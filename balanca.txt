@@ -1,0 +1,21 @@
+<!-- card adicionais -->
+      <div class="card-panel blue">
+      	<div class="row">
+      	<h5 class="white-text center-align ">RELAÇÃO DE BALANÇAS | LOJA 1833</h5><br>
+      	<div class="col s4">
+      	<img class="responsive-img" src="prix.png">
+      </div>
+      <div class="col s8">
+        <span class="white-text">
+        	<p><b>[10.42.181.13] BALANÇA 02:</b> PADARIA - ATENDIMENTO;</p>
+        	<p><b>[10.42.181.14] BALANÇA 05:</b> FRIOS - ATENDIMENTO;</p>
+            <p><b>[10.42.181.16] BALANÇA 06:</b> AÇOUGUE - ATENDIMENTO;</p>
+            <p><b>[10.42.181.22] BALANÇA 08:</b> FRIOS - SALA;</p>
+            <p><b>[10.42.181.11] BALANÇA 09:</b> PADARIA - SALA;</p>
+            <p><b>[10.42.181.18] BALANÇA 10:</b> AÇOUGUE - SALA;</p>
+            <p><b>[10.42.181.23] BALANÇA 12:</b> FRENTE DE CAIXA - SELF;</p>
+            <p><b>[10.42.181.24] BALANÇA 13:</b> FLV - SALA;</p>
+            <p><b>[10.42.181.  ] BALANÇA :</b> E-COMMERCE</p>
+        </span>
+        </div></div>
+      </div><br>
