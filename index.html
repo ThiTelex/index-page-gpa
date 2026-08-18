@@ -24,6 +24,21 @@
 			
 			body{font-family: 'Diodrum', sans-serif;}
 			h1, h2, h3, h4, h5, h6 {font-family: 'Diodrum Bold', sans-serif;}
+			
+			/* botão subir flutuante invisível */
+			#btnTopoContainer {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, 
+                transform 0.35s ease, 
+                visibility 0.35s ease;
+}
+#btnTopoContainer.mostrar {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
 
 			/* Busca do Sumário A-Z */
 			.sumario-busca {
@@ -95,20 +110,25 @@
     background-color: transparent !important;
     border-bottom: 2px solid #2196F3;
 }
-
 		</style>
 	</head>
 	<body>
 		<div class="row center"><img class="responsive-img" src="banner_extrapravc.png"></div><br>
 		<div class="container">
 			
+			<!-- Botão voltar ao topo -->
+			<div id="btnTopoContainer" class="fixed-action-btn" style="bottom: 120px; right: 24px;">
+    <a id="btnTopo" class="btn-floating btn-large blue-grey lighten-1">
+        <i class="material-icons">keyboard_arrow_up</i>
+    </a>
+</div>
 			<!-- Botão flutuante e-mail light-blue accent-4 -->
 			<div class="fixed-action-btn fab-fixed" title="ACESSAR CAIXA DE E-MAIL">
-				<a href="https://outlook.office.com/" class="btn-floating btn-large yellow darken-2 btnemail">
+				<a href="https://outlook.office.com/" class="btn-floating btn-large deep-orange darken-1 btnemail">
 					<i class="large material-icons">email</i>
 				</a>
 			</div>
-
+			
 			<div class="row">
         		<div class="col s7">
                     <h2 class="blue-text text-darken-2" style="margin: 0; white-space: nowrap;">
@@ -230,29 +250,30 @@
 			</div><br>
 
 			<!-- card portaria -->
-			<div class="card-panel brown" style="padding-bottom: 1px">
-      			<div class="row">
-					<div class="col s12">
-						<h4 class="center-align white-text" style="margin-top: 0;"><i class="material-icons" style="font-size: 1.8rem">content_paste</i><b>&nbsp; UTILITÁRIOS PORTARIA</b></h4>
-						<div class="collection">
-							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/EntradaseSaidasdeNFporOperacao/EntradaseSaidasdeNFporOperacao.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | ENTRADAS E SAÍDAS DE NF (AGENDA)</a>
-							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ListadeItensparaContagemCD/ListadeItensparaContagemCD.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | LISTA DE CONTAGEM CD</a>
-							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemCD/ResumodaContagemeRecontagemCD.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM CD</a>
-							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemFornecedor/ResumodaContagemeRecontagemFornecedor.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM FORNECEDOR</a>
-							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoDiariadeItens/MovimentacaoDiariadeItens.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | MOVIMENTAÇÃO DE ITENS (CONSULTA ESTOQUE PLU)</a>
-							<a href="https://gpabr.service-now.com/esc?id=my_requests" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | MINHAS SOLICITAÇÕES (CHAMADOS)</a>
-							<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=34ed1d5b1bb2e550c04942ece54bcb8c" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ABERTURA DE OCORRÊNCIA</a>
-							<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=d82a59e41b7aa51068e8db51f54bcbee" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ANÁLISE DE NOTAS FISCAL</a>
-						</div>
+			<div class="card">
+                <div class="card-content brown">
+					<h4 class="center-align white-text" style="margin-top: 0; margin-bottom:0;"><i class="material-icons" style="font-size: 1.8rem">content_paste</i><b>&nbsp; UTILITÁRIOS PORTARIA</b></h4>
+				</div>
+				<div class="card-content grey lighten-4">
+					<div class="collection">
+						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/EntradaseSaidasdeNFporOperacao/EntradaseSaidasdeNFporOperacao.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | ENTRADAS E SAÍDAS DE NF (AGENDA)</a>
+						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ListadeItensparaContagemCD/ListadeItensparaContagemCD.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | LISTA DE CONTAGEM CD</a>
+						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemCD/ResumodaContagemeRecontagemCD.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM CD</a>
+						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemFornecedor/ResumodaContagemeRecontagemFornecedor.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM FORNECEDOR</a>
+						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoDiariadeItens/MovimentacaoDiariadeItens.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | MOVIMENTAÇÃO DE ITENS (CONSULTA ESTOQUE PLU)</a>
+						<a href="https://gpabr.service-now.com/esc?id=my_requests" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | MINHAS SOLICITAÇÕES (CHAMADOS)</a>
+						<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=34ed1d5b1bb2e550c04942ece54bcb8c" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ABERTURA DE OCORRÊNCIA</a>
+						<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=d82a59e41b7aa51068e8db51f54bcbee" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ANÁLISE DE NOTAS FISCAL</a>
 					</div>
 				</div>
 			</div><br>
 
-
 			<!-- card prevenção -->
-			<div class="card-panel red" style="padding: 0 24px">
-				<div class="row" style="margin-bottom: 5px;"><div class="col s12">
-					<br><h4 class="white-text center-align" style="margin-top: 0;"><i class="material-icons" style="font-size:1.8rem">policy</i><b>&nbsp;BOOK PREVENÇÃO DE PERDAS </b></h4>
+			<div class="card">
+               <div class="card-content red">
+					<h4 class="white-text center-align" style="margin-top: 0; margin-bottom:0;"><i class="material-icons" style="font-size:1.8rem">policy</i><b>&nbsp;BOOK PREVENÇÃO DE PERDAS </b></h4>
+				</div>
+				<div class="card-content grey lighten-4">
 					<div class="collection">
     					<a href="https://app.powerbi.com/groups/me/apps/698e3ff6-804a-48ac-b352-991b249a669f/reports/8072b7a6-b285-4627-9b70-38fb39dad312/ReportSectionb4e51904a1badc4b39aa?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - POWER BI</a>
 						<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - LOJA (SHAREPOINT)</a>
@@ -263,15 +284,17 @@
 						<!-- <a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FPain%C3%A9is%20Gerenciais&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;EVOLUÇÃO PIQUE - <i> descontinuado </i></a> -->
 						<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ITENS OFENSORES</a>
 						<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;VENCIMENTO E MATURAÇÃO</a>
-					</div><br>
-				</div></div>
+					</div>
+				</div>
 			</div><br>
-		
+				
 			<!-- card gestão de senha -->
-			<div class="card-panel teal" style="padding-bottom: 1px">
-				<div class="row">
-					<div class="s12">
-						<h4 class="center-align white-text" style="margin-top:0"><i class="material-icons" style="font-size: 2rem;">admin_panel_settings</i>&nbsp;GESTÃO DE SENHA DE REDE </h4>
+			<div class="card">
+               <div class="card-content teal">
+                   <h4 class="center-align white-text" style="margin-top:0; margin-bottom:0;"><i class="material-icons" style="font-size: 2rem;">admin_panel_settings</i>&nbsp;GESTÃO DE SENHA DE REDE </h4>
+				</div>
+				<div class="card-content grey lighten-4">
+					<div class="row" style="margin-bottom: 0;">
 						<div class="col s6">
 							<div class="card">
 								<div class="card-content">
@@ -290,10 +313,10 @@
 								<div class="card-action"><a href="https://aka.ms/sspr" class="teal-text text-darken-2"><i class="mini material-icons">settings</i> &nbsp;Desbloqueio/troca de senha </a></div>
 							</div>
 						</div>
-					</div>
+                    </div>
 				</div>
 			</div><br>
-			
+							
 			<!-- card listagem IPs balanças/CPU -->
 			<div class="card">
     <div class="card-content blue" style="padding-bottom: 0;">
@@ -365,12 +388,31 @@
        		</div><br>
         	<div class="footer-copyright">
           		<div class="container">
-					<div class="left">© 2023 By <a href="mailto: thiago.vieira1@gpabr.com" class="white-text">Thiago Teles</a> | Atualizado: 17/08/2026</div>
+					<div class="left">© 2023 By <a href="mailto: thiago.vieira1@gpabr.com" class="white-text">Thiago Teles</a> | Atualizado: 18/08/2026</div>
 					<div class="right">1833, Araruama-RJ</div>
 				</div>
       		</div>
       	</footer>
 		
+		<!-- script do buscar subir flutuante -->
+		<script>
+    const btnTopo = document.getElementById('btnTopo');
+    const btnTopoContainer = document.getElementById('btnTopoContainer');
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 300) {
+            btnTopoContainer.classList.add('mostrar');
+        } else {
+            btnTopoContainer.classList.remove('mostrar');
+        }
+    });
+    btnTopo.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
         <!-- script do buscar sumário a-z -->
 		<script>
 			(function () {
