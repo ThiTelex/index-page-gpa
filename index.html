@@ -8,7 +8,7 @@
 		<style>
 			i.tiny{font-size: 18px;}
 			i.mini{font-size: 12px;}
-	
+
 			@font-face{
 				font-family: 'Diodrum';
 				src: url('diodrum.woff2') format('woff2');
@@ -21,24 +21,24 @@
 				font-weight: normal;
 				font-style: normal;
 			}
-			
+
 			body{font-family: 'Diodrum', sans-serif;}
 			h1, h2, h3, h4, h5, h6 {font-family: 'Diodrum Bold', sans-serif;}
-			
+
 			/* botão subir flutuante invisível */
 			#btnTopoContainer {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: opacity 0.35s ease, 
-                transform 0.35s ease, 
-                visibility 0.35s ease;
-}
-#btnTopoContainer.mostrar {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
+				opacity: 0;
+				visibility: hidden;
+				transform: translateY(10px);
+				transition: opacity 0.35s ease, 
+				transform 0.35s ease, 
+				visibility 0.35s ease;
+			}
+			#btnTopoContainer.mostrar {
+				opacity: 1;
+				visibility: visible;
+				transform: translateY(0);
+			}
 
 			/* Busca do Sumário A-Z */
 			.sumario-busca {
@@ -85,6 +85,7 @@
 			#buscaSumario:focus::placeholder {
 				color: #9e9e9e;
 			}
+
 			.fab-fixed {
 				position: fixed !important;
 				bottom: 45px;
@@ -92,51 +93,111 @@
 				z-index: 9999 !important;
 			}
 			a.btnemail:hover, active {background-color: #00b0ff !important}
-			
-/* Mouse em cima */
-.tabs .tab a:hover {
-    color: #2196F3 !important;
-    background-color: rgba(33, 150, 243, 0.10) !important;
-}
-/* Enquanto estiver pressionando */
-.tabs .tab a:active,
-.tabs .tab a:focus {
-    color: #2196F3 !important;
-    background-color: rgba(33, 150, 243, 0.15) !important;
-}
-/* Aba ativa */
-.tabs .tab a.active {
-    color: #2196F3 !important;
-    background-color: transparent !important;
-    border-bottom: 2px solid #2196F3;
-}
+
+			/* Acessos mais utilizados */
+			.mais-acessados {
+				margin: 0 0 1.5rem 0;
+				border: 1px solid #e0e0e0;
+				border-radius: 3px;
+				overflow: hidden;
+			}
+			.mais-acessados-titulo {
+				background: #1565c0;
+				color: #fff;
+				font-weight: 600;
+				padding: 9px 14px;
+				font-size: 1rem;
+			}
+			.mais-acessados-lista {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+				padding: 10px;
+				background: #fafafa;
+			}
+			.mais-acessado-item {
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
+				border: 1px solid #ddd;
+				border-radius: 3px;
+				padding: 7px 10px;
+				background: #fff;
+				font-size: .9rem;
+			}
+			.mais-acessado-item:hover {
+				background: #e1f5fe;
+			}
+			.mais-acessados-vazio {
+				padding: 10px;
+				font-size: .9rem;
+				color: #757575;
+			}
+
+			/* card id #utilitarios */
+			/* Mouse em cima */
+			#utilitarios .tabs .tab a:hover {
+				color: #f44336 !important;
+				background-color: rgba(244, 67, 54, 0.10) !important;
+			}
+			/* Enquanto estiver pressionando */
+			#utilitarios .tabs .tab a:active,
+			#utilitarios .tabs .tab a:focus {
+				color: #f44336 !important;
+				background-color: rgba(244, 67, 54, 0.15) !important;
+			}
+			/* Aba ativa */
+			#utilitarios .tabs .tab a.active {
+				color: #f44336 !important;
+				background-color: transparent !important;
+				border-bottom: 2px solid #f44336;
+			}
+
+			/* card id #ip */
+			/* Mouse em cima */
+			#ip .tabs .tab a:hover {
+				color: #2196F3 !important;
+				background-color: rgba(33, 150, 243, 0.10) !important;
+			}
+			/* Enquanto estiver pressionando */
+			#ip .tabs .tab a:active,
+			#ip .tabs .tab a:focus {
+				color: #2196F3 !important;
+				background-color: rgba(33, 150, 243, 0.15) !important;
+			}
+			/* Aba ativa */
+			#ip .tabs .tab a.active {
+				color: #2196F3 !important;
+				background-color: transparent !important;
+				border-bottom: 2px solid #2196F3;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="row center"><img class="responsive-img" src="banner_extrapravc.png"></div><br>
 		<div class="container">
-			
+
 			<!-- Botão voltar ao topo -->
 			<div id="btnTopoContainer" class="fixed-action-btn" style="bottom: 120px; right: 24px;">
-    <a id="btnTopo" class="btn-floating btn-large blue-grey lighten-1">
-        <i class="material-icons">keyboard_arrow_up</i>
-    </a>
-</div>
-			<!-- Botão flutuante e-mail light-blue accent-4 -->
+				<a id="btnTopo" class="btn-floating btn-large blue-grey lighten-1">
+					<i class="material-icons">keyboard_arrow_up</i>
+				</a>
+			</div>
+			<!-- Botão flutuante e-mail red accent-4 -->
 			<div class="fixed-action-btn fab-fixed" title="ACESSAR CAIXA DE E-MAIL">
-				<a href="https://outlook.office.com/" class="btn-floating btn-large deep-orange darken-1 btnemail">
+				<a href="https://outlook.office.com/" class="btn-floating btn-large red accent-4 btnemail">
 					<i class="large material-icons">email</i>
 				</a>
 			</div>
-			
+
 			<div class="row">
-        		<div class="col s7">
-                    <h2 class="blue-text text-darken-2" style="margin: 0; white-space: nowrap;">
-                       <i class="material-icons" style="font-size: 2.5rem; vertical-align: middle;">bookmarks</i>
-                       <b> SUMÁRIO A-Z</b>
-                       <a href="central_atalhos.html" target="_blank" title="Informações"> <i class="material-icons blue-text " style="font-size: 1.2rem; vertical-align: middle; position: relative; top: -20px;">pending</i> </a>
-                    </h2>
-                </div>
+				<div class="col s7">
+					<h2 class="blue-text text-darken-2" style="margin: 0; white-space: nowrap;">
+						<i class="material-icons" style="font-size: 2.5rem; vertical-align: middle;">bookmarks</i>
+						<b> SUMÁRIO A-Z</b>
+						<a href="central_atalhos.html" target="_blank" title="Informações"> <i class="material-icons blue-text " style="font-size: 1.2rem; vertical-align: middle; position: relative; top: -20px;">pending</i> </a>
+					</h2>
+				</div>
 				<div class="col s5">
 					<div class="col s3"> <a href="https://gpa.pricefy.com.br/Store/Cartazes/Cartaz" class="collection-item blue-text text-darken-1" title="CRIAR CARTAZ DIGITAL"> <i class="material-icons medium">print</i> </a> </div>
 					<div class="col s3"> <a href="https://gprweb.gpacorp.com.br/loja/1833/" class="collection-item blue-text text-darken-1" title="ACESSAR GPR WEB"> <i class="material-icons medium">store</i> </a> </div>
@@ -144,7 +205,8 @@
 					<div class="col s3"> <a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoAcumuladaProdutoLojaMA/MovimentacaoAcumuladaProdutoLojaMA.xdo" class="collection-item blue-text text-darken-1"  title="CONSULTAR ESTOQUE MA"> <i class="material-icons medium">local_mall</i> </a> </div>
 				</div>
 			</div>			
-			
+
+
 			<!-- Busca exclusiva do Sumário A-Z -->
 			<div class="sumario-busca">
 				<div class="input-field">
@@ -152,7 +214,14 @@
 					<input id="buscaSumario" type="text" autocomplete="off" placeholder="Digite para buscar...">
 					<label for="buscaSumario">Buscar no Sumário A-Z</label>
 				</div>
-				<p class="center-align blue-grey-text text-darken-3" style="margin-top: 0; margin-bottom: 2rem; font-size: 1.3rem"><i>Lista de acessos rápidos a ferramentas e serviços para o dia a dia do GPA</i></p>
+			</div>
+
+			<!-- Acessos mais utilizados: preenchido automaticamente pelo histórico deste navegador -->
+			<div id="maisAcessados" class="mais-acessados" style="display: none;">
+				<div class="mais-acessados-titulo">
+					<i class="material-icons" style="font-size: 1.1rem; vertical-align: middle; margin-right: 4px;">star</i> ÚLTIMOS ACESSOS
+				</div>
+				<div id="maisAcessadosLista" class="mais-acessados-lista"></div>
 			</div>
 
 			<div id="sumarioAcesso" class="collection">
@@ -186,34 +255,43 @@
 					<a href="https://m17group.espacoclientes.com.br/entrar" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;M17 Group (Dedetização)</a>
 					<a href="https://app.midfy.io/" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Midfy | JBPHub</a>
 					<a href="https://moki.app/pt/" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Moki</a>
-					<a href="http://simprd/sim-client/Launch" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Oracle SIM (Java)</a>
-					<a href="http://rmsprd/xmlpserver/servlet/report" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Oracle SIM | Movimentação interna (relatórios)</a>
+					<a href="http://rmsprd/xmlpserver/servlet/report" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Oracle RMS (Relatórios)</a>
+					<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/EntradaseSaidasdeNFporOperacao/EntradaseSaidasdeNFporOperacao.xdo" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Oracle RMS | Entradas e Saídas de Nf (Agenda)</a>
+					<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ListadeItensparaContagemCD/ListadeItensparaContagemCD.xdo" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Oracle RMS | Lista de Contagem CD</a>
+					<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemCD/ResumodaContagemeRecontagemCD.xdo" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Oracle RMS | Resumo de Contagem CD</a>
+					<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemFornecedor/ResumodaContagemeRecontagemFornecedor.xdo" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Oracle RMS | Resumo de Contagem Fornecedor</a>
+					<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoDiariadeItens/MovimentacaoDiariadeItens.xdo" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Oracle RMS | Movimentação de Itens (Consulta Estoque Plu)</a>
 					<a href="https://outlook.office.com/" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Outlook | E-mail</a>
 					<a href="https://gpa.qwst.co/v1/lojas-1" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Painel NPS GPA</a>
 					<a href="http://paw08/if10v2/inicio/inicio.asp" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;PAW08 | Sistemas Corporativos (AC34)</a>
 					<a href="https://app.pipefy.com/organizations/300387909/interfaces/fed18e5e-f966-45ed-803c-2764a4a6a055/pages/145ac85d-43f2-406f-8aa8-34d8c33512d7" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Pipefy | GPA Ecommerce</a>
 
-					<a href="https://app.powerbi.com/groups/me/reports/d75bbfbf-da28-4085-9a27-97bf1a3357d2/c6dd825a75c5d926e804?experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Estoque - Mercearia</a>
-					<a href="https://app.powerbi.com/groups/me/apps/91631a75-5166-4864-9fce-e76700f13915/reports/55e4706a-1eb3-4ded-ad8c-d8c9c2315951/afd7cc8be4b72b438480?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Estoque | Acuracidade de Estoque</a>
-					<a href="https://app.powerbi.com/groups/me/apps/91631a75-5166-4864-9fce-e76700f13915/reports/6fecda92-f459-485c-90c5-8e10ea3f66d2/f070b885ce078016b30b?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Estoque | Armazenado Não Exposto</a>
+					<a href="https://app.powerbi.com/groups/me/apps/91631a75-5166-4864-9fce-e76700f13915/reports/55e4706a-1eb3-4ded-ad8c-d8c9c2315951/afd7cc8be4b72b438480?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Acuracidade de Estoque</a>
+					<a href="https://app.powerbi.com/groups/me/apps/91631a75-5166-4864-9fce-e76700f13915/reports/6fecda92-f459-485c-90c5-8e10ea3f66d2/f070b885ce078016b30b?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Armazenado Não Exposto</a>
+					<a href="https://app.powerbi.com/groups/me/reports/e5ff2826-27b8-43a1-b34d-ea849b3d251e/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Power Bi | DDE - Dias De Estoque</a>
+					<a href="https://app.powerbi.com/groups/me/reports/35cf1a22-004a-41c1-bbaf-f76a3c1e7146/ReportSectionfe0099f6cc4fa8067a13?experience=power-bi" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Power Bi | DDE - Dias de Estoque (Perecíveis)</a>
+					<a href="https://app.powerbi.com/groups/me/reports/d75bbfbf-da28-4085-9a27-97bf1a3357d2/c6dd825a75c5d926e804?experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Estoque Mercearia</a>
 					<a href="https://app.powerbi.com/groups/me/reports/2918b4dc-d9bb-49b8-865a-d30838c061c5/ReportSectiondf40029e906f36496d48?experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Estoque Suprimentos (ADM)</a>
 					<a href="https://app.powerbi.com/groups/me/reports/f19f9678-5603-4d0b-ae3d-ce8b4cb8f2ce/ReportSectionfe0099f6cc4fa8067a13?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi&bookmarkGuid=Bookmarka2e3959fa6c50b76c57a" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Heat Map (Giro de Estoque) - 30 dias</a>
 					<a href="https://app.powerbi.com/groups/me/apps/698e3ff6-804a-48ac-b352-991b249a669f/reports/a59e0bd3-a923-46a5-b5e8-7764b775a702/ReportSectionb4e51904a1badc4b39aa?experience=power-bi" class="collection-item blue-text "><i class="tiny material-icons">link</i>  &nbsp;Power Bi | Indicadores de Quebras - Lojas</a>
 					<a href="https://gpabr.sharepoint.com/:x:/r/sites/IndicadoresdocumentaodeRH/_layouts/15/Doc.aspx?sourcedoc=%7B92962FE2-4DBB-48DC-8FE5-846AB7D83D6E%7D&file=Relat%25u00f3rio%20Status%20-%20LOJAS%20INTEGRA_TODOS.xlsb&action=default&mobileredirect=true" class="collection-item blue-text "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Indicadores Comportamental - RH</a>
-					<a href="https://app.powerbi.com/groups/me/reports/968d44b3-c17c-4d91-8bf6-6071f1e4b98b/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Ofertas (8 dias)</a>
+					<a href="https://app.powerbi.com/groups/me/reports/968d44b3-c17c-4d91-8bf6-6071f1e4b98b/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Ofertas</a>
 					<a href="https://app.powerbi.com/groups/me/apps/0a36da17-a6f8-4089-9068-a615048fcf36/reports/9798cefb-e5d2-4852-989e-b86de13d9f23/ReportSection63a19a9f65906907c9a9?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Operação E-commerce</a>
 					<a href="https://app.powerbi.com/groups/me/reports/4c5ec5eb-cf4b-4c53-9466-04bed01f2aa4/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Painel Dias de Estoque</a>
+					<a href="https://app.powerbi.com/groups/me/reports/1a1d0382-083a-4275-a441-d324da7616c0/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Power Bi | Painel Gestão a Vista</a>
 					<a href="https://app.powerbi.com/groups/me/reports/c10e8c29-42c0-412a-bfea-aa52c8832ea1/ReportSection578a195ccf6fbca7e787?experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Painel Pique Motivos</a>
 					<a href="https://app.powerbi.com/groups/me/reports/3152913b-8637-45f1-8625-57eacac7113d/ReportSection1ebc7bf6215264300142?experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Painel Quebra Produtos</a>
 					<a href="https://app.powerbi.com/groups/me/reports/ab66e09a-b7cf-4347-9da6-d13e9d9027fa/e86e0462ff027a95c91f?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Painel Risco de Vencimento (4L6)</a>
 					<a href="https://app.powerbi.com/groups/me/reports/eab8e65f-614b-446b-a0db-a909165a0cf3/9159eb3babcbae2c11bf?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Painel SIRO</a>
 					<a href="https://app.powerbi.com/groups/me/apps/9190d269-d305-4cb8-bbb1-a63a633498a6/reports/076382ad-de8a-471a-9eee-c6875aa18a06/ReportSection8627ba3149e71bb4609e?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Planejamento de Produção Perecíveis (Guia)</a>
 					<a href="https://app.powerbi.com/groups/me/apps/3f1a907f-e09a-4315-8f03-e531f96e2da8/reports/83264715-a62c-4dfd-9458-65be56e49f95/ReportSection5598f671e6b4571795a4?experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Projeto Revitalização - LJ06</a>
-					<a href="https://app.powerbi.com/groups/me/apps/a7d49495-a51a-4276-adae-af3b5282ac42/reports/199a098a-aebd-4112-a8e3-a91f744ed9ab/ReportSectionb4e51904a1badc4b39aa?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | One Page</a>
+					<a href="https://app.powerbi.com/groups/me/apps/698e3ff6-804a-48ac-b352-991b249a669f/reports/8072b7a6-b285-4627-9b70-38fb39dad312/ReportSectionb4e51904a1badc4b39aa?experience=power-bi" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Power Bi | One Page</a>
 					<a href="https://app.powerbi.com/groups/me/reports/9a401ed0-ab7a-4296-b55f-eaed379f1283/ReportSection4d6fca801067c01bb2ad?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Portal GPA</a>
 					<a href="https://app.powerbi.com/groups/me/reports/b7390b06-24f3-4b71-9939-614c9d5bbcaf/ReportSection?experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Painel de Status da Quebra (Papa Quebras)</a>
 					<a href="https://app.powerbi.com/groups/me/apps/9190d269-d305-4cb8-bbb1-a63a633498a6/reports/4f4f0dc3-67cf-4a4c-accc-d0afeaeff807/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Quadro Ativo x Orçado (RH)</a>
 					<a href="https://app.powerbi.com/groups/me/reports/804c584f-3884-46b9-a392-fc288c521c6a/ReportSectionb7e2cdf0d01ddb903d26?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&experience=power-bi" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Power Bi | Relatório de Despesas (Gerência)</a>
+					<a href="https://app.powerbi.com/groups/me/reports/6c003941-1ebd-4f68-afba-093e889a53c8/ReportSection?experience=power-bi" class="collection-item blue-text"><i class="tiny material-icons">link</i>  &nbsp;Power Bi | Tabela One Page - Loja</a>
+
 					<a href="https://portalderh.gpabr.com/" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Portal de RH (ADP Expert) </a>
 					<a href="https://www.gpapp.com.br/home" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Portal GPApp (Comunidade)</a>
 					<a href="https://gpa.pricefy.com.br/" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Pricefy (Cartaz Digital)</a>
@@ -222,11 +300,16 @@
 					<a href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=tuZTGmJ1n0uD0OcaiJFmflQDVX3oiltJpKXcRvi1dk1UMEVOVk1GOTNNSjcxWDJBWTUzVEVGUERWNC4u" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Pró-Ativo Online | Formulário</a>
 					<a href="http://pap102/GPA.SAP.Apresentacao/(S(eogrnheeaa5gl055tvch5s45))/Relatorio/RelatorioRazaoDLPDivisional.aspx?REL=1&UserId=252346" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Razão (Despesas) </a>
 					<a href="http://10.101.1.31:8084/adm/login.xhtml" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Scope NCR</a>
+
 					<a href="https://gpabr.sharepoint.com/sites/Comunicacaointerna/ComunicacaoOperacional/Forms/AllItems.aspx?cid=ce7b6e43%2D22b9%2D4a8b%2Da8e8%2Da866565d040b&csf=1&e=q6FBvA&FolderCTID=0x0120006673C9E019AF994F97CB00F5F16E1E8B&web=1&id=%2Fsites%2FComunicacaointerna%2FComunicacaoOperacional%2FExtra%20Mercado&viewid=bc80a6e1%2D97b1%2D4403%2Dae3b%2Dfaf13a247b15" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Comunicação Operacional</a>
+					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp; SharePoint | Itens Ofensores</a>
+					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp; SharePoint | One Page - Loja</a>
 					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FPain%C3%A9is%20Gerenciais&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059&CT=1713554395590&OR=OWA%2DNT%2DMail&CID=82facf8e%2D173a%2Da72c%2D2994%2De6981f5cb758" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Painéis Gerenciais</a>
 					<a href="https://gpabr.sharepoint.com/sites/MEX/Documentos%20Compartilhados/Forms/AllItems.aspx?newTargetListUrl=%2Fsites%2FMEX%2FDocumentos%20Compartilhados&viewpath=%2Fsites%2FMEX%2FDocumentos%20Compartilhados%2FForms%2FAllItems%2Easpx&id=%2Fsites%2FMEX%2FDocumentos%20Compartilhados%2FATUALIZADO%20PLANOGRAMAS%20E%20DOCS%20MEX%2F1%20%2D%20PLANOGRAMAS%2F1%2E3%20RJ%2F1%2E3%2E1%20MERCEARIA&viewid=9c320b30%2Db32e%2D42f8%2D81e2%2D3d71f1a40414" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Planograma MEX</a>
 					<a href="http://nb02298643/share_point/quebras.php" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Prevenção de Perdas</a>
 					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGovernan%C3%A7a%20de%20Invent%C3%A1rio%20e%20Preven%C3%A7%C3%A3o%20de%20Perdas%2FPrograma%C3%A7%C3%A3o%20de%20Invent%C3%A1rio&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059&csf=1&web=1&e=6xbIqO&cid=612ac24a%2Dacec%2D4804%2Dbe41%2D19f79161cd50&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Programação de Inventário</a>
+					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp; SharePoint | Vencimento e Maturação</a>
+
 					<a href="https://gpabr.service-now.com/esc" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Service Now | Central de Serviços GPA</a>
 					<a href="https://gpabr.service-now.com/blsp" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Service Now | Portal Casa do Cliente (Gerência)</a>
 					<a href="https://gpabr.service-now.com/esc?id=emp_taxonomy_topic&topic_id=3c9312521bbe6150c04942ece54bcbc2" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Service Now | Portal Financeiro (Administração)</a>
@@ -246,52 +329,56 @@
 					<a href="https://universidadedovarejogpa.com.br/app/home/canal/gpa-capacita?section=eficiencia-em-acao&trail=cqc-combate-a-quebra-no-caixa" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Universidade do Varejo GPA | Combate a Quebra de Caixa</a>
 					<a href="https://universidadedovarejogpa.com.br/app/home/canal/home/sessao/treinamentos-obrigatorios" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Universidade do Varejo GPA | Treinamentos Obrigatórios</a>
 					<a href="https://visibilidade.cbdnet.com.br/login" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Visibilidade GPA</a>
-        		</span>
+				</span>
 			</div><br>
 
-			<!-- card portaria -->
-			<div class="card">
-                <div class="card-content brown">
-					<h4 class="center-align white-text" style="margin-top: 0; margin-bottom:0;"><i class="material-icons" style="font-size: 1.8rem">content_paste</i><b>&nbsp; UTILITÁRIOS PORTARIA</b></h4>
+			<!-- card seleção portaria vs prevenção -->
+			<div class="card" id="utilitarios">
+				<div class="card-content red" style="padding-bottom: 0;">
+					<h4 class="white-text center-align" style="margin: 0;"><i class="material-icons" style="font-size: 1.8rem">content_paste</i> <b>&nbsp;ROTINAS OPERACIONAIS</b></h4><br>
+				</div>
+				<div class="card-tabs">
+					<ul class="tabs tabs-fixed-width">
+						<li class="tab"><b><a class="active red-text" href="#card_portaria">PORTARIA/NFs</a></b></li>
+						<li class="tab"><b><a class="red-text" href="#card_prevencao">BOOK PREVENÇÃO</a></b></li>
+					</ul>
 				</div>
 				<div class="card-content grey lighten-4">
-					<div class="collection">
-						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/EntradaseSaidasdeNFporOperacao/EntradaseSaidasdeNFporOperacao.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | ENTRADAS E SAÍDAS DE NF (AGENDA)</a>
-						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ListadeItensparaContagemCD/ListadeItensparaContagemCD.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | LISTA DE CONTAGEM CD</a>
-						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemCD/ResumodaContagemeRecontagemCD.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM CD</a>
-						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemFornecedor/ResumodaContagemeRecontagemFornecedor.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM FORNECEDOR</a>
-						<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoDiariadeItens/MovimentacaoDiariadeItens.xdo" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | MOVIMENTAÇÃO DE ITENS (CONSULTA ESTOQUE PLU)</a>
-						<a href="https://gpabr.service-now.com/esc?id=my_requests" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | MINHAS SOLICITAÇÕES (CHAMADOS)</a>
-						<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=34ed1d5b1bb2e550c04942ece54bcb8c" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ABERTURA DE OCORRÊNCIA</a>
-						<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=d82a59e41b7aa51068e8db51f54bcbee" class="collection-item brown-text text-darken-2"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ANÁLISE DE NOTAS FISCAL</a>
+					<div id="card_portaria">
+						<div class="collection">
+							<a href="http://nfecd-gpa.unisys.com.br/eFormseMonitor/" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;E-MONITOR | NF-E (2ª VIA)</a>
+							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/EntradaseSaidasdeNFporOperacao/EntradaseSaidasdeNFporOperacao.xdo" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | ENTRADAS E SAÍDAS DE NF (AGENDA)</a>
+							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ListadeItensparaContagemCD/ListadeItensparaContagemCD.xdo" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | LISTA DE CONTAGEM CD</a>
+							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemCD/ResumodaContagemeRecontagemCD.xdo" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM CD</a>
+							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/ResumodaContagemeRecontagemFornecedor/ResumodaContagemeRecontagemFornecedor.xdo" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | RESUMO DE CONTAGEM FORNECEDOR</a>
+							<a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoDiariadeItens/MovimentacaoDiariadeItens.xdo" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;ORACLE SIM | MOVIMENTAÇÃO DE ITENS (CONSULTA ESTOQUE PLU)</a>
+							<a href="https://gpabr.service-now.com/esc?id=my_requests" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | MINHAS SOLICITAÇÕES (CHAMADOS)</a>
+							<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=34ed1d5b1bb2e550c04942ece54bcb8c" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ABERTURA DE OCORRÊNCIA</a>
+							<a href="https://gpabr.service-now.com/esc?id=sc_cat_item&sys_id=d82a59e41b7aa51068e8db51f54bcbee" class="collection-item red-text"><i class="mini material-icons">label</i> &nbsp;SERVICE NOW | ANÁLISE DE NOTAS FISCAL</a>
+						</div>
+					</div>
+					<div id="card_prevencao">
+						<div class="collection">
+							<a href="https://app.powerbi.com/groups/me/apps/698e3ff6-804a-48ac-b352-991b249a669f/reports/8072b7a6-b285-4627-9b70-38fb39dad312/ReportSectionb4e51904a1badc4b39aa?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - POWER BI</a>
+							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - LOJA (SHAREPOINT)</a>
+							<a href="https://app.powerbi.com/groups/me/reports/6c003941-1ebd-4f68-afba-093e889a53c8/ReportSection?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i>  &nbsp;TABELA ONE PAGE - LOJA</a>
+							<a href="https://app.powerbi.com/groups/me/reports/1a1d0382-083a-4275-a441-d324da7616c0/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;PAINEL GESTÃO A VISTA</a>
+							<a href="https://app.powerbi.com/groups/me/reports/e5ff2826-27b8-43a1-b34d-ea849b3d251e/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;DDE - DIAS DE ESTOQUE</a>
+							<a href="https://app.powerbi.com/groups/me/reports/35cf1a22-004a-41c1-bbaf-f76a3c1e7146/ReportSectionfe0099f6cc4fa8067a13?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;DDE - DIAS DE ESTOQUE (PERECÍVEIS)</a>
+							<!-- <a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FPain%C3%A9is%20Gerenciais&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;EVOLUÇÃO PIQUE - <i> descontinuado </i></a> -->
+							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ITENS OFENSORES</a>
+							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;VENCIMENTO E MATURAÇÃO</a>
+						</div>
 					</div>
 				</div>
 			</div><br>
 
-			<!-- card prevenção -->
-			<div class="card">
-               <div class="card-content red">
-					<h4 class="white-text center-align" style="margin-top: 0; margin-bottom:0;"><i class="material-icons" style="font-size:1.8rem">policy</i><b>&nbsp;BOOK PREVENÇÃO DE PERDAS </b></h4>
-				</div>
-				<div class="card-content grey lighten-4">
-					<div class="collection">
-    					<a href="https://app.powerbi.com/groups/me/apps/698e3ff6-804a-48ac-b352-991b249a669f/reports/8072b7a6-b285-4627-9b70-38fb39dad312/ReportSectionb4e51904a1badc4b39aa?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - POWER BI</a>
-						<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - LOJA (SHAREPOINT)</a>
-						<a href="https://app.powerbi.com/groups/me/reports/6c003941-1ebd-4f68-afba-093e889a53c8/ReportSection?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i>  &nbsp;TABELA ONE PAGE - LOJA</a>
-						<a href="https://app.powerbi.com/groups/me/reports/1a1d0382-083a-4275-a441-d324da7616c0/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;PAINEL GESTÃO A VISTA</a>
-						<a href="https://app.powerbi.com/groups/me/reports/e5ff2826-27b8-43a1-b34d-ea849b3d251e/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;DDE - DIAS DE ESTOQUE</a>
-						<a href="https://app.powerbi.com/groups/me/reports/35cf1a22-004a-41c1-bbaf-f76a3c1e7146/ReportSectionfe0099f6cc4fa8067a13?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;DDE - DIAS DE ESTOQUE (PERECÍVEIS)</a>
-						<!-- <a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FPain%C3%A9is%20Gerenciais&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;EVOLUÇÃO PIQUE - <i> descontinuado </i></a> -->
-						<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ITENS OFENSORES</a>
-						<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;VENCIMENTO E MATURAÇÃO</a>
-					</div>
-				</div>
-			</div><br>
-				
+
+
 			<!-- card gestão de senha -->
 			<div class="card">
-               <div class="card-content teal">
-                   <h4 class="center-align white-text" style="margin-top:0; margin-bottom:0;"><i class="material-icons" style="font-size: 2rem;">admin_panel_settings</i>&nbsp;GESTÃO DE SENHA DE REDE </h4>
+				<div class="card-content teal">
+					<h4 class="center-align white-text" style="margin-top:0; margin-bottom:0;"><i class="material-icons" style="font-size: 2rem;">admin_panel_settings</i>&nbsp;GESTÃO DE SENHA DE REDE </h4>
 				</div>
 				<div class="card-content grey lighten-4">
 					<div class="row" style="margin-bottom: 0;">
@@ -313,117 +400,143 @@
 								<div class="card-action"><a href="https://aka.ms/sspr" class="teal-text text-darken-2"><i class="mini material-icons">settings</i> &nbsp;Desbloqueio/troca de senha </a></div>
 							</div>
 						</div>
-                    </div>
+					</div>
 				</div>
 			</div><br>
-							
+
 			<!-- card listagem IPs balanças/CPU -->
-			<div class="card">
-    <div class="card-content blue" style="padding-bottom: 0;">
-      <h4 class="white-text center-align" style="margin: 0;"><i class="material-icons" style="font-size: 1.8rem">devices</i> <b>&nbsp;RELAÇÃO DE DISPOSITIVOS IPs</b></h4><br>
-    </div>
-    <div class="card-tabs">
-      <ul class="tabs tabs-fixed-width">
-        <li class="tab"><b><a class="active blue-text" href="#card_balanca">BALANÇA</a></b></li>
-        <li class="tab"><b><a class="blue-text" href="#card_cpu">CPU</a></b></li>
-        <li class="tab"><b><a class="blue-text" href="#card_impressora">IMPRESSORA</a></b></li>
-      </ul>
-    </div>
-    <div class="card-content grey lighten-4">
-      <div id="card_balanca">
-      	             <ul class="collection">
-        			   	<span class="blue-text text-darken-1">
-       			   		<li class="collection-item"><b>[10.42.181.13] BALANÇA 02:</b> PADARIA - SALA</li>
-   				   		<li class="collection-item"><b>[10.42.181.14] BALANÇA 05:</b> PADARIA - BALCÃO</li>
-       		   			<li class="collection-item"><b>[10.42.181.16] BALANÇA 06:</b> AÇOUGUE - SALA</li>
-	   		   			<li class="collection-item"><b>[10.42.181.22] BALANÇA 08:</b> FRIOS - SALA</li>
-            		   	   <li class="collection-item"><b>[10.42.181.11] BALANÇA 09:</b> AÇOUGUE - BALCÃO</li>
-            		   	   <li class="collection-item"><b>[10.42.181.18] BALANÇA 10:</b> FRIOS - BALCÃO</li>
-       		   		    <li class="collection-item"><b>[10.42.181.23] BALANÇA 12:</b> FRENTE DE CAIXA - SELF</li>
-       		   			<li class="collection-item"><b>[10.42.181.24] BALANÇA 13:</b> FLV - SALA</li>
-       	   				<li class="collection-item"><b>[10.42.181.25] BALANÇA 14:</b> PEIXARIA - BALCÃO</li>
-				   		   <li class="collection-item"><b>[10.42.181.#] BALANÇA 16:</b> FLV - SALÃO</li>
-       		   		</span>
-       		   	</ul>
-      </div>
-      <div id="card_cpu">
-      	             <ul class="collection">
-        			   	<span class="blue-text text-darken-1">
-       		   		    <li class="collection-item"><b>[10.18.33.20] CPU: </b> GERENTE </li>
-                              <li class="collection-item"><b>[10.18.33.16] CPU (TIRA-TEIMA): </b> SUBGERENTE </li>
-       			   		<li class="collection-item"><b>[10.18.33.23] CPU: </b> ADM </li>
-					   	   <li class="collection-item"><b>[10.18.33.18] CPU: </b> RH</li>
-					          <li class="collection-item"><b>[10.18.33.17] CPU (BALANÇA MGV7): </b> CPD 1 </li>
-            	   		   <li class="collection-item"><b>[10.18.33.26] CPU: </b> CPD 2 </li>
-                              <li class="collection-item"><b>[10.18.33.13] CPU: </b> DEPÓSITO </li>
-	   			   		<li class="collection-item"><b>[10.18.33.14] CPU: </b> PORTARIA </li>
-	                          <li class="collection-item"><b>[10.18.33.22] CPU: </b> FRENTE DE CAIXA </li>
-   				   		<li class="collection-item"><b>[10.18.33.19] CPU: </b> E-COMMERCE </li>
-       			   	</span>
-       		   	</ul>
-      </div>
-      <div id="card_impressora">
-      	            <ul class="collection">
-      	                 <span class="blue-text text-darken-1">
-       			   		<li class="collection-item"><b>[#.#.#.51] IMPRESSORA ZEBRA: </b> PORTÁTIL 51 </li>
-   				   		<li class="collection-item"><b>[#.#.#.52] IMPRESSORA ZEBRA: </b> PORTÁTIL 52 </li>
-       				   	<li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_01] [10.18.33.221] IMPRESSORA LEXMARK: </b> DEPÓSITO </li>
-	   			   		<li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_02] [10.18.33.222] IMPRESSORA LEXMARK: </b> PORTARIA </li>
-            		   	   <li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_03] [10.18.33.223] IMPRESSORA LEXMARK: </b> FRENTE DE CAIXA </li>
-                              <li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_04] [10.18.33.226] IMPRESSORA RICOH: </b> CPD (CARTAZ) </li>
-       			   	</span>
-       		   	</ul>
-                      <p class="center-align blue-grey-text text-darken-3" style="font-size: 1rem;"><i class="tiny material-icons" style="vertical-align: middle;">info</i> &nbsp; GPR WEB >> CONFIGURAÇÕES >> IMPRESSORA >> \\CORP-GCE-PRD-W3.cbd.root.gpa\Q_1833_RT_01</p>
-      </div>
-    </div>
-  </div><br>
-       		
-      	</div><br> <!-- fecha o container -->
-	
-      	<!-- rodapé -->
-      	<footer class="page-footer red accent-4">
+			<div class="card" id="IP">
+				<div class="card-content blue" style="padding-bottom: 0;">
+					<h4 class="white-text center-align" style="margin: 0;"><i class="material-icons" style="font-size: 1.8rem">devices</i> <b>&nbsp;RELAÇÃO DE DISPOSITIVOS IPs</b></h4><br>
+				</div>
+				<div class="card-tabs">
+					<ul class="tabs tabs-fixed-width">
+						<li class="tab"><b><a class="active blue-text" href="#card_balanca">BALANÇA</a></b></li>
+						<li class="tab"><b><a class="blue-text" href="#card_cpu">CPU</a></b></li>
+						<li class="tab"><b><a class="blue-text" href="#card_impressora">IMPRESSORA</a></b></li>
+					</ul>
+				</div>
+				<div class="card-content grey lighten-4">
+					<div id="card_balanca">
+						<ul class="collection">
+							<span class="blue-text text-darken-1">
+								<li class="collection-item"><b>[10.42.181.13] BALANÇA 02:</b> PADARIA - SALA</li>
+								<li class="collection-item"><b>[10.42.181.14] BALANÇA 05:</b> PADARIA - BALCÃO</li>
+								<li class="collection-item"><b>[10.42.181.16] BALANÇA 06:</b> AÇOUGUE - SALA</li>
+								<li class="collection-item"><b>[10.42.181.22] BALANÇA 08:</b> FRIOS - SALA</li>
+								<li class="collection-item"><b>[10.42.181.11] BALANÇA 09:</b> AÇOUGUE - BALCÃO</li>
+								<li class="collection-item"><b>[10.42.181.18] BALANÇA 10:</b> FRIOS - BALCÃO</li>
+								<li class="collection-item"><b>[10.42.181.23] BALANÇA 12:</b> FRENTE DE CAIXA - SELF</li>
+								<li class="collection-item"><b>[10.42.181.24] BALANÇA 13:</b> FLV - SALA</li>
+								<li class="collection-item"><b>[10.42.181.25] BALANÇA 14:</b> PEIXARIA - BALCÃO</li>
+								<li class="collection-item"><b>[10.42.181.#] BALANÇA 16:</b> FLV - SALÃO</li>
+							</span>
+						</ul>
+					</div>
+					<div id="card_cpu">
+						<ul class="collection">
+							<span class="blue-text text-darken-1">
+								<li class="collection-item"><b>[10.18.33.20] CPU: </b> GERENTE </li>
+								<li class="collection-item"><b>[10.18.33.16] CPU (TIRA-TEIMA): </b> SUBGERENTE </li>
+								<li class="collection-item"><b>[10.18.33.23] CPU: </b> ADM </li>
+								<li class="collection-item"><b>[10.18.33.18] CPU: </b> RH</li>
+								<li class="collection-item"><b>[10.18.33.17] CPU (BALANÇA MGV7): </b> CPD 1 </li>
+								<li class="collection-item"><b>[10.18.33.26] CPU: </b> CPD 2 </li>
+								<li class="collection-item"><b>[10.18.33.13] CPU: </b> DEPÓSITO </li>
+								<li class="collection-item"><b>[10.18.33.14] CPU: </b> PORTARIA </li>
+								<li class="collection-item"><b>[10.18.33.22] CPU: </b> FRENTE DE CAIXA </li>
+								<li class="collection-item"><b>[10.18.33.19] CPU: </b> E-COMMERCE </li>
+							</span>
+						</ul>
+					</div>
+					<div id="card_impressora">
+						<ul class="collection">
+							<span class="blue-text text-darken-1">
+								<li class="collection-item"><b>[#.#.#.51] IMPRESSORA ZEBRA: </b> PORTÁTIL 51 </li>
+								<li class="collection-item"><b>[#.#.#.52] IMPRESSORA ZEBRA: </b> PORTÁTIL 52 </li>
+								<li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_01] [10.18.33.221] IMPRESSORA LEXMARK: </b> DEPÓSITO </li>
+								<li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_02] [10.18.33.222] IMPRESSORA LEXMARK: </b> PORTARIA </li>
+								<li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_03] [10.18.33.223] IMPRESSORA LEXMARK: </b> FRENTE DE CAIXA </li>
+								<li class="collection-item"><b>[\\CORP-GCE-PRD-W3\Q_1833_RT_04] [10.18.33.226] IMPRESSORA RICOH: </b> CPD (CARTAZ) </li>
+							</span>
+						</ul>
+						<p class="center-align blue-grey-text text-darken-3" style="font-size: 1rem;"><i class="tiny material-icons" style="vertical-align: middle;">info</i> &nbsp; GPR WEB >> CONFIGURAÇÕES >> IMPRESSORA >> \\CORP-GCE-PRD-W3.cbd.root.gpa\Q_1833_RT_01</p>
+					</div>
+				</div>
+			</div><br>
+
+		</div><br> <!-- fecha o container -->
+
+		<!-- rodapé -->
+		<footer class="page-footer blue darken-2">
 			<div class="container white-text">
 				<h5 style="margin-top: 0"><i class="material-icons tiny"> contact_phone</i> &nbsp;SUPORTE NAUS</h5>
-				<h4 style="margin: 0;"><b><a href="tel:+5508008924065" class="red-text text-lighten-4"> 0800 892 4065</a></b></h4>
-       		</div><br>
-        	<div class="footer-copyright">
-          		<div class="container">
-					<div class="left">© 2023 By <a href="mailto: thiago.vieira1@gpabr.com" class="white-text">Thiago Teles</a> | Atualizado: 18/08/2026</div>
-					<div class="right">1833, Araruama-RJ</div>
+				<h4 style="margin: 0;"><b><a href="tel:+5508008924065" class="blue-text text-lighten-4"> 0800 892 4065</a></b></h4>
+			</div><br>
+			<div class="footer-copyright">
+				<div class="container">
+					<div class="left">CNPJ: 47.508.411/1681-70 :: ABC CB 1833 | Rua México, 160, Centro, Araruama-RJ</div><br>
+					<div class="left">© 2023 By <a href="mailto: thiago.vieira1@gpabr.com" class="white-text">Thiago Teles</a> | Atualizado: 19/08/2026</div>
 				</div>
-      		</div>
-      	</footer>
-		
-		<!-- script do buscar subir flutuante -->
+			</div>
+		</footer>
+
+
+		<!-- Scripts: abas, busca do Sumário A-Z e últimos acessos -->
 		<script>
-    const btnTopo = document.getElementById('btnTopo');
-    const btnTopoContainer = document.getElementById('btnTopoContainer');
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > 300) {
-            btnTopoContainer.classList.add('mostrar');
-        } else {
-            btnTopoContainer.classList.remove('mostrar');
-        }
-    });
-    btnTopo.addEventListener('click', function (e) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-</script>
-        <!-- script do buscar sumário a-z -->
-		<script>
-			(function () {
+			document.addEventListener('DOMContentLoaded', function () {
+
+				/* ABAS DOS CARDS */
+				document.querySelectorAll('.tabs').forEach(function (tabs) {
+					var links = tabs.querySelectorAll('.tab a');
+					var card = tabs.closest('.card');
+					if (!card) return;
+
+					var contents = card.querySelectorAll('.card-content.grey.lighten-4 > div');
+
+					function activate(id) {
+						links.forEach(function (link) {
+							link.classList.toggle('active',
+								link.getAttribute('href') === '#' + id);
+						});
+
+						contents.forEach(function (content) {
+							content.style.display =
+								content.id === id ? 'block' : 'none';
+						});
+					}
+
+					links.forEach(function (link) {
+						link.addEventListener('click', function (event) {
+							event.preventDefault();
+							var href = this.getAttribute('href');
+							if (href) activate(href.substring(1));
+						});
+					});
+
+					var active = tabs.querySelector('.tab a.active');
+					if (active) {
+						activate(active.getAttribute('href').substring(1));
+					} else if (links.length) {
+						activate(links[0].getAttribute('href').substring(1));
+					}
+				});
+
+
+				/* BUSCA DO SUMÁRIO A-Z + ÚLTIMOS ACESSOS */
 				var campo = document.getElementById('buscaSumario');
 				var sumario = document.getElementById('sumarioAcesso');
 				var label = document.querySelector('label[for="buscaSumario"]');
+				var ultimosAcessos = document.getElementById('maisAcessados');
+				var ultimosAcessosLista = document.getElementById('maisAcessadosLista');
+
+				var STORAGE_KEY = 'gpa_ultimos_acessos';
+				var LIMITE = 6;
 
 				if (!campo || !sumario) return;
 
 				function normalizar(texto) {
-					return texto
+					return String(texto || '')
 						.toLocaleLowerCase('pt-BR')
 						.normalize('NFD')
 						.replace(/[\u0300-\u036f]/g, '');
@@ -431,74 +544,186 @@
 
 				function atualizarLabel() {
 					if (label) {
-						label.classList.toggle('active', campo === document.activeElement || campo.value.length > 0);
+						label.classList.toggle('active',
+							campo === document.activeElement ||
+							campo.value.length > 0);
 					}
 				}
 
-				campo.addEventListener('focus', atualizarLabel);
-				campo.addEventListener('blur', atualizarLabel);
+				function lerUltimosAcessos() {
+					try {
+						var dados = JSON.parse(
+							localStorage.getItem(STORAGE_KEY) || '[]'
+						);
 
-				campo.addEventListener('input', function () {
+						return Array.isArray(dados) ? dados : [];
+					} catch (e) {
+						return [];
+					}
+				}
+
+				function salvarUltimosAcessos(lista) {
+					try {
+						localStorage.setItem(
+							STORAGE_KEY,
+							JSON.stringify(lista.slice(0, LIMITE))
+						);
+					} catch (e) {}
+				}
+
+				function chaveDoLink(link) {
+					try {
+						return new URL(link.href, window.location.href).href;
+					} catch (e) {
+						return link.getAttribute('href') || '';
+					}
+				}
+
+				/* Obtém somente o texto do link, sem o conteúdo textual
+				   dos ícones Material Icons (ex.: "link"). */
+				function tituloDoLink(link) {
+					var clone = link.cloneNode(true);
+					clone.querySelectorAll('.material-icons').forEach(function (icone) {
+						icone.remove();
+					});
+					return clone.textContent
+						.replace(/^\s*🔗\s*/, '')
+						.trim();
+				}
+
+				function registrarAcesso(link) {
+					var chave = chaveDoLink(link);
+					if (!chave) return;
+
+					var lista = lerUltimosAcessos();
+
+					/* Remove o item se ele já estiver na lista.
+					   Assim ele volta para o topo sem criar duplicidade. */
+					lista = lista.filter(function (item) {
+						return item.url !== chave;
+					});
+
+					lista.unshift({
+						url: chave,
+						titulo: tituloDoLink(link)
+					});
+
+					salvarUltimosAcessos(lista);
+				}
+
+				function atualizarUltimosAcessos() {
+					if (!ultimosAcessos || !ultimosAcessosLista) return;
+
+					var lista = lerUltimosAcessos();
+					var links = Array.prototype.slice.call(
+						sumario.querySelectorAll('a.collection-item')
+					);
+
+					/* Usa os dados atuais do Sumário para garantir que
+					   o título exibido esteja sempre atualizado. */
+					var itens = lista.map(function (item) {
+						var link = links.find(function (atual) {
+							return chaveDoLink(atual) === item.url;
+						});
+
+						if (!link) return null;
+
+						return {
+							link: link,
+							titulo: tituloDoLink(link)
+						};
+					}).filter(function (item) {
+						return item !== null;
+					}).slice(0, LIMITE);
+
+					ultimosAcessosLista.innerHTML = '';
+
+					if (!itens.length) {
+						ultimosAcessos.style.display = 'none';
+						return;
+					}
+
+					ultimosAcessos.style.display = '';
+
+					itens.forEach(function (item) {
+						var botao = document.createElement('a');
+
+						botao.href = item.link.href;
+						botao.className =
+							'blue-text text-darken-3 mais-acessado-item';
+						botao.title = 'Último acesso';
+
+						var icone = document.createElement('i');
+						icone.className = 'material-icons';
+						icone.style.fontSize = '1rem';
+						icone.textContent = 'link';
+
+						botao.appendChild(icone);
+						botao.appendChild(
+							document.createTextNode(item.titulo)
+						);
+
+						/* Se o usuário clicar novamente em um item dos
+						   últimos acessos, ele também deve ser atualizado. */
+						botao.addEventListener('click', function () {
+							registrarAcesso(item.link);
+						});
+
+						ultimosAcessosLista.appendChild(botao);
+					});
+				}
+
+				function filtrarSumario() {
 					var termo = normalizar(campo.value.trim());
 					var links = sumario.querySelectorAll('a.collection-item');
 
 					links.forEach(function (link) {
 						var texto = normalizar(link.textContent);
-						link.style.display = (!termo || texto.indexOf(termo) !== -1) ? '' : 'none';
+
+						link.style.display =
+							(!termo || texto.indexOf(termo) !== -1)
+								? ''
+								: 'none';
 					});
 
 					atualizarLabel();
+				}
+
+				campo.addEventListener('focus', atualizarLabel);
+				campo.addEventListener('blur', atualizarLabel);
+				campo.addEventListener('input', filtrarSumario);
+
+				/* Registra somente os links do Sumário A-Z. */
+				sumario.querySelectorAll('a.collection-item').forEach(function (link) {
+					link.addEventListener('click', function () {
+						registrarAcesso(link);
+					});
 				});
 
+				atualizarUltimosAcessos();
 				atualizarLabel();
-			})();
+			});
 		</script>
-		<!-- script do card dispositivos ips -->
 		<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.tabs').forEach(function (tabs) {
+			const btnTopo = document.getElementById('btnTopo');
+			const btnTopoContainer = document.getElementById('btnTopoContainer');
 
-        const links = tabs.querySelectorAll('.tab a');
-        const card = tabs.closest('.card');
-        const contents = card.querySelectorAll('.card-content.grey.lighten-4 > div');
+			window.addEventListener('scroll', function () {
+				if (window.scrollY > 300) {
+					btnTopoContainer.classList.add('mostrar');
+				} else {
+					btnTopoContainer.classList.remove('mostrar');
+				}
+			});
 
-        function activate(id) {
-            // Ativa a aba
-            links.forEach(function (link) {
-                link.classList.toggle(
-                    'active',
-                    link.getAttribute('href') === '#' + id
-                );
-            });
+			btnTopo.addEventListener('click', function (e) {
+				e.preventDefault();
 
-            // Mostra apenas o conteúdo correspondente
-            contents.forEach(function (content) {
-                content.style.display =
-                    content.id === id ? 'block' : 'none';
-            });
-        }
-
-        // Clique nas abas
-        links.forEach(function (link) {
-            link.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                const id = this.getAttribute('href').substring(1);
-                activate(id);
-            });
-        });
-
-        // Inicializa pela aba marcada como active
-        const active = tabs.querySelector('.tab a.active');
-
-        if (active) {
-            activate(active.getAttribute('href').substring(1));
-        } else if (links.length > 0) {
-            activate(links[0].getAttribute('href').substring(1));
-        }
-    });
-});
-</script>
-
+				window.scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				});
+			});
+		</script>
 	</body>
 </html>
