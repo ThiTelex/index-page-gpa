@@ -5,176 +5,10 @@
 		<link rel="icon" href="logo.ico">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link type="text/css" rel="stylesheet" href="materialize.min.css" media="screen,projection">
-		<style>
-			i.tiny{font-size: 18px;}
-			i.mini{font-size: 12px;}
-
-			@font-face{
-				font-family: 'Diodrum';
-				src: url('diodrum.woff2') format('woff2');
-				font-weight: normal;
-				font-style: normal;
-			}
-			@font-face{
-				font-family: 'Diodrum Bold';
-				src: url('diodrumbold.woff2') format('woff2');
-				font-weight: normal;
-				font-style: normal;
-			}
-
-			body{font-family: 'Diodrum', sans-serif;}
-			h1, h2, h3, h4, h5, h6 {font-family: 'Diodrum Bold', sans-serif;}
-
-			/* botão subir flutuante invisível */
-			#btnTopoContainer {
-				opacity: 0;
-				visibility: hidden;
-				transform: translateY(10px);
-				transition: opacity 0.35s ease, 
-				transform 0.35s ease, 
-				visibility 0.35s ease;
-			}
-			#btnTopoContainer.mostrar {
-				opacity: 1;
-				visibility: visible;
-				transform: translateY(0);
-			}
-
-			/* Busca do Sumário A-Z */
-			.sumario-busca {
-				margin: 0 0 1.5rem 0;
-			}
-			.sumario-busca .input-field {
-				margin-top: 0;
-				margin-bottom: 0;
-			}
-			.sumario-busca input[type=text] {
-				margin-bottom: 0;
-			}
-			.sumario-busca .material-icons.prefix {
-				font-size: 2rem;
-				top: 0.35rem;
-			}
-			.sumario-busca .input-field > label {
-				left: 0;
-				color: #757575;
-			}
-			.sumario-busca .input-field > label.active {
-				color: #2196f3;
-			}
-			#buscaSumario:focus {
-				border-bottom: 1px solid #2196f3;
-				box-shadow: 0 1px 0 0 #2196f3;
-			}
-			#buscaSumario:focus + label {
-				color: #2196f3;
-			}
-			/* Mantém o label dentro do campo somente quando vazio e sem foco. */
-			#buscaSumario:not(:focus):placeholder-shown + label {
-				transform: translateY(0);
-				transform-origin: 0 100%;
-			}
-			#buscaSumario:focus + label,
-			#buscaSumario:not(:placeholder-shown) + label {
-				transform: translateY(-14px) scale(0.8);
-				transform-origin: 0 0;
-			}
-			#buscaSumario::placeholder {
-				color: transparent;
-			}
-			#buscaSumario:focus::placeholder {
-				color: #9e9e9e;
-			}
-
-			.fab-fixed {
-				position: fixed !important;
-				bottom: 45px;
-				right: 24px;
-				z-index: 9999 !important;
-			}
-			a.btnemail:hover, active {background-color: #00b0ff !important}
-
-			/* Acessos mais utilizados */
-			.mais-acessados {
-				margin: 0 0 1.5rem 0;
-				border: 1px solid #e0e0e0;
-				border-radius: 3px;
-				overflow: hidden;
-			}
-			.mais-acessados-titulo {
-				background: #1565c0;
-				color: #fff;
-				font-weight: 600;
-				padding: 9px 14px;
-				font-size: 1rem;
-			}
-			.mais-acessados-lista {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				padding: 10px;
-				background: #fafafa;
-			}
-			.mais-acessado-item {
-				display: inline-flex;
-				align-items: center;
-				gap: 5px;
-				border: 1px solid #ddd;
-				border-radius: 3px;
-				padding: 7px 10px;
-				background: #fff;
-				font-size: .9rem;
-			}
-			.mais-acessado-item:hover {
-				background: #e1f5fe;
-			}
-			.mais-acessados-vazio {
-				padding: 10px;
-				font-size: .9rem;
-				color: #757575;
-			}
-
-			/* card id #utilitarios */
-			/* Mouse em cima */
-			#utilitarios .tabs .tab a:hover {
-				color: #f44336 !important;
-				background-color: rgba(244, 67, 54, 0.10) !important;
-			}
-			/* Enquanto estiver pressionando */
-			#utilitarios .tabs .tab a:active,
-			#utilitarios .tabs .tab a:focus {
-				color: #f44336 !important;
-				background-color: rgba(244, 67, 54, 0.15) !important;
-			}
-			/* Aba ativa */
-			#utilitarios .tabs .tab a.active {
-				color: #f44336 !important;
-				background-color: transparent !important;
-				border-bottom: 2px solid #f44336;
-			}
-
-			/* card id #ip */
-			/* Mouse em cima */
-			#ip .tabs .tab a:hover {
-				color: #2196F3 !important;
-				background-color: rgba(33, 150, 243, 0.10) !important;
-			}
-			/* Enquanto estiver pressionando */
-			#ip .tabs .tab a:active,
-			#ip .tabs .tab a:focus {
-				color: #2196F3 !important;
-				background-color: rgba(33, 150, 243, 0.15) !important;
-			}
-			/* Aba ativa */
-			#ip .tabs .tab a.active {
-				color: #2196F3 !important;
-				background-color: transparent !important;
-				border-bottom: 2px solid #2196F3;
-			}
-		</style>
+		<link type="text/css" rel="stylesheet" href="materialize_modern.css" media="screen,projection">
 	</head>
 	<body>
-		<div class="row center"><img class="responsive-img" src="banner_extrapravc.png"></div><br>
+		<div class="row center"><img class="responsive-img" src="banner_extravc.png"></div><br>
 		<div class="container">
 
 			<!-- Botão voltar ao topo -->
@@ -192,40 +26,50 @@
 
 			<div class="row">
 				<div class="col s7">
-					<h2 class="blue-text text-darken-2" style="margin: 0; white-space: nowrap;">
+					<h2 class="blue-text text-darken-3" style="margin: 0; white-space: nowrap;">
 						<i class="material-icons" style="font-size: 2.5rem; vertical-align: middle;">bookmarks</i>
 						<b> SUMÁRIO A-Z</b>
-						<a href="central_atalhos.html" target="_blank" title="Informações"> <i class="material-icons blue-text " style="font-size: 1.2rem; vertical-align: middle; position: relative; top: -20px;">pending</i> </a>
+						<a href="#modalExcel" class="modal-trigger"><i class="material-icons tiny" style="vertical-align: middle; position: relative; top: -20px;">pending</i></a>
 					</h2>
 				</div>
-				<div class="col s5">
-					<div class="col s3"> <a href="https://gpa.pricefy.com.br/Store/Cartazes/Cartaz" class="collection-item blue-text text-darken-1" title="CRIAR CARTAZ DIGITAL"> <i class="material-icons medium">print</i> </a> </div>
-					<div class="col s3"> <a href="https://gprweb.gpacorp.com.br/loja/1833/" class="collection-item blue-text text-darken-1" title="ACESSAR GPR WEB"> <i class="material-icons medium">store</i> </a> </div>
-					<div class="col s3"> <a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoDiariadeItens/MovimentacaoDiariadeItens.xdo" class="collection-item blue-text text-darken-1"  title="CONSULTAR ESTOQUE PLU"> <i class="material-icons medium">shopping_cart</i> </a> </div>
-					<div class="col s3"> <a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoAcumuladaProdutoLojaMA/MovimentacaoAcumuladaProdutoLojaMA.xdo" class="collection-item blue-text text-darken-1"  title="CONSULTAR ESTOQUE MA"> <i class="material-icons medium">local_mall</i> </a> </div>
+				<div id="atalho" class="col s5">
+					<div class="col s3"> <a href="https://gpa.pricefy.com.br/Store/Cartazes/Cartaz" class="collection-item" title="CRIAR CARTAZ DIGITAL"> <i class="material-icons medium">print</i> </a> </div>
+					<div class="col s3"> <a href="https://gprweb.gpacorp.com.br/loja/1833/" class="collection-item" title="ACESSAR GPR WEB"> <i class="material-icons medium">store</i> </a> </div>
+					<div class="col s3"> <a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoDiariadeItens/MovimentacaoDiariadeItens.xdo" class="collection-item"  title="CONSULTAR ESTOQUE PLU"> <i class="material-icons medium">shopping_cart</i> </a> </div>
+					<div class="col s3"> <a href="http://rmsprd/xmlpserver/Guest/SIM/GPA/MovimentacaoAcumuladaProdutoLojaMA/MovimentacaoAcumuladaProdutoLojaMA.xdo" class="collection-item"  title="CONSULTAR ESTOQUE MA"> <i class="material-icons medium">local_mall</i> </a> </div>
 				</div>
-			</div>			
-
+			</div>
+			
+			<!-- Modal Excel -->
+<div id="modalExcel" class="modal">
+    <div class="modal-content" style="position: relative;">
+        <!-- Botão fechar -->
+        <a href="#!" class="modal-close" style="position: absolute; top: 10px; right: 10px;">
+            <i class="material-icons grey-text text-darken-2">close</i>
+        </a>
+        <h4>CENTRAL RÁPIDA MICROSOFT</h4>
+        <hr>
+        <iframe src="" style="border: none;"></iframe>
+    </div>
+</div>
 
 			<!-- Busca exclusiva do Sumário A-Z -->
 			<div class="sumario-busca">
 				<div class="input-field">
 					<i class="material-icons prefix">search</i>
-					<input id="buscaSumario" type="text" autocomplete="off" placeholder="Digite para buscar...">
-					<label for="buscaSumario">Buscar no Sumário A-Z</label>
+					<input id="buscaSumario" type="text" autocomplete="off" placeholder="Buscar no Sumário A-Z...">
 				</div>
 			</div>
 
 			<!-- Acessos mais utilizados: preenchido automaticamente pelo histórico deste navegador -->
 			<div id="maisAcessados" class="mais-acessados" style="display: none;">
 				<div class="mais-acessados-titulo">
-					<i class="material-icons" style="font-size: 1.1rem; vertical-align: middle; margin-right: 4px;">star</i> ÚLTIMOS ACESSOS
+					<span style="font-size: 1.1rem"><i class="material-icons" style="vertical-align: middle; margin-right: 4px;">star</i> <b>ÚLTIMOS ACESSOS</b></span>
 				</div>
 				<div id="maisAcessadosLista" class="mais-acessados-lista"></div>
 			</div>
 
 			<div id="sumarioAcesso" class="collection">
-				<span style="font-size: 1.64rem">
 					<a href="https://selfbooking.lemontech.com.br/gpa" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;Agiliza</a>
 					<a href="https://hcm19.sapsf.com/login?_s.crb=MpRnyl9h2gtL35%252flQstivPE6UNp9KNI8k6La41ZQEoU%253d#/login" class="collection-item blue-text "><i class="tiny material-icons">link</i> &nbsp;Avance</a>
 					<a href="https://www.benuerp.com.br/new/informacoesClienteDocumentos.benu" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Benu ERP | Software de Gestão (Grupo Expansão)</a>
@@ -302,13 +146,13 @@
 					<a href="http://10.101.1.31:8084/adm/login.xhtml" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Scope NCR</a>
 
 					<a href="https://gpabr.sharepoint.com/sites/Comunicacaointerna/ComunicacaoOperacional/Forms/AllItems.aspx?cid=ce7b6e43%2D22b9%2D4a8b%2Da8e8%2Da866565d040b&csf=1&e=q6FBvA&FolderCTID=0x0120006673C9E019AF994F97CB00F5F16E1E8B&web=1&id=%2Fsites%2FComunicacaointerna%2FComunicacaoOperacional%2FExtra%20Mercado&viewid=bc80a6e1%2D97b1%2D4403%2Dae3b%2Dfaf13a247b15" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Comunicação Operacional</a>
-					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp; SharePoint | Itens Ofensores</a>
-					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp; SharePoint | One Page - Loja</a>
+					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;SharePoint | Itens Ofensores</a>
+					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;SharePoint | One Page - Loja</a>
 					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FPain%C3%A9is%20Gerenciais&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059&CT=1713554395590&OR=OWA%2DNT%2DMail&CID=82facf8e%2D173a%2Da72c%2D2994%2De6981f5cb758" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Painéis Gerenciais</a>
 					<a href="https://gpabr.sharepoint.com/sites/MEX/Documentos%20Compartilhados/Forms/AllItems.aspx?newTargetListUrl=%2Fsites%2FMEX%2FDocumentos%20Compartilhados&viewpath=%2Fsites%2FMEX%2FDocumentos%20Compartilhados%2FForms%2FAllItems%2Easpx&id=%2Fsites%2FMEX%2FDocumentos%20Compartilhados%2FATUALIZADO%20PLANOGRAMAS%20E%20DOCS%20MEX%2F1%20%2D%20PLANOGRAMAS%2F1%2E3%20RJ%2F1%2E3%2E1%20MERCEARIA&viewid=9c320b30%2Db32e%2D42f8%2D81e2%2D3d71f1a40414" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Planograma MEX</a>
 					<a href="http://nb02298643/share_point/quebras.php" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Prevenção de Perdas</a>
 					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGovernan%C3%A7a%20de%20Invent%C3%A1rio%20e%20Preven%C3%A7%C3%A3o%20de%20Perdas%2FPrograma%C3%A7%C3%A3o%20de%20Invent%C3%A1rio&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059&csf=1&web=1&e=6xbIqO&cid=612ac24a%2Dacec%2D4804%2Dbe41%2D19f79161cd50&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;SharePoint | Programação de Inventário</a>
-					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp; SharePoint | Vencimento e Maturação</a>
+					<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item blue-text"><i class="tiny material-icons">link</i> &nbsp;cSharePoint | Vencimento e Maturação</a>
 
 					<a href="https://gpabr.service-now.com/esc" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Service Now | Central de Serviços GPA</a>
 					<a href="https://gpabr.service-now.com/blsp" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Service Now | Portal Casa do Cliente (Gerência)</a>
@@ -329,7 +173,6 @@
 					<a href="https://universidadedovarejogpa.com.br/app/home/canal/gpa-capacita?section=eficiencia-em-acao&trail=cqc-combate-a-quebra-no-caixa" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Universidade do Varejo GPA | Combate a Quebra de Caixa</a>
 					<a href="https://universidadedovarejogpa.com.br/app/home/canal/home/sessao/treinamentos-obrigatorios" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Universidade do Varejo GPA | Treinamentos Obrigatórios</a>
 					<a href="https://visibilidade.cbdnet.com.br/login" class="collection-item blue-text  "><i class="tiny material-icons">link</i> &nbsp;Visibilidade GPA</a>
-				</span>
 			</div><br>
 
 			<!-- card seleção portaria vs prevenção -->
@@ -359,15 +202,15 @@
 					</div>
 					<div id="card_prevencao">
 						<div class="collection">
-							<a href="https://app.powerbi.com/groups/me/apps/698e3ff6-804a-48ac-b352-991b249a669f/reports/8072b7a6-b285-4627-9b70-38fb39dad312/ReportSectionb4e51904a1badc4b39aa?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - POWER BI</a>
-							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ONE PAGE - LOJA (SHAREPOINT)</a>
-							<a href="https://app.powerbi.com/groups/me/reports/6c003941-1ebd-4f68-afba-093e889a53c8/ReportSection?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i>  &nbsp;TABELA ONE PAGE - LOJA</a>
-							<a href="https://app.powerbi.com/groups/me/reports/1a1d0382-083a-4275-a441-d324da7616c0/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;PAINEL GESTÃO A VISTA</a>
-							<a href="https://app.powerbi.com/groups/me/reports/e5ff2826-27b8-43a1-b34d-ea849b3d251e/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;DDE - DIAS DE ESTOQUE</a>
-							<a href="https://app.powerbi.com/groups/me/reports/35cf1a22-004a-41c1-bbaf-f76a3c1e7146/ReportSectionfe0099f6cc4fa8067a13?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;DDE - DIAS DE ESTOQUE (PERECÍVEIS)</a>
-							<!-- <a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FPain%C3%A9is%20Gerenciais&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;EVOLUÇÃO PIQUE - <i> descontinuado </i></a> -->
-							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;ITENS OFENSORES</a>
-							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;VENCIMENTO E MATURAÇÃO</a>
+							<a href="https://app.powerbi.com/groups/me/apps/698e3ff6-804a-48ac-b352-991b249a669f/reports/8072b7a6-b285-4627-9b70-38fb39dad312/ReportSectionb4e51904a1badc4b39aa?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;POWER BI | ONE PAGE</a>
+							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FOne%20Page%20Loja&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;SHAREPOINT | ONE PAGE - LOJA</a>
+							<a href="https://app.powerbi.com/groups/me/reports/6c003941-1ebd-4f68-afba-093e889a53c8/ReportSection?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i>  &nbsp;POWER BI | TABELA ONE PAGE - LOJA</a>
+							<a href="https://app.powerbi.com/groups/me/reports/1a1d0382-083a-4275-a441-d324da7616c0/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;POWER BI | PAINEL GESTÃO A VISTA</a>
+							<a href="https://app.powerbi.com/groups/me/reports/e5ff2826-27b8-43a1-b34d-ea849b3d251e/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&openReportSource=ReportInvitation&experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;POWER BI | DDE - DIAS DE ESTOQUE</a>
+							<a href="https://app.powerbi.com/groups/me/reports/35cf1a22-004a-41c1-bbaf-f76a3c1e7146/ReportSectionfe0099f6cc4fa8067a13?experience=power-bi" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;POWER BI | DDE - DIAS DE ESTOQUE (PERECÍVEIS)</a>
+							<!-- <a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FGPA%2FPain%C3%A9is%20Gerenciais&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;SHAREPOINT | EVOLUÇÃO PIQUE - <i> descontinuado </i></a> -->
+							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?csf=1&web=1&e=xpeMt6&CID=6f496089%2D36bb%2D4613%2Db7e3%2Dfa91c9091f7b&FolderCTID=0x012000EBF8FDE488D5714EB2B0820F4110D01E&id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FItens%20Ofensores&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;SHAREPOINT | ITENS OFENSORES</a>
+							<a href="https://gpabr.sharepoint.com/sites/SharePoint-PrevenodePerdas-GPA/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FSharePoint%2DPrevenodePerdas%2DGPA%2FDocumentos%20Compartilhados%2FMCE%2FAcompanhamento%20PIQue%20Sem%20A%C3%A7%C3%A3o&viewid=d84ef93a%2D8c8a%2D4d91%2Dbae9%2De726bb8c4059" class="collection-item red-text"><i class="mini material-icons">folder</i> &nbsp;SHAREPOINT | VENCIMENTO E MATURAÇÃO</a>
 						</div>
 					</div>
 				</div>
@@ -385,19 +228,19 @@
 						<div class="col s6">
 							<div class="card">
 								<div class="card-content">
-									<h5 class="header teal-text text-darken-3" style="margin-top: 0;"><i class="material-icons" style="font-size: 18px">note_alt</i> PASSO 1: </h5>
-									<p> Acesse com sua conta e senha de rede > em “Continuar Conectado?” clique em “não” > Clique em configurar agora > Informe cód. país + DDD + nº celular, clique enviar por SMS, verifique em seu celular e volte para digitar o cód. recebido > Clique em “verificar” > Clique em concluir. </p>
+									<h5 class="header teal-text text-darken-1" style="margin-top: 0;">PASSO 1: </h5>
+									<p> Acesse com sua conta e senha de rede > em “Continuar Conectado?” clique em “não” > Clique em configurar agora > Informe cód. país + DDD + nº celular, clique enviar por SMS, verifique em seu celular e volte para digitar o cód. recebido > Clique em “verificar” > Clique em concluir. </p><br>
 								</div>
-								<div class="card-action"><a href="https://aka.ms/ssprsetup" class="teal-text text-darken-2"><i class="mini material-icons">settings</i> &nbsp;Pré-requisito (Cadastro) </a></div>
+								<div class="card-action"><a href="https://aka.ms/ssprsetup"><i class="mini material-icons" id="card_password">settings</i> &nbsp;Pré-requisito (Cadastro)</a></div>
 							</div>
 						</div>
 						<div class="col s6">
 							<div class="card">
 								<div class="card-content">
-									<h5 class="header teal-text text-darken-3" style="margin-top: 0;"><i class="material-icons" style="font-size: 18px">note_alt</i> PASSO 2: </h5>
+									<h5 class="header teal-text text-darken-1" style="margin-top: 0;"> PASSO 2: </h5>
 									<p> Informe seu e-mail e o código captcha e clique em “Avançar” > Clique em “Esqueci minha senha” e depois em “Avançar” > Insira o número de telefone cadastrado e clique em “Enviar SMS” > Insira o código recebido e clique em “Avançar” > Insira uma nova senha e clique em “Concluir”. </p>
 								</div>
-								<div class="card-action"><a href="https://aka.ms/sspr" class="teal-text text-darken-2"><i class="mini material-icons">settings</i> &nbsp;Desbloqueio/troca de senha </a></div>
+								<div class="card-action"><a href="https://aka.ms/sspr"><i class="mini material-icons" id="card_password">settings</i> &nbsp;Desbloqueio / troca de senha</a></div>
 							</div>
 						</div>
 					</div>
@@ -407,7 +250,7 @@
 			<!-- card listagem IPs balanças/CPU -->
 			<div class="card" id="IP">
 				<div class="card-content blue" style="padding-bottom: 0;">
-					<h4 class="white-text center-align" style="margin: 0;"><i class="material-icons" style="font-size: 1.8rem">devices</i> <b>&nbsp;RELAÇÃO DE DISPOSITIVOS IPs</b></h4><br>
+					<h4 class="white-text center-align" style="margin: 0;"><i class="material-icons" style="font-size: 1.8rem">devices</i> <b>&nbsp;RELAÇÃO DE DISPOSITIVOS IP</b></h4><br>
 				</div>
 				<div class="card-tabs">
 					<ul class="tabs tabs-fixed-width">
@@ -432,22 +275,26 @@
 								<li class="collection-item"><b>[10.42.181.#] BALANÇA 16:</b> FLV - SALÃO</li>
 							</span>
 						</ul>
+						<p class="center-align blue-grey-text text-darken-3" style="font-size: 1rem;"><i class="tiny material-icons" style="vertical-align: middle;">info</i> &nbsp; CARGA NA BALANÇA :: CPU CPD I >> MGV7.exe >> USER: ADMINL // SENHA: LOJA1833</p>
 					</div>
 					<div id="card_cpu">
 						<ul class="collection">
 							<span class="blue-text text-darken-1">
 								<li class="collection-item"><b>[10.18.33.20] CPU: </b> GERENTE </li>
-								<li class="collection-item"><b>[10.18.33.16] CPU (TIRA-TEIMA): </b> SUBGERENTE </li>
+								<li class="collection-item"><b>[10.18.33.16] CPU: </b> SUBGERENTE </li>
 								<li class="collection-item"><b>[10.18.33.23] CPU: </b> ADM </li>
 								<li class="collection-item"><b>[10.18.33.18] CPU: </b> RH</li>
-								<li class="collection-item"><b>[10.18.33.17] CPU (BALANÇA MGV7): </b> CPD 1 </li>
-								<li class="collection-item"><b>[10.18.33.26] CPU: </b> CPD 2 </li>
+								<li class="collection-item"><b>[10.18.33.17] CPU (MGV7-BALANÇA): </b> CPD I </li>
+								<li class="collection-item"><b>[10.18.33.3] CPU (TIRA-TEIMA): </b> CPD II </li>
 								<li class="collection-item"><b>[10.18.33.13] CPU: </b> DEPÓSITO </li>
+								<li class="collection-item"><b>[10.18.33.21] CPU: </b> THIAGO </li>
 								<li class="collection-item"><b>[10.18.33.14] CPU: </b> PORTARIA </li>
 								<li class="collection-item"><b>[10.18.33.22] CPU: </b> FRENTE DE CAIXA </li>
 								<li class="collection-item"><b>[10.18.33.19] CPU: </b> E-COMMERCE </li>
 							</span>
 						</ul>
+						<p class="center-align blue-grey-text text-darken-3" style="font-size: 1rem;"><i class="tiny material-icons" style="vertical-align: middle;">warning</i> &nbsp; CPU DE APLICAÇÕES NÃO PODEM SER DESLIGADAS! CASO AO CONTRÁRIO, O SISTEMA NÃO SUBIRÁ AS INFORMAÇÕES.</p>
+						<p class="center-align blue-grey-text text-darken-3" style="font-size: 1rem;"><i class="tiny material-icons" style="vertical-align: middle;">info</i> &nbsp; CARGA NA BALANÇA :: CPU I CPD >> MGV7.exe >> USER: ADMINL // SENHA: LOJA1833</p>
 					</div>
 					<div id="card_impressora">
 						<ul class="collection">
@@ -475,11 +322,15 @@
 			</div><br>
 			<div class="footer-copyright">
 				<div class="container">
-					<div class="left">CNPJ: 47.508.411/1681-70 :: ABC CB 1833 | Rua México, 160, Centro, Araruama-RJ</div><br>
+					<div>
+						<div class="left">CNPJ: 47.508.411/1681-70 :: ABC CB 1833 | Rua México, 160, Centro, Araruama-RJ</div>
+						<div class="right"><a href="central_atalhos.html" target="_blank" title="Informações" class="white-text">Central Microsoft</a></div>
+					</div>
 					<div class="left">© 2023 By <a href="mailto: thiago.vieira1@gpabr.com" class="white-text">Thiago Teles</a> | Atualizado: 19/08/2026</div>
 				</div>
 			</div>
 		</footer>
+
 
 
 		<!-- Scripts: abas, busca do Sumário A-Z e últimos acessos -->
@@ -650,18 +501,18 @@
 
 						botao.href = item.link.href;
 						botao.className =
-							'blue-text text-darken-3 mais-acessado-item';
+							'blue-text text-darken-1 mais-acessado-item';
 						botao.title = 'Último acesso';
 
 						var icone = document.createElement('i');
 						icone.className = 'material-icons';
 						icone.style.fontSize = '1rem';
-						icone.textContent = 'link';
+						icone.textContent = 'history';
 
 						botao.appendChild(icone);
-						botao.appendChild(
-							document.createTextNode(item.titulo)
-						);
+                        var texto = document.createElement('span');
+                        texto.textContent = item.titulo;
+                        botao.appendChild(texto);
 
 						/* Se o usuário clicar novamente em um item dos
 						   últimos acessos, ele também deve ser atualizado. */
@@ -725,5 +576,12 @@
 				});
 			});
 		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('.modal');
+                M.Modal.init(elems);
+            });
+        </script>
 	</body>
 </html>
