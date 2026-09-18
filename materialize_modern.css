@@ -590,7 +590,7 @@ i.mini { font-size: 10px; }
 /* ---------- Abas dos cards ---------- */
 
 #utilitarios .tabs .tab a,
-#ip .tabs .tab a {
+#IP .tabs .tab a {
     transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
 }
 
@@ -611,21 +611,28 @@ i.mini { font-size: 10px; }
     border-bottom: 2px solid #e53935;
 }
 
-#ip .tabs .tab a:hover {
+#IP .tabs .tab a:hover {
     color: #1976d2 !important;
     background-color: rgba(33, 150, 243, 0.07) !important;
 }
 
-#ip .tabs .tab a:active,
-#ip .tabs .tab a:focus {
+#IP .tabs .tab a:active,
+#IP .tabs .tab a:focus {
     color: #1976d2 !important;
     background-color: rgba(33, 150, 243, 0.11) !important;
 }
 
-#ip .tabs .tab a.active {
+#IP .tabs .tab a.active,
+#IP .tabs .tab a.active:focus,
+#IP .tabs .tab a.active:active {
     color: #1976d2 !important;
     background-color: transparent !important;
     border-bottom: 2px solid #1976d2;
+    outline: none !important;
+}
+
+#IP .tabs .indicator {
+    background-color: #90caf9 !important;
 }
 
 /* ---------- Botão de e-mail ---------- */
@@ -645,9 +652,9 @@ a.btnemail {
 
 a.btnemail:hover,
 a.btnemail:focus {
-    background-color: #00a7e8 !important;
+    background-color: #ef5350 !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(30, 64, 175, 0.24) !important;
+    box-shadow: 0 8px 22px rgba(211, 47, 47, 0.24) !important;
 }
 
 /* ---------- Sumário principal ---------- */
