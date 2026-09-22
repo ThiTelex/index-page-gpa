@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<link rel="icon" href="logo.ico">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+<title>Auto Anúncios Extra — v4.3</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#111827;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+.container{width:min(100% - 20px,760px);margin:0 auto;padding:18px 0 30px}
+.header{text-align:center;margin:2px 0 15px}.logo{width:min(190px,52vw);display:block;margin:0 auto 3px}.subtitle{margin:0;color:#2b7fc4;font-size:17px;font-weight:700}
+.version{font-size:11px;color:#64748b;margin-top:3px}
+.card,.settings-card{background:#1f2937;border:1px solid #303b4d;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+.card{padding:15px;margin-bottom:12px}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}.settings-card{padding:15px;min-width:0}
+.title{display:block;font-weight:700;margin-bottom:9px;color:#f3f4f6;font-size:16px}
+input[type=file],input[type=number],input[type=text],textarea,select{width:100%;padding:11px;border-radius:9px;border:1px solid #4b5563;background:#111827;color:#fff;font-size:14px}textarea{min-height:105px;resize:vertical;line-height:1.4}input[type=range]{width:100%;accent-color:#267bc1}
+.radio-line{display:flex;gap:15px;flex-wrap:wrap}.radio-line label{font-size:13px;color:#e5e7eb;cursor:pointer}.radio-line input{accent-color:#267bc1}
+.status{background:#111827;border:1px solid #374151;text-align:center;border-radius:11px;padding:16px 11px}.mode{font-size:12px;color:#9ca3af;text-transform:uppercase}.current{font-size:19px;font-weight:700;margin-top:6px;word-break:break-word;color:#60a5fa}.timer{font:700 36px monospace;margin-top:10px;color:#f3f4f6}.next{font-size:13px;color:#9ca3af;margin-top:7px}
+.timeline{height:7px;background:#374151;border-radius:99px;overflow:hidden;margin:13px 0 6px}.timeline-fill{height:100%;width:0;background:#267bc1;transition:width .2s linear}.time-row{display:flex;justify-content:space-between;color:#9ca3af;font-size:10px}
+button{width:100%;border:1px solid #3b4a5f;border-radius:9px;padding:10px 6px;margin-top:9px;font-size:12px;font-weight:700;cursor:pointer;background:#263447;color:#e5e7eb}button:hover:not(:disabled){background:#304157;border-color:#4b6582}button:disabled{opacity:.45;cursor:not-allowed}
+.main-actions,.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.main-actions button,.actions button{margin:0;min-width:0}.main-actions{margin-top:9px}.actions{margin-top:7px}
+#start{background:#267bc1;border-color:#267bc1;color:#fff}#start:hover:not(:disabled){background:#2f8bd7}#pause{background:#344155}#stop{background:#3a2b30;border-color:#63343d;color:#fecaca}
+#skipAd,#skipWait,#operationToggle{background:#263447;color:#dbeafe}.operation-toggle{border-color:#267bc1}
+.count,.hint,.legend{font-size:12px;color:#9ca3af;line-height:1.5}.count{margin-top:7px}.legend{margin-top:8px}
+.list{max-height:285px;overflow:auto;margin-top:8px}.item{display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid #374151;min-width:0}.item-info{flex:1;min-width:0}.item-name{font-size:13px;line-height:1.3;word-break:break-word;color:#dbeafe}.item-meta{font-size:11px;color:#94a3b8;margin-top:3px}.item-status{font-size:11px;margin-top:3px;color:#9ca3af;font-weight:700}.item-status.playing{color:#22c55e}.item-status.last{color:#fbbf24}.delete{width:34px;height:34px;flex:0 0 34px;padding:0;margin:0;border:1px solid #4b5563;border-radius:8px;background:#111827;color:#ef4444;font-size:20px;line-height:1}.section-title{font-size:16px;font-weight:700;margin:0 0 9px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field-label{display:block;font-size:12px;color:#cbd5e1;margin-bottom:5px}.range-value{font-size:11px;color:#9ca3af;text-align:right;margin-top:3px}.voice-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.voice-actions button{margin:0}.primary{background:#267bc1;border-color:#267bc1;color:#fff}.secondary{background:#263447}.footer{text-align:center;margin:20px 0 3px;color:#fff;font-size:13px}.white-text{color:#fff;text-decoration:none}
+.operation-mode{display:none;min-height:100vh;align-items:center;justify-content:center;padding:15px}.operation-panel{width:100%;max-width:680px;text-align:center;background:#1f2937;border:1px solid #303b4d;border-radius:18px;padding:24px 16px}.operation-logo{width:min(170px,46vw);margin:0 auto 5px}.operation-title{color:#60a5fa;font-size:20px;font-weight:800}.operation-current{font-size:21px;font-weight:800;color:#fff;word-break:break-word;margin:8px 0 12px}.operation-timer{font:800 54px monospace;color:#fff}.operation-next{font-size:13px;color:#9ca3af;margin:10px 0}.operation-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.operation-buttons button{margin:0}.op-timeline{margin-top:10px}.op-state{display:inline-block;padding:7px 14px;border-radius:999px;background:#4a161b;color:#f87171;border:1px solid #7f3039;font-weight:800;font-size:12px}.op-state.unlocked{background:#173b29;color:#4ade80;border:1px solid #2f7d50}.operation-lock-row{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}.operation-lock-row button{margin:0}.operation-lock-btn{background:#4a161b;border-color:#7f3039;color:#fecaca}.operation-lock-btn.unlocked{background:#173b29;border-color:#2f7d50;color:#4ade80}.operation-help{font-size:11px;color:#9ca3af;margin-top:7px}
+@media(max-width:560px){.container{padding:14px 10px 25px}.settings-grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr 1fr}.main-actions button,.actions button{font-size:11px;padding:9px 3px;min-height:40px}.operation-buttons{grid-template-columns:repeat(3,1fr)}.operation-buttons button{font-size:10px;padding:9px 3px}.current{font-size:17px}}
+
+/* v2.0.19 - Modo Operação compacto */
+.operation-lock-row {
+  margin-top: 8px;
+}
+.operation-actions-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+@media (max-width: 600px) {
+  .operation-actions-row button {
+    font-size: 11px;
+    padding: 10px 4px;
+    line-height: 1.2;
+    min-height: 42px;
+  }
+}
+
+
+/* v2.0.19 - Modo Operação: bloqueio separado das ações */
+.operation-lock-row{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+.operation-actions-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+@media(max-width:560px){
+  .operation-buttons{grid-template-columns:repeat(3,1fr)}
+  .operation-buttons button{font-size:10px;padding:9px 3px;line-height:1.2;min-height:42px}
+}
+
+
+/* v2.0.19 */
+.operation-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.operation-buttons button:disabled{opacity:.45;cursor:not-allowed}
+.operation-lock-row{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+
+/* v2.0.19 - centralização da interface */
+body {
+  min-height: 100vh;
+}
+#mainApp, #operationMode {
+  width: min(100% - 20px, 760px);
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+/* v4.1 - Modo Operação realmente sobreposto à tela principal */
+.operation-mode {
+  display: none;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9000 !important;
+  width: 100vw !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 14px !important;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background: #0b1220;
+}
+.operation-mode .operation-panel {
+  width: min(100%, 680px) !important;
+  max-width: 680px;
+  margin: auto !important;
+}
+body.operation-open{overflow:hidden}
+
+
+/* v2.0.19 - estado e disponibilidade dos controles */
+.op-state.locked {
+  background: #4a161b !important;
+  color: #f87171 !important;
+}
+.op-state.unlocked {
+  background: #173b29 !important;
+  color: #4ade80 !important;
+}
+.operation-buttons button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+/* v2.0.19 - testar item individual da fila */
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  margin-left: 6px;
+}
+.item-test, .item-delete {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px !important;
+  line-height: 1 !important;
+}
+.item-test {
+  border: 1px solid #3d526b !important;
+  background: #263447 !important;
+  color: #e5e7eb !important;
+  font-size: 13px !important;
+}
+.item-test.testing {
+  border-color: #3f9f67 !important;
+  background: #173b29 !important;
+  color: #4ade80 !important;
+}
+.item-delete {
+  border: 1px solid #4b5563 !important;
+  background: #111827 !important;
+  color: #ef4444 !important;
+  font-size: 19px !important;
+}
+@media (max-width:560px) {
+  .item-actions { gap: 4px; margin-left: 4px; }
+  .item-test, .item-delete {
+    width: 27px !important;
+    height: 27px !important;
+    min-width: 27px !important;
+    font-size: 12px !important;
+  }
+  .item-delete { font-size: 17px !important; }
+}
+
+
+/* v2.0.19 - Google Material Symbols */
+.mi{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;font-size:18px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-flex;align-items:center;justify-content:center;vertical-align:-4px;font-feature-settings:'liga';white-space:nowrap}
+button .mi{font-size:17px;vertical-align:-4px;margin-right:4px}
+.title .mi,.section-title .mi{font-size:19px;margin-right:5px;vertical-align:-4px}
+.legend .mi{font-size:14px;vertical-align:-3px;margin-right:2px}
+.item-test .mi,.item-delete .mi{margin:0;font-size:17px}
+/* Padronização visual dos cards de configuração e da fila */
+.settings-card{background:#1f2937;border:1px solid #303b4d;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.18);padding:15px;min-width:0}
+.settings-card .title{display:flex;align-items:center;font-weight:700;margin-bottom:9px;color:#f3f4f6;font-size:16px;line-height:1.2}
+.queue-card{padding:15px}
+.queue-card .section-title{display:flex;align-items:center;line-height:1.2}
+
+
+/* v2.0.19 - componentes nativos com aparência integrada ao tema */
+.custom-time{position:relative;width:100%;height:43px}
+.custom-time .time-display{width:100%;height:43px;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:9px;border:1px solid #4b5563;background:#111827;color:#fff;font-size:14px;line-height:1;pointer-events:none}
+.custom-time .time-display::after{content:'expand_more';font-family:'Material Symbols Rounded';font-size:20px;color:#9ca3af}
+.custom-time input[type=time]{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;opacity:0;cursor:pointer;z-index:2}
+.file-picker{position:relative;display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:43px;padding:10px 12px;border-radius:9px;border:1px solid #4b5563;background:#111827;color:#e5e7eb;font-size:13px;font-weight:700;cursor:pointer;overflow:hidden}
+.file-picker:hover{background:#263447;border-color:#5b718b}
+.file-picker input[type=file]{position:absolute;inset:0;width:100%;height:100%;padding:0;margin:0;opacity:0;cursor:pointer;z-index:2;border:0}
+.file-picker .mi{font-size:18px;margin-right:0}
+.queue-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:9px;font-size:11px;color:#9ca3af}
+.legend-item{display:inline-flex;align-items:center;gap:5px}
+.status-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:0 0 9px}
+.status-dot.playing{background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.45)}
+.status-dot.last{background:#fbbf24;box-shadow:0 0 6px rgba(251,191,36,.35)}
+.item-status{display:flex;align-items:center;gap:5px}
+.item-status.playing,.item-status.last{color:#cbd5e1}
+@media(max-width:560px){.custom-time,.custom-time .time-display{height:41px}.file-picker{min-height:41px;font-size:12px}}
+#loginScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#0b0f14;padding:20px}#loginCard{width:min(390px,100%);box-sizing:border-box;background:#151b23;border:1px solid #303946;border-radius:18px;padding:28px;box-shadow:0 18px 55px rgba(0,0,0,.45);text-align:center}#loginCard h2{margin:8px 0}#loginCard p{margin:0 0 20px;color:#9ca3af}#loginPassword{width:100%;box-sizing:border-box;background:#0f141b;color:#fff;border:1px solid #3b4553;border-radius:10px;padding:13px 14px;font-size:18px;text-align:center;letter-spacing:5px}#loginButton{width:100%;margin-top:12px}#loginError{min-height:20px;color:#f87171;font-size:13px;margin-top:10px}body.login-locked> *:not(#loginScreen){visibility:hidden}</style>
+</head>
+<body class="login-locked"><div id="loginScreen"><div id="loginCard"><span class="material-symbols-rounded">lock</span><h2>Acesso aos Anúncios</h2><p>Digite a senha para acessar a ferramenta.</p><form id="loginForm"><input id="loginPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="Senha" aria-label="Senha" required><button id="loginButton" type="submit"><span class="material-symbols-rounded">login</span> ENTRAR</button></form><div id="loginError"></div></div></div>
+<div class="container" id="mainApp">
+<div class="header"><img class="logo" src="logo-extra.png" alt="Extra Mercado"><p class="subtitle">AUTO ANÚNCIOS</p><div class="version">v4.4 • MÚSICA + ANÚNCIOS</div></div>
+
+<div class="card">
+<div class="status" aria-live="polite">
+<div id="mode" class="mode">PARADO</div>
+<div id="current" class="current">Aguardando início</div>
+<div class="timeline"><div id="timelineFill" class="timeline-fill"></div></div>
+<div class="time-row"><span id="timeElapsed">00:00</span><span id="timeTotal">00:00</span></div>
+<div id="timer" class="timer">00:00</div>
+<div id="next" class="next">Próximo anúncio: --:--</div>
+</div>
+<div class="main-actions"><button id="start"><span class="mi">play_arrow</span> INICIAR</button><button id="pause" disabled><span class="mi">pause</span> PAUSAR</button><button id="stop" disabled><span class="mi">stop</span> PARAR</button></div>
+<div class="actions"><button id="skipAd" disabled><span class="mi">skip_next</span> PULAR ANÚNCIO</button><button id="skipWait" disabled><span class="mi">skip_next</span> PULAR MÚSICA</button><button id="operationToggle"><span class="mi">point_of_sale</span> MODO OPERAÇÃO</button></div>
+</div>
+
+<div class="settings-grid">
+<div class="settings-card"><label class="title" for="songsBeforeAd"><span class="mi">music_note</span> Músicas antes do anúncio</label><input id="songsBeforeAd" type="number" min="1" step="1" value="3"><div class="hint">Ex.: 3 = toca 3 músicas completas antes de iniciar o bloco de anúncios.</div></div>
+<div class="settings-card"><label class="title" for="adsPerBlock"><span class="mi">campaign</span> Anúncios por intervalo</label><input id="adsPerBlock" type="number" min="1" step="1" value="1"><div class="hint">Quantidade de anúncios tocados quando o contador de músicas atingir o limite.</div></div>
+</div>
+<div class="settings-grid">
+<div class="settings-card"><label class="title"><span class="mi">swap_vert</span> Ordem dos anúncios</label><div class="radio-line"><label><input type="radio" name="order" id="random" checked> Aleatório</label><label><input type="radio" name="order" id="sequential"> Sequencial</label></div></div>
+<div class="settings-card"><label class="title"><span class="mi">repeat</span> Contador atual</label><div id="musicCounter" class="current" style="font-size:17px;margin:0">0 / 3 músicas</div><div class="hint">O contador avança somente quando uma música termina.</div></div>
+</div>
+
+<div class="settings-grid">
+<div class="settings-card"><label class="title"><span class="mi">schedule</span> Horário dos anúncios</label><div class="two"><div><span class="field-label">Início</span><div class="custom-time"><div id="startTimeDisplay" class="time-display">07:00</div><input id="startTime" type="time" value="07:00" aria-label="Horário de início"></div></div><div><span class="field-label">Fim</span><div class="custom-time"><div id="endTimeDisplay" class="time-display">22:00</div><input id="endTime" type="time" value="22:00" aria-label="Horário de fim"></div></div></div><div class="hint">Fora desse período, nenhum novo anúncio será iniciado.</div></div>
+<div class="settings-card"><label class="title"><span class="mi">volume_up</span> Volume geral (anúncios e músicas)</label><input id="adVolume" type="range" min="0" max="1" step="0.01" value="1"><div id="adVolumeValue" class="range-value">100%</div></div>
+</div>
+
+<div class="card">
+<h2 class="section-title"><span class="mi">record_voice_over</span> Criar locução para a fila</h2>
+<textarea id="speechText" placeholder="Ex.: Atenção, clientes Extra Mercado! Aproveite nossas ofertas especiais de hoje."></textarea>
+<div><span class="field-label">Voz do navegador</span><select id="voiceSelect"><option>Carregando vozes...</option></select></div>
+<div class="two" style="margin-top:9px"><div><span class="field-label">Velocidade</span><select id="speechRate"><option value="0.9">0.90x</option><option value="1">1.00x</option><option value="1.1">1.10x</option><option value="1.25">1.25x</option><option value="1.35" selected>1.35x</option><option value="1.5">1.50x</option></select></div><div><span class="field-label">Tom de voz</span><select id="speechPitch"><option value="0.7">0.70</option><option value="0.8">0.80</option><option value="0.9" selected>0.90</option><option value="1">1.00</option><option value="1.1">1.10</option><option value="1.2">1.20</option></select></div></div>
+<div class="two" style="margin-top:9px"><div><span class="field-label">Volume da voz <span id="speechVolumeValue">100%</span></span><input id="speechVolume" type="range" min="0" max="1" step="0.01" value="1"></div><div><span class="field-label">Volume da música <span id="bgVolumeValue">15%</span></span><input id="bgVolume" type="range" min="0" max="1" step="0.01" value="0.15"></div></div>
+<div class="voice-actions" style="margin-top:9px"><button id="previewSpeech" class="secondary"><span class="mi">play_arrow</span> TESTAR LOCUÇÃO</button><button id="addSpeech" class="primary"><span class="mi">playlist_add</span> ADICIONAR À FILA</button></div>
+<div class="hint" style="margin-top:8px">A locução usa as vozes disponíveis no próprio navegador/Android. A música de fundo é o arquivo <strong>fundo.mp3</strong> desta pasta.</div>
+<audio id="bgAudio" preload="auto" src="fundo.mp3" style="display:none"></audio>
+<script>
+(()=>{const screen=document.getElementById("loginScreen"),form=document.getElementById("loginForm"),input=document.getElementById("loginPassword"),err=document.getElementById("loginError");
+async function config(){try{const r=await fetch("config.json",{cache:"no-store"});if(!r.ok)throw 0;const c=await r.json();if(typeof c.senha!=="string"||!c.senha)throw 0;return c.senha}catch(e){err.textContent="Não foi possível carregar a configuração de acesso.";return null}}
+(async()=>{const senha=await config();if(!senha)return;form.addEventListener("submit",e=>{e.preventDefault();if(input.value===senha){document.body.classList.remove("login-locked");screen.style.display="none";input.value=""}else{err.textContent="Senha incorreta.";input.select()}});input.focus()})()})();
+</script><script>
+/* v3.0 - reprodução de música de fundo mais compatível com Android/Chrome.
+   A música usa o próprio elemento <audio> em loop. Isso evita que o Web Audio
+   seja bloqueado quando a página está em segundo plano ou quando o TTS começa. */
+let bgMusicActive = false;
+let bgPaused = false;
+let bgRetryId = null;
+let mediaUnlocked = false;
+
+function updateBgVolume(){
+  const v=Number(document.getElementById("bgVolume")?.value ?? 0.22);
+  bgAudio.volume=Number.isFinite(v)?Math.max(0,Math.min(1,v)):0.22;
+}
+
+function startBgMusic(volume){
+  bgMusicActive=true;
+  bgPaused=false;
+  if(bgRetryId){clearInterval(bgRetryId);bgRetryId=null;}
+  bgAudio.loop=true;
+  if(Number.isFinite(Number(volume))) bgAudio.volume=Number(volume);
+  else updateBgVolume();
+  try{bgAudio.currentTime=0}catch(e){}
+  const p=bgAudio.play();
+  const armRetry=()=>{
+    if(bgRetryId)clearInterval(bgRetryId);
+    bgRetryId=setInterval(()=>{
+      if(!bgMusicActive||bgPaused){clearInterval(bgRetryId);bgRetryId=null;return;}
+      if(bgAudio.paused){try{const q=bgAudio.play();if(q&&q.catch)q.catch(()=>{});}catch(e){}}
+    },700);
+  };
+  if(p && typeof p.catch==="function") return p.catch(()=>{armRetry()});
+  armRetry();
+  return Promise.resolve();
+}
+
+function pauseBgMusic(){
+  if(!bgMusicActive || bgPaused) return;
+  try{bgAudio.pause()}catch(e){}
+  bgPaused=true;
+}
+
+function resumeBgMusic(){
+  if(!bgMusicActive || !bgPaused) return Promise.resolve();
+  bgPaused=false;
+  const p=bgAudio.play();
+  const armRetry=()=>{
+    if(bgRetryId)clearInterval(bgRetryId);
+    bgRetryId=setInterval(()=>{
+      if(!bgMusicActive||bgPaused){clearInterval(bgRetryId);bgRetryId=null;return;}
+      if(bgAudio.paused){try{const q=bgAudio.play();if(q&&q.catch)q.catch(()=>{});}catch(e){}}
+    },700);
+  };
+  if(p && typeof p.catch==="function") return p.catch(()=>{armRetry()});
+  armRetry();
+  return Promise.resolve();
+}
+
+function stopBgMusic(){
+  bgMusicActive=false;
+  bgPaused=false;
+  if(bgRetryId){clearInterval(bgRetryId);bgRetryId=null;}
+  try{bgAudio.pause();bgAudio.currentTime=0}catch(e){}
+}
+
+/* Desbloqueia o pipeline de áudio após um toque explícito no botão INICIAR.
+   O elemento é silenciado durante o pequeno desbloqueio e volta ao volume normal. */
+function unlockMedia(){
+  try{
+    const oldMuted=bgAudio.muted;
+    const oldVolume=bgAudio.volume;
+    bgAudio.muted=true;
+    bgAudio.volume=0;
+    const p=bgAudio.play();
+    const done=()=>{try{bgAudio.pause();bgAudio.currentTime=0;bgAudio.muted=oldMuted;bgAudio.volume=oldVolume;mediaUnlocked=true}catch(e){}};
+    if(p && typeof p.then==="function") p.then(done).catch(done); else done();
+  }catch(e){}
+}
+updateBgVolume();
+</script>
+</div>
+
+<div class="card queue-card">
+<h2 class="section-title"><span class="mi">library_music</span> Selecionar músicas MP3</h2>
+<label class="file-picker"><span class="mi">audio_file</span> SELECIONAR MÚSICAS MP3<input id="musicFiles" type="file" accept="audio/*" multiple></label>
+<div id="musicCount" class="count">Nenhuma música selecionada.</div>
+<div id="musicList" class="list"></div>
+<div class="legend" style="margin-top:8px">As músicas são tocadas na ordem selecionada. Ao terminar cada música, o contador é atualizado.</div>
+</div>
+
+<div class="card queue-card">
+<h2 class="section-title"><span class="mi">campaign</span> Selecionar anúncios MP3</h2>
+<label class="file-picker"><span class="mi">audio_file</span> SELECIONAR ARQUIVOS MP3<input id="adFiles" type="file" accept="audio/*" multiple></label>
+<div id="count" class="count">Nenhum áudio selecionado.</div>
+<div id="list" class="list"></div>
+<div class="queue-legend"><span class="legend-item"><span class="status-dot playing"></span> Em reprodução</span><span class="legend-item"><span class="status-dot last"></span> Último tocado</span></div>
+</div>
+
+<div class="card"><div class="hint"><strong>Como esta versão funciona:</strong><br>As músicas ficam em uma fila própria. A cada música concluída, o contador avança. Ao atingir a quantidade configurada, o sistema toca o bloco de anúncios (MP3 e/ou locuções) e depois volta para a música, zerando o contador. Fora do horário dos anúncios, a música continua e o anúncio fica aguardando o próximo horário ativo.</div></div>
+</div>
+
+<div id="operationMode" class="operation-mode"><div class="operation-panel"><img class="operation-logo" src="logo-extra.png" alt="Extra Mercado"><div class="operation-title">AUTO ANÚNCIOS • v4.4</div><div id="opMode" class="mode" style="margin-top:16px">PARADO</div><div id="opCurrent" class="operation-current">Aguardando início</div><div class="timeline op-timeline"><div id="opTimelineFill" class="timeline-fill"></div></div><div class="time-row"><span id="opElapsed">00:00</span><span id="opTotal">00:00</span></div><div id="opTimer" class="operation-timer">00:00</div><div id="opNext" class="operation-next">Próximo anúncio: --:--</div><div id="opState" class="op-state">🔒 FUNÇÕES BLOQUEADAS</div>
+<div class="operation-lock-row">
+<button id="operationLock" class="operation-lock-btn"><span class="mi">lock_open</span> DESBLOQUEAR FUNÇÕES</button>
+</div>
+<div class="operation-help">Verde = funções desbloqueadas • Vermelho = funções bloqueadas</div>
+<div class="operation-buttons">
+<button id="operationSkipMusic" disabled><span class="mi">skip_next</span> PULAR MÚSICA</button>
+<button id="operationSkipAd" disabled><span class="mi">campaign</span> PULAR ANÚNCIO</button>
+<button id="exitOperation" disabled><span class="mi">logout</span> SAIR DO MODO</button>
+</div></div></div>
+
+<audio id="player" playsinline></audio>
+<div class="footer">© 2026 By <a href="mailto: thiago.vieira1@gpabr.com" class="white-text">Thiago Teles</a></div>
+
+<script>
+
+const $=id=>document.getElementById(id);
+const adInput=$("adFiles"),list=$("list"),count=$("count");
+const musicInput=$("musicFiles"),musicList=$("musicList"),musicCount=$("musicCount"),musicCounter=$("musicCounter");
+const songsBeforeAd=$("songsBeforeAd"),adsPerBlock=$("adsPerBlock"),random=$("random"),sequential=$("sequential");
+const start=$("start"),pause=$("pause"),stop=$("stop"),skipAd=$("skipAd"),player=$("player");
+const mode=$("mode"),current=$("current"),timer=$("timer"),next=$("next"),timelineFill=$("timelineFill"),timeElapsed=$("timeElapsed"),timeTotal=$("timeTotal");
+const startTime=$("startTime"),endTime=$("endTime"),adVolume=$("adVolume"),adVolumeValue=$("adVolumeValue");
+const startTimeDisplay=$("startTimeDisplay"),endTimeDisplay=$("endTimeDisplay");
+const speechText=$("speechText"),voiceSelect=$("voiceSelect"),speechRate=$("speechRate"),speechPitch=$("speechPitch"),speechVolume=$("speechVolume"),speechVolumeValue=$("speechVolumeValue"),bgVolume=$("bgVolume"),bgVolumeValue=$("bgVolumeValue"),bgAudio=$("bgAudio");
+const previewSpeech=$("previewSpeech"),addSpeech=$("addSpeech");
+const operationToggle=$("operationToggle"),operationMode=$("operationMode"),exitOperation=$("exitOperation"),operationLock=$("operationLock"),opMode=$("opMode"),opCurrent=$("opCurrent"),opTimer=$("opTimer"),opNext=$("opNext"),opState=$("opState"),operationSkipAd=$("operationSkipAd"),operationSkipMusic=$("operationSkipMusic"),opTimelineFill=$("opTimelineFill"),opElapsed=$("opElapsed"),opTotal=$("opTotal");
+
+let ads=[],musics=[],running=false,paused=false,phase="idle",elapsed=0,lastTick=0,timerId=null,currentAd=null,lastPlayedAd=null,currentMusic=null,lastPlayedMusic=null;
+let musicIndex=0,musicCountValue=0,seqIndex=0,usedSequential=[],currentUrl=null,operationActive=false,operationUnlocked=false;
+let speechVoices=[],speechSession=0,speechPlaying=false,speechPaused=false,previewing=false;
+
+function loadSettings(){
+  try{
+    const c=JSON.parse(localStorage.getItem("extraAutoV4_2")||"{}");
+    if(c.songsBeforeAd)songsBeforeAd.value=c.songsBeforeAd;
+    if(c.adsPerBlock)adsPerBlock.value=c.adsPerBlock;
+    if(c.random!==undefined){random.checked=c.random;sequential.checked=!c.random}
+    if(c.startTime)startTime.value=c.startTime;if(c.endTime)endTime.value=c.endTime;
+    if(c.adVolume!==undefined)adVolume.value=c.adVolume;
+    if(c.speechRate)speechRate.value=c.speechRate;if(c.speechPitch)speechPitch.value=c.speechPitch;
+    if(c.speechVolume!==undefined)speechVolume.value=c.speechVolume;if(c.bgVolume!==undefined)bgVolume.value=c.bgVolume;
+  }catch(e){}
+}
+function saveSettings(){localStorage.setItem("extraAutoV4_2",JSON.stringify({
+  songsBeforeAd:songsBeforeAd.value,adsPerBlock:adsPerBlock.value,random:random.checked,startTime:startTime.value,endTime:endTime.value,
+  adVolume:adVolume.value,speechRate:speechRate.value,speechPitch:speechPitch.value,speechVolume:speechVolume.value,bgVolume:bgVolume.value
+}))}
+loadSettings();
+
+function syncTimeDisplays(){startTimeDisplay.textContent=startTime.value||"07:00";endTimeDisplay.textContent=endTime.value||"22:00"}
+syncTimeDisplays();[startTime,endTime].forEach(el=>el.addEventListener("input",syncTimeDisplays));
+function formatTime(sec){sec=Math.max(0,Math.floor(sec));return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
+function songsLimit(){let n=Math.floor(Number(songsBeforeAd.value));if(!Number.isFinite(n)||n<1)n=1;songsBeforeAd.value=n;return n}
+function adBlockLimit(){let n=Math.floor(Number(adsPerBlock.value));if(!Number.isFinite(n)||n<1)n=1;adsPerBlock.value=n;return n}
+function timeMinutes(v){const [h,m]=String(v||"00:00").split(":").map(Number);return h*60+m}
+function inSchedule(){const now=new Date(),cur=now.getHours()*60+now.getMinutes(),a=timeMinutes(startTime.value),b=timeMinutes(endTime.value);return a<=b?cur>=a&&cur<=b:cur>=a||cur<=b}
+function secondsUntilScheduleStart(){const now=new Date(),[h,m]=String(startTime.value||"07:00").split(":").map(Number),target=new Date(now);target.setHours(Number.isFinite(h)?h:0,Number.isFinite(m)?m:0,0,0);if(target<=now)target.setDate(target.getDate()+1);return Math.max(0,Math.ceil((target-now)/1000))}
+function estimateSpeechSeconds(text,rate){return Math.max(2,Math.ceil((text.trim().length/11)/Number(rate||1.35)))}
+function masterVolume(){const v=Number(adVolume.value);return Number.isFinite(v)?Math.max(0,Math.min(1,v)):1}
+function updateVolumeLabels(){
+  adVolumeValue.textContent=Math.round(masterVolume()*100)+"%";
+  speechVolumeValue.textContent=Math.round(speechVolume.value*100)+"%";
+  bgVolumeValue.textContent=Math.round(bgVolume.value*100)+"%";
+  if(player) player.volume=masterVolume();
+  if(bgAudio) bgAudio.volume=Math.max(0,Math.min(1,Number(bgVolume.value)*masterVolume()));
+}
+function updateMusicCounter(){musicCounter.textContent=`${musicCountValue} / ${songsLimit()} músicas`}
+updateVolumeLabels();updateMusicCounter();
+
+function loadVoices(){
+  const all=speechSynthesis.getVoices(),br=all.filter(v=>/^pt(-|_)br$/i.test(v.lang||"")||/^pt$/i.test(v.lang||""));
+  speechVoices=br.length?br:all;voiceSelect.innerHTML="";
+  speechVoices.forEach((v,i)=>{const o=document.createElement("option");o.value=i;o.textContent=`${v.name} — ${v.lang||""}`;voiceSelect.appendChild(o)});
+  const idx=speechVoices.findIndex(v=>/^pt(-|_)br$/i.test(v.lang||""));if(idx>=0)voiceSelect.value=String(idx)
+}
+speechSynthesis.onvoiceschanged=loadVoices;loadVoices();
+let speechKeepAliveId=null;
+function clearSpeechKeepAlive(){if(speechKeepAliveId){clearInterval(speechKeepAliveId);speechKeepAliveId=null}}
+function startSpeechKeepAlive(){clearSpeechKeepAlive();speechKeepAliveId=setInterval(()=>{if(speechPlaying&&!speechPaused)try{speechSynthesis.resume()}catch(e){}},5000)}
+function speakChunks(text,onDone){
+  speechSession++;const session=speechSession,chunks=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];let i=0;
+  speechPlaying=true;speechPaused=false;startSpeechKeepAlive();try{speechSynthesis.cancel()}catch(e){}
+  function nextChunk(){
+    if(session!==speechSession)return;if(i>=chunks.length){speechPlaying=false;clearSpeechKeepAlive();onDone&&onDone();return}
+    const u=new SpeechSynthesisUtterance(chunks[i++].trim());u.lang="pt-BR";u.rate=Number(speechRate.value);u.pitch=Number(speechPitch.value);u.volume=Math.max(0,Math.min(1,Number(speechVolume.value)*masterVolume()));
+    u.voice=speechVoices[Number(voiceSelect.value)]||speechVoices.find(v=>/^pt(-|_)br$/i.test(v.lang||""))||speechVoices[0]||null;
+    u.onend=nextChunk;u.onerror=()=>{if(session===speechSession){speechPlaying=false;clearSpeechKeepAlive();onDone&&onDone()}};
+    try{speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){if(session===speechSession){speechPlaying=false;clearSpeechKeepAlive();onDone&&onDone()}}
+  } nextChunk()
+}
+function stopSpeech(){speechSession++;clearSpeechKeepAlive();try{speechSynthesis.cancel()}catch(e){}speechPlaying=false;speechPaused=false}
+function preview(){
+  const text=speechText.value.trim();if(!text){alert("Digite um texto para testar.");return}
+  stopPreview();previewing=true;speakChunks(text,()=>{if(previewing){stopBgMusic();previewing=false;previewSpeech.innerHTML='<span class="mi">play_arrow</span> TESTAR LOCUÇÃO'}});
+  startBgMusic(Number(bgVolume.value)*masterVolume()).catch(()=>{});previewSpeech.innerHTML='<span class="mi">stop</span> PARAR TESTE'
+}
+function stopPreview(){previewing=false;stopSpeech();stopBgMusic();previewSpeech.innerHTML='<span class="mi">play_arrow</span> TESTAR LOCUÇÃO'}
+previewSpeech.addEventListener("click",()=>previewing?stopPreview():preview());
+function addSpeechItem(){
+  if(previewing)stopPreview();const text=speechText.value.trim();if(!text){alert("Digite o texto da locução.");return}
+  const v=speechVoices[Number(voiceSelect.value)]||{};
+  ads.push({kind:"speech",id:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),name:"Locução: "+text.slice(0,70)+(text.length>70?"…":""),text,rate:Number(speechRate.value),voiceName:v.name||"Voz do navegador",voiceLang:v.lang||"pt-BR",voiceIndex:Number(voiceSelect.value),voiceVolume:Number(speechVolume.value),pitch:Number(speechPitch.value),bgVolume:Number(bgVolume.value)});
+  renderAdList();speechText.value="";saveSettings()
+}
+addSpeech.addEventListener("click",addSpeechItem);
+
+musicInput.addEventListener("change",()=>{Array.from(musicInput.files).forEach(file=>musics.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),file,name:file.name}));musicInput.value="";renderMusicList()});
+adInput.addEventListener("change",()=>{Array.from(adInput.files).forEach(file=>ads.push({kind:"mp3",id:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),file,name:file.name}));adInput.value="";renderAdList()});
+
+let queueTestAudio=null,queueTestUrl=null;
+function stopQueueTest(){
+  try{speechSynthesis.cancel()}catch(e){}
+  if(queueTestAudio){
+    try{queueTestAudio.oncanplay=null;queueTestAudio.onloadeddata=null;queueTestAudio.onended=null;queueTestAudio.onerror=null;queueTestAudio.pause();queueTestAudio.currentTime=0;queueTestAudio.removeAttribute("src");queueTestAudio.load()}catch(e){}
+    queueTestAudio=null;
+  }
+  if(queueTestUrl){try{URL.revokeObjectURL(queueTestUrl)}catch(e){}queueTestUrl=null}
+  try{stopBgMusic()}catch(e){}
+  document.querySelectorAll(".item-test.testing").forEach(b=>{b.classList.remove("testing");b.innerHTML='<span class="mi">play_arrow</span>'})
+}
+function testFile(item,button,kind){
+  if(button.classList.contains("testing")){stopQueueTest();return}
+  stopQueueTest();button.classList.add("testing");button.innerHTML='<span class="mi">stop</span>';
+  if(kind==="speech"){
+    startBgMusic(Number(item.bgVolume??bgVolume.value)*masterVolume()).catch(()=>{});
+    speakChunks(item.text,stopQueueTest);
+    return;
+  }
+  if(!item.file){stopQueueTest();return}
+  queueTestUrl=URL.createObjectURL(item.file);
+  queueTestAudio=new Audio();
+  queueTestAudio.preload="auto";
+  queueTestAudio.playsInline=true;
+  queueTestAudio.loop=false;
+  queueTestAudio.src=queueTestUrl;
+  queueTestAudio.volume=masterVolume();
+  const finish=()=>stopQueueTest();
+  queueTestAudio.onended=finish;
+  queueTestAudio.onerror=finish;
+  const playOnce=()=>{
+    if(!queueTestAudio)return;
+    queueTestAudio.oncanplay=null;
+    const p=queueTestAudio.play();
+    if(p&&p.catch)p.catch(finish);
+  };
+  queueTestAudio.oncanplay=playOnce;
+  try{queueTestAudio.load()}catch(e){}
+  if(queueTestAudio.readyState>=2)playOnce();
+}
+function renderMusicList(){
+  musicCount.textContent=musics.length?`${musics.length} música(s) na fila.`:"Nenhuma música selecionada.";musicList.innerHTML="";
+  musics.forEach((item,i)=>{
+    const row=document.createElement("div");row.className="item";const info=document.createElement("div");info.className="item-info";
+    const name=document.createElement("div");name.className="item-name";name.textContent=`${i+1}. ${item.name}`;
+    const st=document.createElement("div");st.className="item-status";
+    if(item===currentMusic){st.classList.add("playing");st.innerHTML='<span class="status-dot playing"></span><span>EM REPRODUÇÃO</span>'}
+    else if(item===lastPlayedMusic){st.classList.add("last");st.innerHTML='<span class="status-dot last"></span><span>ÚLTIMO TOCADO</span>'}
+    info.append(name,st);const actions=document.createElement("div");actions.className="item-actions";
+    const test=document.createElement("button");test.type="button";test.className="item-test";test.innerHTML='<span class="mi">play_arrow</span>';test.title="Testar música";test.onclick=e=>{e.stopPropagation();testFile(item,test,"music")};
+    const del=document.createElement("button");del.type="button";del.className="item-delete";del.innerHTML='<span class="mi">delete</span>';del.onclick=e=>{e.stopPropagation();if(item===currentMusic&&running)stopRadio();musics.splice(i,1);if(musicIndex>=musics.length)musicIndex=0;renderMusicList()};
+    actions.append(test,del);row.append(info,actions);musicList.appendChild(row)
+  })
+}
+function renderAdList(){
+  count.textContent=ads.length?`${ads.length} item(ns) na fila.`:"Nenhum áudio selecionado.";list.innerHTML="";
+  ads.forEach((item,i)=>{
+    const row=document.createElement("div");row.className="item";const info=document.createElement("div");info.className="item-info";
+    const name=document.createElement("div");name.className="item-name";name.textContent=`${i+1}. ${item.name}`;
+    const meta=document.createElement("div");meta.className="item-meta";meta.textContent=item.kind==="speech"?`Voz + música • ${item.voiceName}`:"Arquivo MP3";
+    const st=document.createElement("div");st.className="item-status";
+    if(item===currentAd){st.classList.add("playing");st.innerHTML='<span class="status-dot playing"></span><span>EM REPRODUÇÃO</span>'}
+    else if(item===lastPlayedAd){st.classList.add("last");st.innerHTML='<span class="status-dot last"></span><span>ÚLTIMO TOCADO</span>'}
+    info.append(name,meta,st);const actions=document.createElement("div");actions.className="item-actions";
+    const test=document.createElement("button");test.type="button";test.className="item-test";test.innerHTML='<span class="mi">play_arrow</span>';test.title="Testar anúncio";test.onclick=e=>{e.stopPropagation();testFile(item,test,item.kind)};
+    const del=document.createElement("button");del.type="button";del.className="item-delete";del.innerHTML='<span class="mi">delete</span>';del.onclick=e=>{e.stopPropagation();if(item===currentAd&&running)stopRadio();ads.splice(i,1);usedSequential=usedSequential.filter(x=>x!==item);if(seqIndex>=ads.length)seqIndex=0;renderAdList()};
+    actions.append(test,del);row.append(info,actions);list.appendChild(row)
+  })
+}
+function setTimeline(el,total){const pct=total>0?Math.min(100,el/total*100):0;timelineFill.style.width=pct+"%";timeElapsed.textContent=formatTime(el);timeTotal.textContent=formatTime(total);opTimelineFill.style.width=pct+"%";opElapsed.textContent=formatTime(el);opTotal.textContent=formatTime(total)}
+function chooseAd(){
+  if(!ads.length)return null;if(random.checked){if(ads.length===1)return ads[0];let c;do{c=ads[Math.floor(Math.random()*ads.length)]}while(c===lastPlayedAd&&ads.length>1);return c}
+  if(usedSequential.length>=ads.length){usedSequential=[];seqIndex=0}let c=ads.find(x=>!usedSequential.includes(x));if(!c)c=ads[seqIndex%ads.length];usedSequential.push(c);seqIndex=(seqIndex+1)%ads.length;return c
+}
+function beginMusic(){
+  if(!musics.length){mode.textContent="SEM MÚSICAS";current.textContent="Selecione pelo menos uma música.";return}
+  if(currentUrl){URL.revokeObjectURL(currentUrl);currentUrl=null}
+  currentMusic=musics[musicIndex%musics.length];lastPlayedMusic=currentMusic;musicIndex=(musicIndex+1)%musics.length;
+  player.pause();player.onended=null;player.onerror=null;player.src=URL.createObjectURL(currentMusic.file);currentUrl=player.src;player.volume=masterVolume();phase="music";elapsed=0;
+  mode.textContent="MÚSICA EM REPRODUÇÃO";current.textContent=currentMusic.name;next.textContent=`Anúncio após ${Math.max(0,songsLimit()-musicCountValue)} música(s)`;
+  renderMusicList();renderAdList();try{player.load()}catch(e){}const p=player.play();if(p&&p.catch)p.catch(()=>{mode.textContent="MÚSICA AGUARDANDO REPRODUÇÃO";next.textContent="Toque em INICIAR novamente para liberar o áudio."})
+}
+function startAdBlock(){
+  if(!inSchedule()){mode.textContent="FORA DO HORÁRIO";current.textContent="Música continua; anúncio aguardando horário ativo";return}
+  const n=adBlockLimit();let played=0;
+  function one(){if(!running||paused)return;if(played>=n){musicCountValue=0;updateMusicCounter();beginMusic();return}played++;playAd(one)}
+  one()
+}
+function playAd(done){
+  const item=chooseAd();if(!item){musicCountValue=0;updateMusicCounter();beginMusic();return}
+  currentMusic=null;
+  if(currentAd)lastPlayedAd=currentAd;currentAd=item;phase="ad";elapsed=0;renderMusicList();renderAdList();
+  const finish=()=>{player.onended=null;player.onerror=null;if(currentAd)lastPlayedAd=currentAd;currentAd=null;renderAdList();done&&done()};
+  if(item.kind==="mp3"){
+    if(!item.file){finish();return}
+    if(currentUrl){try{URL.revokeObjectURL(currentUrl)}catch(e){}currentUrl=null}
+    player.pause();currentUrl=URL.createObjectURL(item.file);player.src=currentUrl;player.volume=Number(adVolume.value);mode.textContent="ANÚNCIO MP3 EM REPRODUÇÃO";current.textContent=item.name;next.textContent="Anúncio em reprodução";
+    try{player.load()}catch(e){}const p=player.play();if(p&&p.catch)p.catch(()=>{mode.textContent="MP3 AGUARDANDO REPRODUÇÃO";next.textContent="Toque em INICIAR novamente para liberar o áudio."});
+    player.onended=finish;player.onerror=finish;
+  }else{
+    mode.textContent="LOCUÇÃO EM REPRODUÇÃO";current.textContent=item.name;next.textContent="Voz + música de fundo";
+    const total=estimateSpeechSeconds(item.text,item.rate);setTimeline(0,total);speechSession++;const session=speechSession;speechPlaying=true;speechPaused=false;startSpeechKeepAlive();try{speechSynthesis.cancel()}catch(e){}
+    const chunks=item.text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[item.text];let i=0;
+    function nextChunk(){if(session!==speechSession)return;if(i>=chunks.length){speechPlaying=false;clearSpeechKeepAlive();stopBgMusic();finish();return}
+      const u=new SpeechSynthesisUtterance(chunks[i++].trim());u.lang=item.voiceLang||"pt-BR";u.rate=Number(item.rate||1.35);u.pitch=Number(item.pitch??.9);u.volume=Math.max(0,Math.min(1,Number(item.voiceVolume??1)*masterVolume()));
+      const v=speechVoices.find(v=>v.name===item.voiceName&&v.lang===item.voiceLang)||speechVoices.find(v=>v.name===item.voiceName)||speechVoices[Number(item.voiceIndex)]||speechVoices[0];if(v)u.voice=v;
+      u.onend=nextChunk;u.onerror=()=>{if(session===speechSession){speechPlaying=false;clearSpeechKeepAlive();stopBgMusic();finish()}};try{speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){finish()}
+    }
+    startBgMusic(Number(item.bgVolume??.15)*masterVolume()).catch(()=>{});nextChunk()
+  }
+}
+player.addEventListener("ended",()=>{if(!running||paused)return;if(phase==="music"){musicCountValue++;updateMusicCounter();lastPlayedMusic=currentMusic;currentMusic=null;renderMusicList();if(musicCountValue>=songsLimit()&&ads.length&&inSchedule())startAdBlock();else beginMusic()}});
+function updateDisplay(){
+  if(phase==="music"){timer.textContent="▶";next.textContent=`Anúncio após ${Math.max(0,songsLimit()-musicCountValue)} música(s)`;if(player.duration&&isFinite(player.duration))setTimeline(player.currentTime||0,player.duration)}
+  else if(phase==="ad"){timer.textContent="▶";if(player.duration&&isFinite(player.duration)&&currentAd?.kind==="mp3")setTimeline(player.currentTime||0,player.duration)}
+  else if(phase==="idle"){timer.textContent="00:00";setTimeline(0,0)}
+  else if(phase==="paused"){timer.textContent=formatTime(elapsed)}
+  skipAd.disabled=!running||phase!=="ad";skipWait.disabled=!running||phase!=="music";operationSkipMusic.disabled=!operationUnlocked||!running||phase!=="music";updateOperationDisplay()
+}
+function updateOperationDisplay(){
+  const locked=!operationUnlocked;
+  if(phase==="music"){opMode.textContent="MÚSICA EM REPRODUÇÃO";opCurrent.textContent=currentMusic?currentMusic.name:"Música";opTimer.textContent="▶";opNext.textContent=`Anúncio após ${Math.max(0,songsLimit()-musicCountValue)} música(s)`}
+  else if(phase==="ad"){opMode.textContent="ANÚNCIO EM REPRODUÇÃO";opCurrent.textContent=currentAd?currentAd.name:"Anúncio";opTimer.textContent="▶";opNext.textContent="Anúncio em reprodução."}
+  else if(phase==="paused"){opMode.textContent="PAUSADO";opCurrent.textContent=currentMusic?.name||currentAd?.name||"Reprodução pausada";opTimer.textContent=formatTime(elapsed);opNext.textContent="Reprodução pausada."}
+  else{opMode.textContent="PARADO";opCurrent.textContent="Aguardando início";opTimer.textContent="00:00";opNext.textContent="Próximo anúncio conforme contador de músicas."}
+  if(phase==="music"&&player.duration&&isFinite(player.duration))setTimeline(player.currentTime||0,player.duration);
+  if(phase==="ad"&&currentAd?.kind==="speech"){const total=estimateSpeechSeconds(currentAd.text,currentAd.rate);setTimeline(Math.min(elapsed,total),total)}
+  opState.className=locked?"op-state locked":"op-state unlocked";opState.textContent=locked?"FUNÇÕES BLOQUEADAS":"FUNÇÕES DESBLOQUEADAS";
+  operationLock.classList.toggle("unlocked",operationUnlocked);operationLock.innerHTML=locked?'<span class="mi">lock_open</span> DESBLOQUEAR FUNÇÕES':'<span class="mi">lock</span> BLOQUEAR FUNÇÕES';
+  operationSkipAd.disabled=locked||!running||phase!=="ad";operationSkipMusic.disabled=locked||!running||phase!=="music";exitOperation.disabled=locked;
+}
+function tick(){
+  if(!running||paused)return;const now=Date.now(),delta=(now-lastTick)/1000;lastTick=now;elapsed+=delta;
+  if(phase==="ad"&&currentAd?.kind==="speech"){const total=estimateSpeechSeconds(currentAd.text,currentAd.rate);setTimeline(Math.min(elapsed,total),total)}
+  updateDisplay()
+}
+function startTimer(){clearInterval(timerId);lastTick=Date.now();timerId=setInterval(tick,250)}
+function startRadio(){
+  if(!musics.length){alert("Selecione pelo menos uma música.");return}
+  if(!ads.length){alert("Selecione pelo menos um anúncio MP3 ou adicione uma locução.");return}
+  unlockMedia();running=true;paused=false;musicIndex=0;musicCountValue=0;usedSequential=[];seqIndex=0;start.disabled=true;pause.disabled=false;stop.disabled=false;updateMusicCounter();beginMusic();startTimer()
+}
+function pauseRadio(){
+  if(!running)return;
+  if(!paused){paused=true;elapsed=0;player.pause();if(speechPlaying){speechPaused=true;speechSynthesis.pause()}pauseBgMusic();phase="paused";pause.textContent="▶ CONTINUAR"}
+  else{paused=false;phase=currentMusic?"music":currentAd?"ad":"idle";if(currentAd?.kind==="speech"){speechPaused=false;speechSynthesis.resume();resumeBgMusic()}else player.play().catch(()=>{});lastTick=Date.now();pause.textContent="⏸ PAUSAR"}updateDisplay()
+}
+function skipCurrentAd(){if(!running||phase!=="ad")return;if(currentAd)lastPlayedAd=currentAd;stopSpeech();player.pause();stopBgMusic();currentAd=null;renderAdList();musicCountValue=0;updateMusicCounter();beginMusic()}
+function skipCurrentMusic(){if(!running||phase!=="music")return;player.pause();lastPlayedMusic=currentMusic;currentMusic=null;musicCountValue++;updateMusicCounter();if(musicCountValue>=songsLimit()&&ads.length&&inSchedule())startAdBlock();else beginMusic()}
+function stopRadio(){
+  running=false;paused=false;phase="idle";clearInterval(timerId);stopSpeech();player.pause();player.onended=null;player.onerror=null;player.removeAttribute("src");player.load();stopBgMusic();
+  if(currentUrl){try{URL.revokeObjectURL(currentUrl)}catch(e){}currentUrl=null}currentAd=null;currentMusic=null;musicCountValue=0;elapsed=0;
+  mode.textContent="PARADO";current.textContent="Aguardando início";timer.textContent="00:00";next.textContent="Próximo anúncio conforme contador de músicas.";setTimeline(0,0);
+  start.disabled=false;pause.disabled=true;stop.disabled=true;skipAd.disabled=true;skipWait.disabled=true;pause.textContent="⏸ PAUSAR";updateMusicCounter();renderMusicList();renderAdList();updateOperationDisplay()
+}
+start.addEventListener("click",startRadio);pause.addEventListener("click",pauseRadio);stop.addEventListener("click",stopRadio);skipAd.addEventListener("click",skipCurrentAd);skipWait.addEventListener("click",skipCurrentMusic);
+operationSkipMusic.addEventListener("click",skipCurrentMusic);operationSkipAd.addEventListener("click",skipCurrentAd);
+
+[songsBeforeAd,adsPerBlock,random,sequential,startTime,endTime,adVolume,speechRate,speechPitch,speechVolume,bgVolume].forEach(el=>el.addEventListener("change",()=>{saveSettings();updateVolumeLabels();syncTimeDisplays();updateMusicCounter();updateDisplay()}));
+[speechVolume,bgVolume,adVolume].forEach(el=>el.addEventListener("input",()=>{updateVolumeLabels();saveSettings()}));
+
+function requireOperationPin(message="Digite o PIN para continuar:"){const pin=prompt(message);if(pin!=="1234"){if(pin!==null)alert("PIN incorreto.");return false}return true}
+operationToggle.addEventListener("click",()=>{operationActive=true;operationUnlocked=false;mainApp.style.display="none";operationMode.style.display="flex";document.body.classList.add("operation-open");updateOperationDisplay()});
+exitOperation.addEventListener("click",()=>{if(!operationUnlocked)return;operationActive=false;operationUnlocked=false;operationMode.style.display="none";mainApp.style.display="block";document.body.classList.remove("operation-open");updateOperationDisplay();updateDisplay()});
+operationLock.addEventListener("click",()=>{if(!operationUnlocked){if(!requireOperationPin("Digite o PIN para desbloquear as funções:"))return;operationUnlocked=true}else operationUnlocked=false;updateOperationDisplay()});
+
+renderMusicList();renderAdList();updateVolumeLabels();updateMusicCounter();updateDisplay();
+
+</script>
+</body>
+</html>
