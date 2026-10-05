@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A7 • Gerador de Cartazes</title>
+<link rel="icon" href="logo.ico">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style id="v32-ajustes-espaco">
+/* v32: compactação vertical para cartazes DE+POR */
+.cartaz .barcode-svg,
+.cartaz svg.barcode-svg {
+  max-height: 18px !important;
+  height: 18px !important;
+}
+.cartaz .validade-oferta,
+.cartaz .validade,
+.cartaz .offer-validity {
+  font-size: 10px !important;
+  line-height: 1.1 !important;
+}
+@media print {
+  .cartaz .barcode-svg,
+  .cartaz svg.barcode-svg {
+    max-height: 18px !important;
+    height: 18px !important;
+  }
+  .cartaz .validade-oferta,
+  .cartaz .validade,
+  .cartaz .offer-validity {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+  }
+}
+</style>
+
+
+<style id="v40-qtd-cartaz-ui">
+.qtd-cartaz-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  vertical-align: middle;
+}
+.qtd-cartaz-control button {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  line-height: 1 !important;
+}
+.qtd-cartaz-control button .material-icons {
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+.qtd-cartaz-control input[type="number"] {
+  width: 58px !important;
+  height: 34px !important;
+  box-sizing: border-box !important;
+  padding: 0 6px !important;
+  margin: 0 !important;
+  text-align: center !important;
+  font: inherit !important;
+  font-weight: 600 !important;
+  border: 1px solid #c7c7c7 !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  color: #222 !important;
+  -moz-appearance: textfield;
+}
+.qtd-cartaz-control input[type="number"]::-webkit-outer-spin-button,
+.qtd-cartaz-control input[type="number"]::-webkit-inner-spin-button {
+  margin: 0;
+  opacity: 1;
+}
+@media (max-width: 700px) {
+  .qtd-cartaz-control button {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+  }
+  .qtd-cartaz-control input[type="number"] {
+    width: 62px !important;
+    height: 36px !important;
+  }
+}
+</style>
+
+</head>
+<body>
+<div id="loginScreen" class="login-screen" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
+  <div class="login-card">
+    <div class="login-logo-wrap"><img src="login-logo-extra-mercado.png" alt="Extra Mercado" class="login-logo"></div>
+    <div class="login-icon"><span class="material-symbols-rounded" aria-hidden="true">lock</span></div>
+    <h1 id="loginTitle">Acesso ao Gerador</h1>
+    <p>Digite a senha para acessar a ferramenta.</p>
+    <form id="loginForm" autocomplete="off">
+      <div class="login-input-wrap">
+        <span class="material-symbols-rounded login-field-icon" aria-hidden="true">lock</span>
+        <input id="loginPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Senha" aria-label="Senha" required>
+      </div>
+      <button id="loginBtn" class="login-submit" type="submit">ENTRAR</button>
+      <div id="loginError" class="login-error" role="alert" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
+<header>
+  <div class="header-brand">
+    <img class="brand-logo" src="logo-extra-mercado.png" alt="Extra Mercado">
+    <div class="brand-copy">
+      <div class="brand">A7 <span>GERADOR DE CARTAZES</span></div>
+      <div class="subtitle">Substituto do fluxo de planilhas • Result / PBi / Zebrinha / COD</div>
+    </div>
+  </div>
+  <div class="status" id="status">Aguardando arquivo</div>
+</header>
+
+<nav class="steps">
+  <button class="step active" data-page="entrada">1 · Entrada</button>
+  <button class="step" data-page="tratamento">2 · Tratamento</button>
+  <button class="step" data-page="cartazes">3 · Cartazes</button>
+  <button class="step" data-page="impressao">4 · Impressão</button>
+  <button class="step" data-page="cod">5 · COD</button>
+</nav>
+
+<main>
+<section id="entrada" class="page active">
+  <div class="hero">
+    <h1>Central de Cartazes A7</h1>
+    <p>Carregue o arquivo da empresa e deixe o sistema organizar os dados para você.</p>
+  </div>
+  <div class="source-grid">
+    <label class="source-card selected"><input type="radio" name="source" value="Result" checked>
+      <strong>RESULT</strong><span>Arquivo principal de ofertas.</span>
+    </label>
+    <label class="source-card"><input type="radio" name="source" value="PBi">
+      <strong>PBi</strong><span>Outra estrutura de preços.</span>
+    </label>
+    <label class="source-card"><input type="radio" name="source" value="Zebrinha">
+      <strong>ZEBRINHA</strong><span>Fonte específica de zebrinha.</span>
+    </label>
+  </div>
+  <div class="drop" id="drop">
+    <input type="file" id="file" accept=".xlsx,.xls,.csv">
+    <div class="drop-icon"><span class="material-symbols-rounded" aria-hidden="true">upload_file</span></div>
+    <h2>Solte o arquivo aqui</h2>
+    <p>ou toque/clique para selecionar XLSX, XLS ou CSV</p>
+    <small>O arquivo fica vinculado a esta sessão até você removê-lo.</small>
+  </div>
+
+  <div class="file-card hidden" id="fileCard">
+    <div class="file-icon" id="fileIcon"><span class="material-symbols-rounded" aria-hidden="true">description</span></div>
+    <div class="file-info">
+      <strong id="fileName">—</strong>
+      <div class="file-meta">
+        <span id="fileType">—</span>
+        <span id="fileSize">—</span>
+        <span id="fileDate">—</span>
+      </div>
+      <div class="file-desc" id="fileDesc">Arquivo selecionado para processamento.</div>
+    </div>
+    <button class="clear-file" id="clearFile" type="button"><span class="material-symbols-rounded" aria-hidden="true">delete</span> Limpar</button>
+  </div>
+
+  <div class="toolbar">
+    <button class="primary" id="processBtn" disabled>Processar arquivo</button>
+    <button id="demoBtn" type="button">Carregar demonstração</button>
+  </div>
+  <div class="drop-hint" id="dropHint">Nenhum arquivo selecionado.</div>
+</section>
+
+<section id="tratamento" class="page">
+  <div class="section-head"><div><h2>Tratamento</h2><p>Dados resumidos para geração dos cartazes.</p></div>
+  <div class="stats" id="stats"></div></div>
+  <div class="filters">
+    <input id="search" placeholder="Pesquisar PLU ou descrição...">
+    <select id="dynFilter"><option value="">Todas as dinâmicas</option></select>
+  </div>
+  <div class="table-wrap"><table id="dataTable"></table></div>
+  <div class="page-nav"><button class="secondary" data-prev="entrada"><span class="material-symbols-rounded" aria-hidden="true">arrow_back</span> RETROCEDER</button><button class="primary" data-next="cartazes"><span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span> AVANÇAR</button></div>
+</section>
+
+<section id="cartazes" class="page">
+  <div class="section-head"><div><h2>Cartazes</h2><p>Selecione o tipo de tratamento e revise a quantidade.</p></div></div>
+  <div class="mode-grid">
+    <button class="mode active" data-mode="padrao">Padrão</button>
+    <button class="mode" data-mode="percentual">Percentual</button>
+    <button class="mode" data-mode="pack">Pack</button>
+    <button class="mode" data-mode="parcela">Parcelamento</button>
+  </div>
+  <div class="control-row">
+    <label>Desconto % <input type="number" id="discount" value="50" min="0" max="100"></label>
+    <label>Unidades no pack <input type="number" id="packQty" value="2" min="1"></label>
+    <label>Parcelas <input type="number" id="installments" value="2" min="1"></label>
+    <button class="primary" id="rebuild">Atualizar</button>
+  </div>
+  <div class="summary-card" id="cartSummary"></div>
+  <div class="page-nav"><button class="secondary" data-prev="tratamento"><span class="material-symbols-rounded" aria-hidden="true">arrow_back</span> RETROCEDER</button><button class="primary" data-next="impressao"><span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span> AVANÇAR</button></div>
+</section>
+
+<section id="impressao" class="page">
+  <div class="section-head"><div><h2>Pré-visualização de impressão</h2><p>A4 horizontal • 8 cartazes A7 por página.</p></div>
+  <button class="primary" id="printBtn"><span class="material-symbols-rounded" aria-hidden="true">print</span> Imprimir</button></div>
+  <div class="print-controls">
+    <button id="prevPage" type="button" aria-label="Página anterior"><span class="material-symbols-rounded" aria-hidden="true">chevron_left</span></button>
+    <label>Página <select id="pageSelect"></select></label>
+    <button id="nextPage" type="button" aria-label="Próxima página"><span class="material-symbols-rounded" aria-hidden="true">chevron_right</span></button>
+    <span id="pageInfo"></span>
+    <div class="print-actions">
+      <button id="printAllBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">print</span> Imprimir todas as páginas</button>
+    </div>
+  </div>
+  <div id="printArea" class="a4"></div>
+  <div id="printAllArea" aria-hidden="true"></div>
+  <div class="page-nav"><button class="secondary" data-prev="cartazes"><span class="material-symbols-rounded" aria-hidden="true">arrow_back</span> RETROCEDER</button><button class="primary" data-next="cod"><span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span> AVANÇAR</button></div>
+</section>
+
+<section id="cod" class="page">
+  <div class="section-head"><div><h2>COD • Código de barras</h2><p>PLU convertido para Code 39, pronto para impressão.</p></div>
+  <button class="primary" id="codPrint"><span class="material-symbols-rounded" aria-hidden="true">print</span> Imprimir COD</button></div>
+  <div class="table-wrap"><table id="codTable"></table></div>
+  <div id="codPrintArea" class="cod-print-area" aria-hidden="true"></div>
+  <div class="page-nav"><button class="secondary" data-prev="impressao"><span class="material-symbols-rounded" aria-hidden="true">arrow_back</span> RETROCEDER</button></div>
+</section>
+</main>
+<footer>© 2026 By Thiago Teles</footer>
+<script src="app.js"></script>
+</body>
+</html>
