@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
-<title>Auto Anúncios Extra — v4.3</title>
+<title>Rádio Auto Anúncios Extra — v6</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#111827;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
@@ -15,7 +15,7 @@ body{margin:0;background:#111827;color:#fff;font-family:Arial,Helvetica,sans-ser
 .header{text-align:center;margin:2px 0 15px}.logo{width:min(190px,52vw);display:block;margin:0 auto 3px}.subtitle{margin:0;color:#2b7fc4;font-size:17px;font-weight:700}
 .version{font-size:11px;color:#64748b;margin-top:3px}
 .card,.settings-card{background:#1f2937;border:1px solid #303b4d;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.18)}
-.card{padding:15px;margin-bottom:12px}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}.settings-card{padding:15px;min-width:0}
+.card{padding:15px;margin-bottom:12px}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}.settings-card{padding:15px;min-width:0}.schedule-card{width:100%;box-sizing:border-box;margin-bottom:12px}
 .title{display:block;font-weight:700;margin-bottom:9px;color:#f3f4f6;font-size:16px}
 input[type=file],input[type=number],input[type=text],textarea,select{width:100%;padding:11px;border-radius:9px;border:1px solid #4b5563;background:#111827;color:#fff;font-size:14px}textarea{min-height:105px;resize:vertical;line-height:1.4}input[type=range]{width:100%;accent-color:#267bc1}
 .radio-line{display:flex;gap:15px;flex-wrap:wrap}.radio-line label{font-size:13px;color:#e5e7eb;cursor:pointer}.radio-line input{accent-color:#267bc1}
@@ -205,11 +205,13 @@ button .mi{font-size:17px;vertical-align:-4px;margin-right:4px}
 .item-status{display:flex;align-items:center;gap:5px}
 .item-status.playing,.item-status.last{color:#cbd5e1}
 @media(max-width:560px){.custom-time,.custom-time .time-display{height:41px}.file-picker{min-height:41px;font-size:12px}}
-#loginScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#0b0f14;padding:20px}#loginCard{width:min(390px,100%);box-sizing:border-box;background:#151b23;border:1px solid #303946;border-radius:18px;padding:28px;box-shadow:0 18px 55px rgba(0,0,0,.45);text-align:center}#loginCard h2{margin:8px 0}#loginCard p{margin:0 0 20px;color:#9ca3af}#loginPassword{width:100%;box-sizing:border-box;background:#0f141b;color:#fff;border:1px solid #3b4553;border-radius:10px;padding:13px 14px;font-size:18px;text-align:center;letter-spacing:5px}#loginButton{width:100%;margin-top:12px}#loginError{min-height:20px;color:#f87171;font-size:13px;margin-top:10px}body.login-locked> *:not(#loginScreen){visibility:hidden}</style>
+.speech-card{overflow:hidden}.speech-collapse-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:0;background:transparent;border:0;border-radius:0;color:#f3f4f6;text-align:left;cursor:pointer;box-shadow:none}.speech-collapse-header:hover{background:transparent;border-color:transparent;box-shadow:none}.speech-collapse-title{display:flex;align-items:center;font-size:16px;font-weight:700;line-height:1.2}.speech-collapse-arrow{font-family:'Material Symbols Rounded';font-size:24px;color:#94a3b8;transition:transform .2s ease;flex:0 0 auto}.speech-card.open .speech-collapse-arrow{transform:rotate(180deg);color:#60a5fa}.speech-collapse-body{display:none;margin-top:12px}.speech-card.open .speech-collapse-body{display:block}.speech-collapse-hint{font-size:11px;color:#9ca3af;margin-top:8px;line-height:1.35}@media(max-width:560px){.speech-collapse-title{font-size:15px}.speech-collapse-arrow{font-size:22px}}
+
+#loginScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(18,84,145,.18),transparent 34%),linear-gradient(145deg,#020814 0%,#06152a 48%,#020712 100%);padding:20px}#loginScreen::before,#loginScreen::after{content:"";position:absolute;left:-18%;width:136%;height:1px;background:linear-gradient(90deg,transparent,rgba(49,151,255,.72),transparent);box-shadow:0 0 14px rgba(49,151,255,.42);transform:rotate(-27deg);pointer-events:none}#loginScreen::before{top:16%;opacity:.7}#loginScreen::after{bottom:17%;opacity:.48;transform:rotate(27deg)}#loginCard{position:relative;z-index:1;width:min(390px,100%);box-sizing:border-box;background:linear-gradient(180deg,rgba(14,24,39,.97),rgba(7,14,25,.98));border:1px solid rgba(52,153,255,.68);border-radius:18px;padding:28px;box-shadow:0 18px 60px rgba(0,0,0,.62),0 0 28px rgba(30,125,230,.12);text-align:center}#loginLogo{width:min(220px,72%);height:auto;display:block;margin:0 auto 10px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.32))}#loginLock{width:50px;height:50px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#1f9aff 0%,#0e62b7 58%,#083665 100%);border:1px solid rgba(102,190,255,.9);box-shadow:0 0 20px rgba(35,148,255,.48)}#loginLock .material-symbols-rounded{font-size:27px;color:#fff}#loginCard h2{margin:0 0 7px;color:#fff;font-size:20px;font-weight:800}#loginCard p{margin:0 0 20px;color:#9fb2c8;font-size:12px}#loginForm{margin:0}.login-input-wrap{position:relative}.login-input-wrap .material-symbols-rounded{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:20px;color:#7f9bb8;pointer-events:none}#loginPassword{width:100%;box-sizing:border-box;background:#07111e;color:#fff;border:1px solid #2c78b8;border-radius:10px;padding:13px 42px 13px 42px;font-size:16px;text-align:center;letter-spacing:4px;outline:none;box-shadow:inset 0 0 0 1px rgba(31,129,214,.06)}#loginPassword:focus{border-color:#42a8ff;box-shadow:0 0 0 3px rgba(45,153,255,.12)}#loginPassword::placeholder{color:#6d8196;letter-spacing:1px}#loginButton{width:100%;margin-top:12px;background:linear-gradient(180deg,#188ef0,#0966b7);border-color:#249cff;color:#fff;box-shadow:0 7px 20px rgba(11,115,202,.3);min-height:44px}#loginButton:hover:not(:disabled){background:linear-gradient(180deg,#2b9eff,#0873ca);border-color:#55b5ff;box-shadow:0 8px 24px rgba(11,115,202,.4)}#loginButton .material-symbols-rounded{font-size:18px;vertical-align:-4px;margin-right:4px}#loginError{min-height:20px;color:#ff7b86;font-size:13px;margin-top:10px}body.login-locked> *:not(#loginScreen){visibility:hidden}@media(max-width:560px){#loginScreen{padding:16px}#loginCard{padding:25px 20px;width:min(390px,100%)}#loginLogo{width:min(210px,74vw)}#loginLock{width:48px;height:48px}}</style>
 </head>
-<body class="login-locked"><div id="loginScreen"><div id="loginCard"><span class="material-symbols-rounded">lock</span><h2>Acesso aos Anúncios</h2><p>Digite a senha para acessar a ferramenta.</p><form id="loginForm"><input id="loginPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="Senha" aria-label="Senha" required><button id="loginButton" type="submit"><span class="material-symbols-rounded">login</span> ENTRAR</button></form><div id="loginError"></div></div></div>
+<body class="login-locked"><div id="loginScreen"><div id="loginCard"><img id="loginLogo" src="logo-login.png" alt="Extra Mercado"><div id="loginLock"><span class="material-symbols-rounded">lock</span></div><h2>Acesso à Rádio</h2><p>Digite a senha para acessar o sistema.</p><form id="loginForm"><div class="login-input-wrap"><span class="material-symbols-rounded">lock</span><input id="loginPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="Senha" aria-label="Senha" required></div><button id="loginButton" type="submit"><span class="material-symbols-rounded">login</span> ENTRAR</button></form><div id="loginError"></div></div></div>
 <div class="container" id="mainApp">
-<div class="header"><img class="logo" src="logo-extra.png" alt="Extra Mercado"><p class="subtitle">AUTO ANÚNCIOS</p><div class="version">v5 • MÚSICA + TEMPO OCIOSO + ANÚNCIOS</div></div>
+<div class="header"><img class="logo" src="logo-login.png" alt="Extra Mercado"><p class="subtitle">RÁDIO AUTO ANÚNCIOS</p><div class="version">v6 • MÚSICA + TEMPO OCIOSO + ANÚNCIOS</div></div>
 
 <div class="card">
 <div class="status" aria-live="polite">
@@ -233,21 +235,21 @@ button .mi{font-size:17px;vertical-align:-4px;margin-right:4px}
 <div class="settings-card"><label class="title"><span class="mi">repeat</span> Contador atual</label><div id="musicCounter" class="current" style="font-size:17px;margin:0">0 / 3 itens</div><div class="hint">O contador avança quando uma música ou um tempo ocioso é concluído.</div></div>
 </div>
 
-<div class="settings-grid">
-<div class="settings-card"><label class="title"><span class="mi">schedule</span> Horário de funcionamento</label><div class="two"><div><span class="field-label">Início</span><div class="custom-time"><div id="startTimeDisplay" class="time-display">07:00</div><input id="startTime" type="time" value="07:00" aria-label="Horário de início"></div></div><div><span class="field-label">Fim</span><div class="custom-time"><div id="endTimeDisplay" class="time-display">22:00</div><input id="endTime" type="time" value="22:00" aria-label="Horário de fim"></div></div></div><div class="hint">Fora desse período, toda a programação fica parada. No próximo início, músicas, tempo ocioso e anúncios recomeçam do zero.</div></div>
-</div>
+<div class="card settings-card schedule-card"><label class="title"><span class="mi">schedule</span> Horário de funcionamento</label><div class="two"><div><span class="field-label">Início</span><div class="custom-time"><div id="startTimeDisplay" class="time-display">07:00</div><input id="startTime" type="time" value="07:00" aria-label="Horário de início"></div></div><div><span class="field-label">Fim</span><div class="custom-time"><div id="endTimeDisplay" class="time-display">22:00</div><input id="endTime" type="time" value="22:00" aria-label="Horário de fim"></div></div></div><div class="hint">Fora desse período, toda a programação fica parada. No próximo início, músicas, tempo ocioso e anúncios recomeçam do zero.</div></div>
 
-<div class="card">
-<h2 class="section-title"><span class="mi">record_voice_over</span> Criar locução para a fila</h2>
+<div class="card speech-card" id="speechCard">
+<button type="button" class="speech-collapse-header" id="speechCollapseToggle" aria-expanded="false" aria-controls="speechCollapseBody"><span class="speech-collapse-title"><span class="mi">record_voice_over</span> Criar locução para a fila</span><span class="speech-collapse-arrow" aria-hidden="true">expand_more</span></button>
+<div class="speech-collapse-body" id="speechCollapseBody">
 <textarea id="speechText" placeholder="Ex.: Atenção, clientes Extra Mercado! Aproveite nossas ofertas especiais de hoje."></textarea>
 <div><span class="field-label">Voz do navegador</span><select id="voiceSelect"><option>Carregando vozes...</option></select></div>
 <div class="two" style="margin-top:9px"><div><span class="field-label">Velocidade</span><select id="speechRate"><option value="0.9">0.90x</option><option value="1">1.00x</option><option value="1.1">1.10x</option><option value="1.25">1.25x</option><option value="1.35" selected>1.35x</option><option value="1.5">1.50x</option></select></div><div><span class="field-label">Tom de voz</span><select id="speechPitch"><option value="0.7">0.70</option><option value="0.8">0.80</option><option value="0.9" selected>0.90</option><option value="1">1.00</option><option value="1.1">1.10</option><option value="1.2">1.20</option></select></div></div>
 <div class="two" style="margin-top:9px"><div><span class="field-label">Volume da voz <span id="speechVolumeValue">100%</span></span><input id="speechVolume" type="range" min="0" max="1" step="0.01" value="1"></div><div><span class="field-label">Volume da música <span id="bgVolumeValue">15%</span></span><input id="bgVolume" type="range" min="0" max="1" step="0.01" value="0.15"></div></div>
 <div class="voice-actions" style="margin-top:9px"><button id="previewSpeech" class="secondary"><span class="mi">play_arrow</span> TESTAR LOCUÇÃO</button><button id="addSpeech" class="primary"><span class="mi">playlist_add</span> ADICIONAR À FILA</button></div>
-<div class="hint" style="margin-top:8px">A locução usa as vozes disponíveis no próprio navegador/Android. A música de fundo é o arquivo <strong>fundo.mp3</strong> desta pasta.</div>
+<div class="hint speech-collapse-hint">A locução usa as vozes disponíveis no próprio navegador/Android. A música de fundo é o arquivo <strong>fundo.mp3</strong> desta pasta.</div>
+</div>
 <audio id="bgAudio" preload="auto" src="fundo.mp3" style="display:none"></audio>
 <script>
-/* v5 - Bloqueio de suspensão da tela enquanto o sistema estiver acessado.
+/* v6 - Bloqueio de suspensão da tela enquanto o sistema estiver acessado.
    Usa a Screen Wake Lock API quando disponível. O bloqueio é solicitado após
    o login e renovado automaticamente quando a página volta a ficar visível
    ou quando o navegador libera o Wake Lock. */
@@ -399,7 +401,7 @@ updateBgVolume();
 <div class="card queue-card">
 <h2 class="section-title"><span class="mi">campaign</span> Selecionar anúncios MP3</h2>
 <label class="file-picker"><span class="mi">audio_file</span> SELECIONAR ARQUIVOS MP3<input id="adFiles" type="file" accept="audio/*" multiple></label>
-<div class="queue-volume"><span class="field-label"><span class="mi">volume_up</span> Volume dos anúncios MP3 <span id="adVolumeValue">100%</span></span><input id="adVolume" type="range" min="0" max="1" step="0.01" value="1"></div>
+<div class="queue-volume"><span class="field-label"><span class="mi">volume_up</span> Volume dos anúncios MP3 <span id="adVolumeValue">100%</span></span><input id="adVolume" type="range" min="0" max="1" step="0.01" value="1"><div class="hint">Controla os anúncios em MP3 e também atua como volume geral dos itens de locução. O volume da locução e o volume da música de fundo continuam com ajuste próprio no card de criação de locução.</div></div>
 <div id="count" class="count">Nenhum áudio selecionado.</div>
 <div id="list" class="list"></div>
 <div class="queue-legend"><span class="legend-item"><span class="status-dot playing"></span> Em reprodução</span><span class="legend-item"><span class="status-dot last"></span> Último tocado</span></div>
@@ -408,7 +410,7 @@ updateBgVolume();
 <div class="card"><div class="hint"><strong>Como esta versão funciona:</strong><br>A programação aceita músicas e <strong>tempo ocioso</strong> na mesma fila. Cada item concluído vale 1 unidade para o contador. Ex.: 2 músicas + 1 tempo ocioso de 5 minutos = bloco de anúncios. Durante o tempo ocioso, não há áudio e a tela mostra uma contagem regressiva. Fora do horário de funcionamento, toda a programação para. No próximo horário de início, a sequência recomeça do zero.</div></div>
 </div>
 
-<div id="operationMode" class="operation-mode"><div class="operation-panel"><img class="operation-logo" src="logo-extra.png" alt="Extra Mercado"><div class="operation-title">AUTO ANÚNCIOS • v5</div><div id="opMode" class="mode" style="margin-top:16px">PARADO</div><div id="opCurrent" class="operation-current">Aguardando início</div><div class="timeline op-timeline"><div id="opTimelineFill" class="timeline-fill"></div></div><div class="time-row"><span id="opElapsed">00:00</span><span id="opTotal">00:00</span></div><div id="opTimer" class="operation-timer">00:00</div><div id="opNext" class="operation-next">Próximo anúncio: --:--</div><div id="opState" class="op-state">🔒 FUNÇÕES BLOQUEADAS</div>
+<div id="operationMode" class="operation-mode"><div class="operation-panel"><img class="operation-logo" src="logo-extra.png" alt="Extra Mercado"><div class="operation-title">AUTO ANÚNCIOS • v6</div><div id="opMode" class="mode" style="margin-top:16px">PARADO</div><div id="opCurrent" class="operation-current">Aguardando início</div><div class="timeline op-timeline"><div id="opTimelineFill" class="timeline-fill"></div></div><div class="time-row"><span id="opElapsed">00:00</span><span id="opTotal">00:00</span></div><div id="opTimer" class="operation-timer">00:00</div><div id="opNext" class="operation-next">Próximo anúncio: --:--</div><div id="opState" class="op-state">🔒 FUNÇÕES BLOQUEADAS</div>
 <div class="operation-lock-row">
 <button id="operationLock" class="operation-lock-btn"><span class="mi">lock_open</span> DESBLOQUEAR FUNÇÕES</button>
 </div>
@@ -511,16 +513,20 @@ function inSchedule(){const now=new Date(),cur=now.getHours()*3600+now.getMinute
 function secondsUntilScheduleStart(){const now=new Date(),[h,m]=String(startTime.value||"07:00").split(":").map(Number),target=new Date(now);target.setHours(Number.isFinite(h)?h:0,Number.isFinite(m)?m:0,0,0);if(target<=now)target.setDate(target.getDate()+1);return Math.max(0,Math.ceil((target-now)/1000))}
 function estimateSpeechSeconds(text,rate){return Math.max(2,Math.ceil((text.trim().length/11)/Number(rate||1.35)))}
 function clampVolume(v){v=Number(v);return Number.isFinite(v)?Math.max(0,Math.min(1,v)):1}
+function effectiveSpeechVolume(item){return clampVolume(Number(item?.voiceVolume??speechVolume.value)*clampVolume(adVolume.value))}
+function effectiveSpeechBgVolume(item){return clampVolume(Number(item?.bgVolume??bgVolume.value)*clampVolume(adVolume.value))}
+function applyActivePlayerVolume(){
+  if(!player)return;
+  const role=player.dataset.audioRole||((phase==="ad"||currentAd)?"ad":"music");
+  player.volume=role==="ad"?clampVolume(adVolume.value):clampVolume(musicVolume.value);
+}
 function updateVolumeLabels(){
   const mv=clampVolume(musicVolume.value),av=clampVolume(adVolume.value);
   musicVolumeValue.textContent=Math.round(mv*100)+"%";
   adVolumeValue.textContent=Math.round(av*100)+"%";
   speechVolumeValue.textContent=Math.round(clampVolume(speechVolume.value)*100)+"%";
   bgVolumeValue.textContent=Math.round(clampVolume(bgVolume.value)*100)+"%";
-  if(player){
-    const playerIsAd=phase==="ad"||(phase==="paused"&&currentAd);
-    player.volume=playerIsAd?av:mv;
-  }
+  applyActivePlayerVolume();
   if(bgAudio) bgAudio.volume=clampVolume(bgVolume.value);
 }
 function updateMusicCounter(){musicCounter.textContent=`${musicCountValue} / ${songsLimit()} itens`}
@@ -536,12 +542,12 @@ speechSynthesis.onvoiceschanged=loadVoices;loadVoices();
 let speechKeepAliveId=null;
 function clearSpeechKeepAlive(){if(speechKeepAliveId){clearInterval(speechKeepAliveId);speechKeepAliveId=null}}
 function startSpeechKeepAlive(){clearSpeechKeepAlive();speechKeepAliveId=setInterval(()=>{if(speechPlaying&&!speechPaused)try{speechSynthesis.resume()}catch(e){}},5000)}
-function speakChunks(text,onDone){
+function speakChunks(text,onDone,volumeOverride=null){
   speechSession++;const session=speechSession,chunks=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];let i=0;
   speechPlaying=true;speechPaused=false;startSpeechKeepAlive();try{speechSynthesis.cancel()}catch(e){}
   function nextChunk(){
     if(session!==speechSession)return;if(i>=chunks.length){speechPlaying=false;clearSpeechKeepAlive();onDone&&onDone();return}
-    const u=new SpeechSynthesisUtterance(chunks[i++].trim());u.lang="pt-BR";u.rate=Number(speechRate.value);u.pitch=Number(speechPitch.value);u.volume=Math.max(0,Math.min(1,Number(speechVolume.value)));
+    const u=new SpeechSynthesisUtterance(chunks[i++].trim());u.lang="pt-BR";u.rate=Number(speechRate.value);u.pitch=Number(speechPitch.value);u.volume=volumeOverride===null?clampVolume(speechVolume.value):clampVolume(volumeOverride);
     u.voice=speechVoices[Number(voiceSelect.value)]||speechVoices.find(v=>/^pt(-|_)br$/i.test(v.lang||""))||speechVoices[0]||null;
     u.onend=nextChunk;u.onerror=()=>{if(session===speechSession){speechPlaying=false;clearSpeechKeepAlive();onDone&&onDone()}};
     try{speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){if(session===speechSession){speechPlaying=false;clearSpeechKeepAlive();onDone&&onDone()}}
@@ -596,8 +602,8 @@ function testFile(item,button,kind){
   if(button.classList.contains("testing")){stopQueueTest();return}
   stopQueueTest();button.classList.add("testing");button.innerHTML='<span class="mi">stop</span>';
   if(kind==="speech"){
-    startBgMusic(Number(item.bgVolume??bgVolume.value)).catch(()=>{});
-    speakChunks(item.text,stopQueueTest);
+    startBgMusic(effectiveSpeechBgVolume(item)).catch(()=>{});
+    speakChunks(item.text,stopQueueTest,effectiveSpeechVolume(item));
     return;
   }
   if(!item.file){stopQueueTest();return}
@@ -682,7 +688,7 @@ function beginMusic(){
     mode.textContent="TEMPO OCIOSO";current.textContent=item.name;next.textContent=`Próximo anúncio após ${Math.max(0,songsLimit()-musicCountValue)} item(ns)`;
     renderMusicList();renderAdList();startIdleCountdown();return;
   }
-  player.pause();player.onended=null;player.onerror=null;player.src=URL.createObjectURL(item.file);currentUrl=player.src;player.volume=clampVolume(musicVolume.value);phase="music";
+  player.pause();player.onended=null;player.onerror=null;player.src=URL.createObjectURL(item.file);currentUrl=player.src;phase="music";player.dataset.audioRole="music";applyActivePlayerVolume();
   mode.textContent="MÚSICA EM REPRODUÇÃO";current.textContent=item.name;next.textContent=`Anúncio após ${Math.max(0,songsLimit()-musicCountValue)} item(ns)`;
   renderMusicList();renderAdList();try{player.load()}catch(e){}const p=player.play();if(p&&p.catch)p.catch(()=>{mode.textContent="MÚSICA AGUARDANDO REPRODUÇÃO";next.textContent="Toque em INICIAR novamente para liberar o áudio."})
 }
@@ -718,7 +724,7 @@ function playAd(done){
   if(item.kind==="mp3"){
     if(!item.file){finish();return}
     if(currentUrl){try{URL.revokeObjectURL(currentUrl)}catch(e){}currentUrl=null}
-    player.pause();currentUrl=URL.createObjectURL(item.file);player.src=currentUrl;player.volume=clampVolume(adVolume.value);mode.textContent="ANÚNCIO MP3 EM REPRODUÇÃO";current.textContent=item.name;next.textContent="Anúncio em reprodução";
+    player.pause();currentUrl=URL.createObjectURL(item.file);player.src=currentUrl;phase="ad";player.dataset.audioRole="ad";applyActivePlayerVolume();mode.textContent="ANÚNCIO MP3 EM REPRODUÇÃO";current.textContent=item.name;next.textContent="Anúncio em reprodução";
     try{player.load()}catch(e){}const p=player.play();if(p&&p.catch)p.catch(()=>{mode.textContent="MP3 AGUARDANDO REPRODUÇÃO";next.textContent="Toque em INICIAR novamente para liberar o áudio."});
     player.onended=finish;player.onerror=finish;
   }else{
@@ -726,11 +732,11 @@ function playAd(done){
     const total=estimateSpeechSeconds(item.text,item.rate);setTimeline(0,total);speechSession++;const session=speechSession;speechPlaying=true;speechPaused=false;startSpeechKeepAlive();try{speechSynthesis.cancel()}catch(e){}
     const chunks=item.text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[item.text];let i=0;
     function nextChunk(){if(session!==speechSession)return;if(i>=chunks.length){speechPlaying=false;clearSpeechKeepAlive();stopBgMusic();finish();return}
-      const u=new SpeechSynthesisUtterance(chunks[i++].trim());u.lang=item.voiceLang||"pt-BR";u.rate=Number(item.rate||1.35);u.pitch=Number(item.pitch??.9);u.volume=Math.max(0,Math.min(1,Number(item.voiceVolume??1)));
+      const u=new SpeechSynthesisUtterance(chunks[i++].trim());u.lang=item.voiceLang||"pt-BR";u.rate=Number(item.rate||1.35);u.pitch=Number(item.pitch??.9);u.volume=effectiveSpeechVolume(item);
       const v=speechVoices.find(v=>v.name===item.voiceName&&v.lang===item.voiceLang)||speechVoices.find(v=>v.name===item.voiceName)||speechVoices[Number(item.voiceIndex)]||speechVoices[0];if(v)u.voice=v;
       u.onend=nextChunk;u.onerror=()=>{if(session===speechSession){speechPlaying=false;clearSpeechKeepAlive();stopBgMusic();finish()}};try{speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){finish()}
     }
-    startBgMusic(Number(item.bgVolume??.15)).catch(()=>{});nextChunk()
+    startBgMusic(effectiveSpeechBgVolume(item)).catch(()=>{});nextChunk()
   }
 }
 player.addEventListener("ended",()=>{if(!running||paused)return;if(phase==="music")finishProgramItem()});
@@ -860,12 +866,32 @@ start.addEventListener("click",startRadio);pause.addEventListener("click",pauseR
 operationSkipMusic.addEventListener("click",skipCurrentMusic);operationSkipAd.addEventListener("click",skipCurrentAd);
 
 [songsBeforeAd,adsPerBlock,random,sequential,startTime,endTime,musicVolume,adVolume,speechRate,speechPitch,speechVolume,bgVolume].forEach(el=>el.addEventListener("change",()=>{saveSettings();updateVolumeLabels();syncTimeDisplays();updateMusicCounter();updateDisplay()}));
-[speechVolume,bgVolume,musicVolume,adVolume].forEach(el=>el.addEventListener("input",()=>{updateVolumeLabels();saveSettings()}));
+[speechVolume,bgVolume,musicVolume,adVolume].forEach(el=>el.addEventListener("input",()=>{
+  updateVolumeLabels();
+  saveSettings();
+  if(el===adVolume&&player.dataset.audioRole==="ad")applyActivePlayerVolume();
+  if(el===musicVolume&&player.dataset.audioRole!=="ad")applyActivePlayerVolume();
+  // IMPORTANTE: nunca cancelar/reiniciar uma locução que já esteja em reprodução.
+  // SpeechSynthesis não permite alterar o volume da utterance atual de forma segura;
+  // o novo volume será aplicado à próxima locução, preservando o contador e o fluxo atual.
+  if((el===bgVolume||el===adVolume)&&phase==="ad"&&currentAd?.kind==="speech"&&bgAudio&&!bgAudio.paused){
+    bgAudio.volume=effectiveSpeechBgVolume(currentAd);
+  }
+}));
+player.addEventListener("play",applyActivePlayerVolume);
+player.addEventListener("loadedmetadata",applyActivePlayerVolume);
 
 function requireOperationPin(message="Digite o PIN para continuar:"){const pin=prompt(message);if(pin!=="1234"){if(pin!==null)alert("PIN incorreto.");return false}return true}
 operationToggle.addEventListener("click",()=>{operationActive=true;operationUnlocked=false;mainApp.style.display="none";operationMode.style.display="flex";document.body.classList.add("operation-open");updateOperationDisplay()});
 exitOperation.addEventListener("click",()=>{if(!operationUnlocked)return;operationActive=false;operationUnlocked=false;operationMode.style.display="none";mainApp.style.display="block";document.body.classList.remove("operation-open");updateOperationDisplay();updateDisplay()});
 operationLock.addEventListener("click",()=>{if(!operationUnlocked){if(!requireOperationPin("Digite o PIN para desbloquear as funções:"))return;operationUnlocked=true}else operationUnlocked=false;updateOperationDisplay()});
+
+const speechCard=document.getElementById("speechCard");
+const speechCollapseToggle=document.getElementById("speechCollapseToggle");
+speechCollapseToggle.addEventListener("click",()=>{
+  const open=speechCard.classList.toggle("open");
+  speechCollapseToggle.setAttribute("aria-expanded",String(open));
+});
 
 renderMusicList();renderAdList();updateVolumeLabels();updateMusicCounter();updateDisplay();loadSavedQueues();
 

@@ -1,4 +1,4 @@
-AUTO ANÚNCIOS EXTRA — v5
+AUTO ANÚNCIOS EXTRA — v6
 
 Novidade principal:
 - A programação agora aceita MÚSICAS e TEMPO OCIOSO na mesma fila.
@@ -38,3 +38,6 @@ VERSÃO 5 — AJUSTE DE HORÁRIO E VOLUMES
 - Volume dos anúncios MP3 fica dentro do card da fila de anúncios.
 - Locuções continuam com volume próprio no card de criação de locução.
 - Música de fundo das locuções continua com controle separado.
+
+
+v6: pacote renumerado para versão 6. O card “Criar locução para a fila” inicia fechado e pode ser expandido pela seta para exibir os controles.
