@@ -292,34 +292,60 @@ function measureUnit(r){
   if(!/G$/.test(d)) return "kg";
   return "cada";
 }
-function buildCarts(){let out=[];rows.forEach(r=>{r.measureUnit=measureUnit(r);let n=Math.max(1,Number(r.cartazQty)||1);for(let i=0;i<n;i++){
+function buildCarts(){let out=[];rows.forEach(r=>{r.measureUnit=measureUnit(r);let n=Math.max(0,Math.floor(Number(r.cartazQty)||0));for(let i=0;i<n;i++){
   let specialMsg="";
   if(r.dyn===19||r.dyn===24) specialMsg=String(r.mensagemEtiqueta||"").trim();
   if(r.dyn===23){
     const msg1=String(val(r.raw||{},["Msg 1","MSG 1","Msg1","MSG1"])||"").trim();
     specialMsg=msg1 ? `A PARTIR DE ${msg1} UN.` : "A PARTIR DE UN.";
   }
-  out.push({...r,price:priceFor(r),measureUnit:r.measureUnit||measureUnit(r),dynName:dynamics[r.dyn]||r.dynName||"OFERTA",dynDesc:specialMsg||descDyn[r.dyn]||r.dynName||"",validity:validityPhrase(r)})
+  const packBasePrice=mode==="pack" ? packPriceBase(r) : 0;
+  const parcelBasePrice=mode==="parcela" ? parcelPriceBase(r) : 0;
+  out.push({...r,price:priceFor(r),packBasePrice,parcelBasePrice,measureUnit:r.measureUnit||measureUnit(r),dynName:dynamics[r.dyn]||r.dynName||"OFERTA",dynDesc:specialMsg||descDyn[r.dyn]||r.dynName||"",validity:validityPhrase(r),packValidity:packValidityPhrase(r),parcelValidity:parcelValidityPhrase(r)})
 }});carts=out}
+function packPriceBase(r){
+  // Pack normal usa sempre Preço Venda. Dinâmica 20 (Clube Extra) usa Preço Fide/Promo.
+  return Number(r.dyn)===20 ? Number(r.fide||0) : Number(r.por||0);
+}
+function packValidityPhrase(r){
+  // No Pack, somente a existência de Data Inicio Fide/Promo determina a mensagem.
+  const ini=formatDateBR(r.dataInicioFidePromo);
+  if(!ini) return "";
+  const fim=formatDateBR(r.dataFimFidePromo);
+  return `Oferta válida de ${ini} a ${fim} ou enquanto durar nossos estoques`;
+}
+function parcelPriceBase(r){
+  // Parcelamento normal usa Preço Venda. Dinâmica 20 (Clube Extra) usa Preço Fide/Promo.
+  return Number(r.dyn)===20 ? Number(r.fide||0) : Number(r.por||0);
+}
+function parcelValidityPhrase(r){
+  // No Parcelamento, somente a existência de Data Inicio Fide/Promo determina a mensagem.
+  const ini=formatDateBR(r.dataInicioFidePromo);
+  if(!ini) return "";
+  const fim=formatDateBR(r.dataFimFidePromo);
+  return `Oferta válida de ${ini} a ${fim} ou enquanto durar nossos estoques`;
+}
 function priceFor(r){
  let p=Number(r.por||0);
  if(mode==="percentual") return +(p*(1-num($("discount").value)/100)).toFixed(2);
- if(mode==="pack") return +(p/(num($("packQty").value)||1)).toFixed(2);
- if(mode==="parcela") return +(p/(num($("installments").value)||1)).toFixed(2);
+ if(mode==="pack") return +(packPriceBase(r)/(num($("packQty").value)||1)).toFixed(2);
+ if(mode==="parcela") return +(parcelPriceBase(r)/(num($("installments").value)||1)).toFixed(2);
  return +Number(p).toFixed(2);
 }
 function populateDyn(){let s=$("dynFilter");s.innerHTML='<option value="">Todas as dinâmicas</option>';Object.entries(dynamics).forEach(([k,v])=>s.innerHTML+=`<option value="${k}">${k} · ${v}</option>`)}
-function renderTable(){let q=$("search").value.toLowerCase(),d=$("dynFilter").value;let a=rows.filter(r=>(!q||`${r.plu} ${r.desc}`.toLowerCase().includes(q))&&(!d||String(r.dyn)===d));$("dataTable").innerHTML="<thead><tr><th>PLU</th><th>Descrição</th><th>Qtd. Cartaz</th><th>Dinâmica</th><th>De</th><th>Por</th></tr></thead><tbody>"+a.map((r,i)=>{const idx=rows.indexOf(r);return `<tr><td>${r.plu}</td><td>${r.desc}</td><td><div class="qty-editor"><button type="button" class="qty-btn" data-qty="dec" data-row="${idx}" aria-label="Diminuir quantidade" title="Diminuir quantidade"><span class="material-symbols-rounded" aria-hidden="true">remove</span></button><input class="qty-cartaz-input" data-row="${idx}" type="number" min="1" step="1" value="${Math.max(1,Number(r.cartazQty)||1)}" aria-label="Quantidade de cartazes"><button type="button" class="qty-btn" data-qty="inc" data-row="${idx}" aria-label="Aumentar quantidade" title="Aumentar quantidade"><span class="material-symbols-rounded" aria-hidden="true">add</span></button></div></td><td>${dynamics[r.dyn]||r.dynName||""}</td><td>${r.de?money(r.de):"—"}</td><td>${(r.por||r.fide)?money(r.por||r.fide):"—"}</td></tr>`}).join("")+"</tbody>";
+function renderTable(){let q=$("search").value.toLowerCase(),d=$("dynFilter").value;let a=rows.filter(r=>(!q||`${r.plu} ${r.desc}`.toLowerCase().includes(q))&&(!d||String(r.dyn)===d));$("dataTable").innerHTML="<thead><tr><th>#</th><th>PLU</th><th>Descrição</th><th>Qtd. Cartaz</th><th>Dinâmica</th><th>De</th><th>Por</th></tr></thead><tbody>"+a.map((r,i)=>{const idx=rows.indexOf(r);return `<tr><td>${idx+1}</td><td>${r.plu}</td><td>${r.desc}</td><td><div class="qty-editor"><button type="button" class="qty-btn" data-qty="dec" data-row="${idx}" aria-label="Diminuir quantidade" title="Diminuir quantidade"><span class="material-symbols-rounded" aria-hidden="true">remove</span></button><input class="qty-cartaz-input" data-row="${idx}" type="number" min="0" step="1" value="${Math.max(0,Number(r.cartazQty)||0)}" aria-label="Quantidade de cartazes" title="0 = não imprimir este produto"><button type="button" class="qty-btn" data-qty="inc" data-row="${idx}" aria-label="Aumentar quantidade" title="Aumentar quantidade"><span class="material-symbols-rounded" aria-hidden="true">add</span></button></div></td><td>${dynamics[r.dyn]||r.dynName||""}</td><td>${r.de?money(r.de):"—"}</td><td>${(r.por||r.fide)?money(r.por||r.fide):"—"}</td></tr>`}).join("")+"</tbody>";
 $("dataTable").querySelectorAll(".qty-cartaz-input").forEach(inp=>inp.onchange=()=>setCartazQty(Number(inp.dataset.row),inp.value));
-$("dataTable").querySelectorAll(".qty-btn").forEach(btn=>btn.onclick=()=>{const i=Number(btn.dataset.row);const cur=Math.max(1,Number(rows[i].cartazQty)||1);setCartazQty(i,btn.dataset.qty==="inc"?cur+1:cur-1)});
+$("dataTable").querySelectorAll(".qty-btn").forEach(btn=>btn.onclick=()=>{const i=Number(btn.dataset.row);const cur=Math.max(0,Number(rows[i].cartazQty)||0);setCartazQty(i,btn.dataset.qty==="inc"?cur+1:cur-1)});
 }
-function updateStats(){let qty=rows.reduce((a,r)=>a+(Number(r.cartazQty)||1),0),pages=Math.ceil(carts.length/8);$("stats").innerHTML=`<div><b>${rows.length}</b> produtos</div><div><b>${qty}</b> cartazes</div><div><b>${pages}</b> páginas A4</div>`;$("cartSummary").innerHTML=`<b>${carts.length}</b> cartazes gerados • <b>${Math.ceil(carts.length/8)}</b> páginas A4 • 8 cartazes por página.`} 
-function setCartazQty(index,value){const n=Math.max(1,Math.floor(Number(value)||1));if(!rows[index])return;rows[index].cartazQty=n;buildCarts();currentPage=Math.min(currentPage,Math.max(1,Math.ceil(carts.length/8)));renderTable();updateStats();renderPrint();}
+function updateStats(){let qty=rows.reduce((a,r)=>a+Math.max(0,Number(r.cartazQty)||0),0),pages=Math.ceil(carts.length/8);$("stats").innerHTML=`<div><b>${rows.length}</b> produtos</div><div><b>${qty}</b> cartazes</div><div><b>${pages}</b> páginas A4</div>`;$("cartSummary").innerHTML=`<b>${carts.length}</b> cartazes gerados • <b>${Math.ceil(carts.length/8)}</b> páginas A4 • 8 cartazes por página.`} 
+function setCartazQty(index,value){const parsed=Number(value);const n=Number.isFinite(parsed)?Math.max(0,Math.floor(parsed)):0;if(!rows[index])return;rows[index].cartazQty=n;buildCarts();currentPage=Math.min(currentPage,Math.max(1,Math.ceil(carts.length/8)));renderTable();updateStats();renderPrint();}
 function money(v){return v?Number(v).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}):"—"}
 function changePage(delta){let pages=Math.max(1,Math.ceil(carts.length/8));currentPage=Math.min(pages,Math.max(1,currentPage+delta));renderPrint()}
 function renderPrint(){let pages=Math.max(1,Math.ceil(carts.length/8));$("prevPage").disabled=currentPage<=1;$("nextPage").disabled=currentPage>=pages;$("pageSelect").innerHTML=Array.from({length:pages},(_,i)=>`<option value="${i+1}">Página ${i+1}</option>`).join("");$("pageSelect").value=currentPage;$("pageSelect").onchange=()=>{currentPage=+$("pageSelect").value;drawPage()};drawPage()}
 function renderAllPrintPages(){let pages=Math.max(1,Math.ceil(carts.length/8));$("printAllArea").innerHTML=Array.from({length:pages},(_,i)=>`<div class="a4 print-page">${carts.slice(i*8,i*8+8).map(cartMarkup).join("")}</div>`).join("")}
 function cartMarkup(r){
+  if(mode==="pack") return packCartMarkup(r);
+  if(mode==="parcela") return parcelCartMarkup(r);
   const hasDePor=!!(r.de && r.price && Math.abs(Number(r.de)-Number(r.price))>0.004);
   const promoPhrase=(hasDePor && [19,23,24].includes(Number(r.dyn)))?'NESTA PROMOÇÃO, A UN. SAI POR':'';
   return `<article class="cartaz ${hasDePor?'has-de-por':'no-de-por'}">
@@ -331,6 +357,41 @@ function cartMarkup(r){
     ${hasDePor?`<div class="cart-pricing"><div class="de-price"><span>DE:</span> <s class="price-value">${money(r.de)}</s><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div><div class="promo-box"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg><span class="promo-box-text ${String(r.dynDesc||'').length>15?'promo-box-text--long':''}">${esc(r.dynDesc||'')}</span></div><div class="promo-phrase">${promoPhrase}</div><div class="por-price"><span>POR:</span> <span class="price-value">${money(r.price)}</span><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div>${r.validity?`<div class="validity-phrase">${esc(r.validity)}</div>`:""}</div>`:`<div class="cart-pricing"><div class="price">${money(r.price)}<small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div></div>`}
     <div class="cart-code"><div class="plu">PLU ${esc(r.plu||'')}</div>${code39SVG(String(r.plu),190,34)}</div>
   </article>`
+}
+function packCartMarkup(r){
+  const club=Number(r.dyn)===20;
+  const base=Number(r.packBasePrice||packPriceBase(r));
+  const validity=r.packValidity||"";
+  return `<article class="cartaz pack-cartaz">
+    <div class="cart-top pack-top"></div>
+    <div class="cart-desc">${esc(r.desc||'')}</div>
+    ${club?`<div class="pack-club-note">EXCLUSIVO CLUBE EXTRA</div>`:""}
+    <div class="cart-pricing pack-pricing">
+      <div class="pack-base-price">${money(base)}</div>
+      <div class="pack-box"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg><span>NESTA EMBALAGEM,<br>A UND. SAI POR</span></div>
+      <div class="pack-unit-price">${money(r.price)}</div>
+      ${validity?`<div class="validity-phrase pack-validity">${esc(validity)}</div>`:""}
+    </div>
+    <div class="cart-code"><div class="plu">PLU ${esc(r.plu||'')}</div>${code39SVG(String(r.plu),190,34)}</div>
+  </article>`;
+}
+function parcelCartMarkup(r){
+  const club=Number(r.dyn)===20;
+  const base=Number(r.parcelBasePrice||parcelPriceBase(r));
+  const validity=r.parcelValidity||"";
+  const parcelas=Math.max(1,Math.floor(num($("installments").value)||1));
+  return `<article class="cartaz parcel-cartaz">
+    <div class="cart-top parcel-top"></div>
+    <div class="cart-desc">${esc(r.desc||'')}</div>
+    ${club?`<div class="parcel-club-note">EXCLUSIVO CLUBE EXTRA</div>`:""}
+    <div class="cart-pricing parcel-pricing">
+      <div class="parcel-base-price">${money(base)}</div>
+      <div class="parcel-box"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg><div class="parcel-box-text"><span class="parcel-box-highlight">EM ${parcelas}x SEM JUROS</span><span class="parcel-box-sub">NOS CARTÕES DE CRÉDITO</span></div></div>
+      <div class="parcel-unit-price">${money(r.price)}</div>
+      ${validity?`<div class="validity-phrase parcel-validity">${esc(validity)}</div>`:""}
+    </div>
+    <div class="cart-code"><div class="plu">PLU ${esc(r.plu||'')}</div>${code39SVG(String(r.plu),190,34)}</div>
+  </article>`;
 }
 function drawPage(){let start=(currentPage-1)*8,a=carts.slice(start,start+8);$("pageInfo").textContent=`${a.length} cartaz(es) nesta página`;$("printArea").innerHTML=a.map(cartMarkup).join("")}
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}

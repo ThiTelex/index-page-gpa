@@ -139,8 +139,56 @@ Senha atual permanece no `config.json`.
 - Dinâmica 17 passa a usar `Preço Venda` como seu único preço, exibido como `POR`.
 - A dinâmica 17 continua definindo a unidade de medida como `100g` para produtos do `Depto. = 2`.
 
+## v48 — modo Pack nos Cartazes
+- Adicionado o modo **Pack** na aba 3 · Cartazes, usando o campo **Unidades do pack** para dividir o preço.
+- Pack normal usa **Preço Venda** como preço original e como base do cálculo por unidade.
+- O cartaz Pack não imprime os rótulos **DE** e **POR** e não aplica risco/corte sobre o preço original.
+- A organização visual do Pack passa a ser: descrição → preço original → caixa preta **NESTA EMBALAGEM, A UND. SAI POR** → preço resultante da divisão.
+- Na dinâmica **20 · FIDELIDADE CLUBE EXTRA**, o Pack usa **Preço Fide/Promo** como preço original e base da divisão e exibe **EXCLUSIVO CLUBE EXTRA** abaixo da descrição.
+- No Pack, a mensagem **Oferta válida de X a Y ou enquanto durar nossos estoques** só é exibida quando **Data Inicio Fide/Promo** estiver preenchida; a data final é usada como Y.
+- Mantidas as demais regras de processamento, tratamento, quantidades de cartazes, impressão e COD.
 
-## v46 — tratamento sem limite de 500 produtos
-- Removido o limite que exibia apenas os primeiros 500 registros na aba **2. Tratamento**.
-- A tabela de tratamento agora lista todos os produtos que passaram pelo processamento, mantendo pesquisa, filtro por dinâmica e controle individual de quantidade.
-- O cartazeamento e a impressão continuam usando a lista completa, sem alteração nas regras de preços, dinâmicas ou unidades de medida.
+
+
+## v49 — modo Parcelamento nos Cartazes
+- Adicionado o modo **Parcelamento** na aba 3 · Cartazes, usando o campo **Parcelas** para definir a quantidade de parcelas.
+- Parcelamento normal usa **Preço Venda** como preço principal e como base do cálculo da parcela.
+- O cartaz Parcelamento não imprime os rótulos **DE** e **POR** e não aplica risco/corte sobre o preço original.
+- A organização visual do Parcelamento passa a ser: descrição → preço original → caixa preta **EM Yx SEM JUROS NOS CARTÕES DE CRÉDITO** → valor da parcela.
+- A quantidade Y da caixa preta acompanha o campo **Parcelas** e o texto pode quebrar linha dentro da caixa.
+- Na dinâmica **20 · FIDELIDADE CLUBE EXTRA**, o Parcelamento usa **Preço Fide/Promo** como preço original e base da divisão e exibe **EXCLUSIVO CLUBE EXTRA** abaixo da descrição.
+- No Parcelamento, a mensagem **Oferta válida de X a Y ou enquanto durar nossos estoques** só é exibida quando **Data Inicio Fide/Promo** estiver preenchida; a data final é usada como Y.
+- Corrigido o limite de 500 registros na tabela da aba 2 · Tratamento, mantendo a lista completa de produtos.
+- Mantidas as demais regras de processamento, quantidades de cartazes, impressão e COD.
+
+## v50 — destaque visual no parcelamento
+- Ajustada a caixa preta do modo **Parcelamento** para separar a mensagem em duas linhas:
+  - **EM Yx SEM JUROS**
+  - **NOS CARTÕES DE CRÉDITO**
+- **EM Yx SEM JUROS** recebe fonte ligeiramente maior para criar hierarquia visual e destacar a condição do parcelamento.
+- As duas linhas são elementos SVG/HTML independentes dentro da mesma caixa preta, com centralização controlada, evitando quebra automática em ponto inadequado.
+- Mantidas todas as regras de preços, dinâmica 20, validade, Pack, Percentual, tratamento sem limite de 500 produtos e demais modos.
+\n## v51 — caixa de parcelamento mais expressiva
+- Aumentada a tipografia da caixa preta do modo **Parcelamento** para aproveitar melhor a largura disponível da arte.
+- **EM Yx SEM JUROS** passa a usar fonte **20px**, mantendo o destaque visual da primeira linha.
+- **NOS CARTÕES DE CRÉDITO** passa a usar fonte **16px**, também maior que na v50 e menor que a primeira linha.
+- A caixa preta foi ampliada verticalmente para acomodar as duas linhas com melhor presença visual.
+- Considerado o limite de até **2 dígitos** para a quantidade de parcelas (ex.: 10x e 12x), mantendo as duas linhas em uma única linha cada.
+- A regra visual também foi preservada na impressão, sem reduzir as duas linhas para uma fonte única menor.
+- Mantidas todas as regras de preços, dinâmica 20, validade, Pack, Percentual, tratamento sem limite de 500 produtos e demais modos.
+
+## v52 — ajuste equilibrado do destaque do parcelamento
+- Reduzido o aumento excessivo aplicado na v51 à caixa preta do modo Parcelamento.
+- Mantidas as duas linhas com hierarquia visual: `EM Yx SEM JUROS` maior e `NOS CARTÕES DE CRÉDITO` menor.
+- Ajustadas as fontes para 18px e 14px, respectivamente, mantendo destaque sem ocupar largura excessiva.
+- Reduzida levemente a largura da caixa e sua altura para melhorar a proporção dentro do SVG.
+- Considerado o limite de até 2 dígitos para parcelas (ex.: 10x e 12x), evitando estouro lateral.
+- Mantidas todas as regras de preços, dinâmica 20, validade, Pack, Percentual e demais modos.
+
+## v53 — numeração do tratamento e opção de não imprimir
+- Adicionada uma coluna de numeração na aba **2 · Tratamento**, iniciando em **1** e seguindo a ordem dos produtos analisados a partir do arquivo Excel.
+- A numeração identifica o produto na lista analisada e permanece vinculada à posição original mesmo quando a tabela é pesquisada ou filtrada.
+- O seletor **Qtd. Cartaz** agora aceita **0**.
+- Quando um produto recebe quantidade **0**, ele permanece listado no Tratamento, mas é excluído da pré-visualização, do total de cartazes e da impressão.
+- O botão de diminuir pode levar a quantidade até 0; o botão de aumentar permite voltar de 0 para 1 ou mais.
+- Mantidas todas as regras de preços, dinâmicas, Pack, Percentual, Parcelamento, validade, SVG e demais funcionalidades existentes.
