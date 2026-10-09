@@ -1,3 +1,15 @@
+## v54 — primeira versão de teste da função PBi
+- Adicionada a primeira tratativa funcional da fonte **PBi**, usando a estrutura do `data.xlsx` como referência.
+- `NOM_PROD` → descrição; `Preço De (R$)` → DE; `Preço Promo (R$)` → POR quando preenchido; `DAT_INICIO_OFERTA`/`DAT_FIM_OFERTA` → validade; `COD_PLU` → PLU e código de barras.
+- Caixa preta construída a partir de `TIPO_CLIENTE` + `DINÂMICA`, com **EXCLUSIVO CLUBE EXTRA** para `Fidelidade (Clube Extra / PA+)`.
+- Dinâmicas **A PARTIR DE X PAGUE Y**, **LEVE X PAGUE Y** e **X% DE DESCONTO** são reconhecidas.
+- Em **A PARTIR DE X PAGUE Y**, a caixa exibe `A PARTIR DE X UN.` e o POR é extraído do valor Y da própria dinâmica quando `Preço Promo (R$)` estiver vazio.
+- Em **LEVE X PAGUE Y**, o POR é calculado como `Preço De × Y ÷ X`.
+- Em **X% DE DESCONTO**, o POR usa `Preço Promo (R$)`.
+- Para as três dinâmicas especiais é exibido `NESTA PROMOÇÃO, A UN. SAI POR`.
+- Para outras dinâmicas, a caixa usa `OFERTA`, conforme a regra definida para o primeiro teste.
+- Esta versão é uma base de teste da PBi; as regras do Result permanecem preservadas.
+
 # A7 Gerador de Cartazes — v23
 
 ## Correção desta versão
@@ -192,3 +204,57 @@ Senha atual permanece no `config.json`.
 - Quando um produto recebe quantidade **0**, ele permanece listado no Tratamento, mas é excluído da pré-visualização, do total de cartazes e da impressão.
 - O botão de diminuir pode levar a quantidade até 0; o botão de aumentar permite voltar de 0 para 1 ou mais.
 - Mantidas todas as regras de preços, dinâmicas, Pack, Percentual, Parcelamento, validade, SVG e demais funcionalidades existentes.
+
+## v55 — correção do processamento PBi e tratamento da estrutura Power BI
+- Corrigido o processamento da fonte **PBi** para usar as colunas reais do export do Power BI (`COD_PLU`, `NOM_PROD`, `Preço De (R$)`, `Preço Promo (R$)`, `DINÂMICA`, `TIPO_CLIENTE`, `DAT_INICIO_OFERTA` e `DAT_FIM_OFERTA`), em vez dos nomes usados na estrutura Result.
+- A aba **2 · Tratamento** agora mostra PLU, descrição, dinâmica e preços reais do PBi.
+- O filtro de dinâmica do PBi passa a usar o texto original da coluna `DINÂMICA`.
+- Implementada a interpretação das três famílias especiais:
+  - `A PARTIR DE X PAGUE Y` → `A PARTIR DE X UN.` e preço Y;
+  - `LEVE X PAGUE Y` → cálculo `Preço De × Y ÷ X`;
+  - `X% DE DESCONTO` → usa `Preço Promo (R$)`.
+- `LISTA DE PRODUTOS` e `VALOR FIXO` ficam como oferta normal, sem criar uma segunda linha de dinâmica.
+- `TIPO_CLIENTE = Fidelidade (Clube Extra / PA+)` passa a gerar `EXCLUSIVO CLUBE EXTRA` e, nas três famílias especiais, uma segunda linha com a dinâmica.
+- Para as demais situações, a caixa preta usa `OFERTA` ou a própria dinâmica conforme a regra PBi definida.
+- Implementada a validade usando `DAT_INICIO_OFERTA` e `DAT_FIM_OFERTA`.
+- Mantida a função Result e todas as funcionalidades anteriores de quantidade, Pack, Parcelamento, Percentual, impressão e COD.
+
+## v56 — correções de PLU, datas e dinâmica exibida no tratamento PBi
+- Corrigido o carregamento do XLSX do PBi para não interpretar valores numéricos de `COD_PLU` como datas do Excel.
+- `COD_PLU` passa a ser preservado como número/código, evitando resultados como `Wed Dec 14 3138...` no PLU e no código de barras.
+- Datas `DAT_INICIO_OFERTA` e `DAT_FIM_OFERTA` em formato serial do Excel passam a ser convertidas para `DD/MM/AAAA` no cartaz.
+- Na aba **2 · Tratamento**, a coluna **Dinâmica** do PBi passa a mostrar exatamente o conteúdo original da coluna `DINÂMICA`, em vez de substituir códigos derivados por textos da estrutura Result, como `OFERTA 2 UNID`.
+- Assim, um produto cuja `DINÂMICA` é `20% DE DESCONTO` aparece como `20% DE DESCONTO` no Tratamento e continua usando essa mesma dinâmica na caixa preta do cartaz.
+- Mantidas as regras já implementadas para `A PARTIR DE X PAGUE Y`, `LEVE X PAGUE Y`, `X% DE DESCONTO`, Clube Extra, validade, quantidades e função Result.
+
+
+## v57 — melhorias PBi e EAN no Result
+- PBi: o preço **DE** passa a usar o mesmo porte visual do DE do Result.
+- PBi: os modos **Percentual**, **Pack** e **Parcelamento** ficam desabilitados quando a fonte é PBi; somente **Padrão** permanece ativo.
+- PBi: linhas com `ESTOQUE = 0` são descartadas após o processamento e não geram tratamento, cartaz ou impressão.
+- Result: antes da linha **PLU** e do código de barras, o cartaz passa a exibir **EAN**, usando a coluna `EAN` do CSV, com o mesmo tamanho e cor visual do PLU.
+- Demais regras de Result e PBi preservadas.
+
+## v58 — entrada por texto para ZEBRINHA
+- Adicionada entrada por caixa de texto para colar diretamente a tabela do e-mail da ZEBRINHA, separada por tabulações.
+- O cabeçalho é validado por nome de coluna antes do processamento.
+- O Tratamento usa `PLU virtual`, `Descrição`, `Quantidade`, `Preço Original` e `Novo Preço Arredondado`.
+- Quantidade de cartazes começa com o valor de `Quantidade` e continua editável, inclusive para zero.
+- Cartaz padrão com dinâmica `PRÓXIMO AO VENCIMENTO`, validade desde a data local atual até `Validade da Oferta` e código de barras baseado no PLU virtual.
+- Percentual, Pack e Parcelamento desativados para ZEBRINHA; Result e PBi preservados.
+
+
+## v59 — correção de preços e entrada condicional da ZEBRINHA
+- Corrigida a interpretação dos valores monetários com `R$`, vírgula decimal e espaços, para que Preço Original e Novo Preço Arredondado sejam processados corretamente.
+- A área de envio de arquivo aparece somente para Result e PBi.
+- A caixa de texto da ZEBRINHA aparece somente quando essa fonte está selecionada, inclusive no carregamento inicial da aplicação.
+- O botão de demonstração fica oculto na ZEBRINHA.
+
+
+## v60 — atalhos para sistemas de origem
+- Removido o botão “Carregar demonstração” da tela de entrada.
+- Atualizados os subtítulos de RESULT, PBi e ZEBRINHA conforme solicitado.
+- Adicionado o atalho “Acessar GPR Cockpit” quando RESULT estiver selecionado.
+- Adicionado o atalho “Acessar Power Bi Ofertas” quando PBi estiver selecionado.
+- Adicionado o atalho “Acessar Outlook” quando ZEBRINHA estiver selecionada.
+- Os atalhos abrem em nova aba; o campo de arquivo ou a caixa de texto continua aparecendo conforme a fonte selecionada.

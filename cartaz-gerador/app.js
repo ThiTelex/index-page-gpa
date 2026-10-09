@@ -62,12 +62,40 @@ function showPage(p){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 syncStepLock();
+function updateModeAvailability(){
+  const restricted=["PBi","Zebrinha"].includes(source);
+  document.querySelectorAll(".mode").forEach(btn=>{
+    const disabled=restricted && btn.dataset.mode!=="padrao";
+    btn.disabled=disabled;
+    btn.classList.toggle("mode-disabled",disabled);
+    btn.setAttribute("aria-disabled",String(disabled));
+  });
+  if(restricted){
+    mode="padrao";
+    document.querySelectorAll(".mode").forEach(x=>x.classList.toggle("active",x.dataset.mode==="padrao"));
+  }
+}
+updateModeAvailability();
+function syncSourceUI(){
+  const isZebra=source==="Zebrinha";
+  $("fileInputArea").classList.toggle("hidden",isZebra);
+  $("zebrinhaInputArea").classList.toggle("hidden",!isZebra);
+  $("processBtn").textContent=isZebra?"Processar texto":"Processar arquivo";
+  $("processBtn").disabled=isZebra ? !$("zebrinhaText").value.trim() : !selectedFile;
+  $("resultLink").classList.toggle("hidden",source!=="Result");
+  $("pbiLink").classList.toggle("hidden",source!=="PBi");
+  $("outlookLink").classList.toggle("hidden",!isZebra);
+}
 document.querySelectorAll(".source-card").forEach(c=>c.onclick=()=>{
   document.querySelectorAll(".source-card").forEach(x=>x.classList.remove("selected"));
   c.classList.add("selected");
   source=c.querySelector("input").value;
+  updateModeAvailability();
   if(selectedFile) updateFileCard();
+  syncSourceUI();
 });
+syncSourceUI();
+$("zebrinhaText").addEventListener("input",()=>{if(source==="Zebrinha") $("processBtn").disabled=!$("zebrinhaText").value.trim()});
 const drop=$("drop"), fileInput=$("file");
 drop.onclick=(e)=>{if(e.target!==fileInput) fileInput.click()};
 drop.ondragover=e=>{e.preventDefault();drop.classList.add("drag")};
@@ -117,9 +145,8 @@ function clearSelectedFile(){
   $("status").textContent="Aguardando arquivo";
 }
 $("processBtn").onclick=processFile;
-$("demoBtn").onclick=()=>{rows=demo(); source="Result"; normalize(); finish()};
 $("search").oninput=renderTable;$("dynFilter").onchange=renderTable;
-document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));b.classList.add("active");mode=b.dataset.mode;});
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{if(b.disabled)return;document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));b.classList.add("active");mode=b.dataset.mode;});
 $("rebuild").onclick=()=>{buildCarts();showPage("impressao")};
 $("printBtn").onclick=()=>printSection("impressao");
 $("printAllBtn").onclick=printAllSections;
@@ -133,6 +160,9 @@ function printSection(section){
   window.print();
 }
 async function processFile(){
+  if(source==="Zebrinha"){
+    try{const parsed=parseZebrinhaText($("zebrinhaText").value); if(!parsed.length) throw new Error("Não encontrei linhas de produtos. Cole a tabela com o cabeçalho e os dados separados por tabulações."); rows=parsed; normalize(); finish(); $("status").textContent=`Texto ZEBRINHA • ${rows.length} produtos`; }catch(err){alert(`Não foi possível processar o texto da ZEBRINHA.\n\n${err.message||err}`)} return;
+  }
   const f=selectedFile;
   if(!f){alert("Selecione ou solte um arquivo primeiro.");return}
   const ext=(f.name.toLowerCase().split(".").pop()||"");
@@ -146,7 +176,7 @@ async function processFile(){
       finish();
     }else{
       const data=await f.arrayBuffer();
-      const wb=XLSX.read(data,{type:"array",cellDates:true,raw:true});
+      const wb=XLSX.read(data,{type:"array",cellDates:false,raw:true});
       const wanted=source==="Result"?"Result":source;
       const ws=wb.Sheets[wanted]||wb.Sheets[wb.SheetNames[0]];
       rows=XLSX.utils.sheet_to_json(ws,{defval:"",raw:true});
@@ -237,15 +267,88 @@ function calcPorResult(raw,dyn){
   }
   return 0;
 }
+function parsePBiDynamic(dynName,de,promo){
+  const s=String(dynName||"").trim();
+  const up=s.toUpperCase();
+  if(/^A PARTIR DE\s+\d+\s+PAGUE\s+/i.test(s)){
+    const m=s.match(/^A PARTIR DE\s+(\d+)\s+PAGUE\s+([0-9]+(?:[.,][0-9]{1,2})?)/i);
+    const qtd=m?m[1]:"";
+    const price=m?num(m[2]):promo;
+    return {code:23,type:"a_partir",line:qtd?`A PARTIR DE ${qtd} UN.`:"A PARTIR DE UN.",por:price};
+  }
+  if(/^LEVE\s+\d+\s+PAGUE\s+\d+/i.test(s)){
+    const m=s.match(/^LEVE\s+(\d+)\s+PAGUE\s+(\d+)/i);
+    const leve=m?Number(m[1]):0, pague=m?Number(m[2]):0;
+    const price=(leve>0&&pague>0)?+((de*pague)/leve).toFixed(2):promo;
+    return {code:24,type:"leve_pague",line:m?`LEVE ${leve} PAGUE ${pague}`:s,por:price};
+  }
+  if(/^\d+(?:[.,]\d+)?%\s+DE\s+DESCONTO/i.test(s)){
+    const m=s.match(/^(\d+(?:[.,]\d+)?)%\s+DE\s+DESCONTO/i);
+    return {code:19,type:"percentual",line:m?`${m[1].replace(",",".")}% DE DESCONTO`:s,por:promo};
+  }
+  return {code:12,type:"normal",line:"OFERTA",por:promo};
+}
+function pbiValidityPhrase(r){
+  const ini=formatDateBR(r.dataInicioOferta), fim=formatDateBR(r.dataFimOferta);
+  if(!ini && !fim) return "";
+  return `Oferta válida de ${ini} a ${fim} ou enquanto durar nossos estoques`;
+}
+function parseZebrinhaText(text){
+  const lines=String(text||"").replace(/^\uFEFF/,"").split(/\r?\n/).filter(x=>x.trim());
+  if(lines.length<2) return [];
+  const sep="\t";
+  const headers=lines[0].split(sep).map(x=>x.trim().replace(/^"|"$/g,""));
+  const required=["PLU virtual","Descrição","Quantidade","Validade da Oferta","Preço Original","Novo Preço Arredondado"];
+  const norm=s=>keyNorm(s).replace(/%/g,"%");
+  const headerNorm=headers.map(norm);
+  const missing=required.filter(x=>!headerNorm.includes(norm(x)));
+  if(missing.length) throw new Error("Cabeçalho não reconhecido. Colunas ausentes: "+missing.join(", "));
+  return lines.slice(1).map(line=>{const cells=line.split(sep);const obj={};headers.forEach((h,i)=>obj[h]=(cells[i]??"").trim().replace(/^"|"$/g,""));return obj}).filter(r=>Object.values(r).some(v=>String(v).trim()));
+}
+function zebrinhaValidityPhrase(r){
+  const end=formatDateBR(r.zebraEndDate); if(!end) return "";
+  const now=new Date(); const today=`${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${now.getFullYear()}`;
+  return `Oferta válida de ${today} a ${end} ou enquanto durar nossos estoques`;
+}
 function normalize(){
  if(source==="Result"){rows=rows.map(r=>{const dyn=Number(val(r,["Cod. Dinâmica","COD DINAMICA","Código Dinâmica"]))||10; const deResult=calcDeResult(r,dyn); const porResult=calcPorResult(r,dyn); return {raw:r,category:val(r,["Nome Categ.","Nome Categoria","NOME CATEG.","Categoria"]),depto:val(r,["Depto.","Depto","DEPTO.","Departamento"]),deptName:val(r,["Nome Depto.","Nome Depto","NOME DEPTO.","Nome Departamento"]),plu:val(r,["PLU","Plu","plu"]),desc:val(r,["Descrição PLU","Descricao PLU","Descrição","DESCRIÇÃO"]),qtd:Number(val(r,["Quantidade Coletada","Quantidade","QTD"]))||1,cartazQty:Number(val(r,["Quantidade Coletada","Quantidade","QTD"]))||1,dyn,dynName:val(r,["Dinâmica","DINAMICA"]),de:deResult,por:porResult,fide:num(val(r,["Preço Fide/Promo","Preço Fidelidade","POR FIDE"])),ean:val(r,["EAN","Código EAN","CODIGO EAN"]),mensagemEtiqueta:val(r,["Mensagem Etiqueta","MENSAGEM ETIQUETA","Mensagem etiqueta"]),dataInicioFidePromo:val(r,["Data Inicio Fide/Promo","DATA INICIO FIDE/PROMO","Data Início Fide/Promo"]),dataFimFidePromo:val(r,["Data Fim Fide/Promo","DATA FIM FIDE/PROMO","Data Fim Fide/Promo"])} }).filter(r=>r.plu||r.desc)}
- else if(source==="PBi"){rows=rows.map(r=>({category:val(r,["Nome Depto.","Nome Depto","NOME DEPTO.","Nome Departamento","Departamento"]),plu:val(r,["PLU","Plu"]),desc:val(r,["DESCRICAO","Descrição","DESCRIÇÃO"]),qtd:num(val(r,["QTD","Quantidade"]))||1,cartazQty:num(val(r,["QTD","Quantidade"]))||1,dyn:0,dynName:val(r,["DINAMICA","Dinâmica"]),de:num(val(r,["DE","Preço De"])),por:num(val(r,["POR","Preço Venda"])),fide:num(val(r,["POR VAL","Preço Fidelidade"])),ean:val(r,["EAN"])}))}
- else {rows=rows.map(r=>({category:val(r,["Nome Depto.","Nome Depto","NOME DEPTO.","Nome Departamento","Departamento"]),plu:val(r,["PLU","Plu"]),desc:val(r,["Descrição","DESCRICAO"]),qtd:num(val(r,["Quantidade","QTD"]))||1,cartazQty:num(val(r,["Quantidade","QTD"]))||1,dyn:12,dynName:"ZEBRINHA",de:num(val(r,["Preço Original","Preço De"])),por:num(val(r,["Novo Preço Arredondado","Novo Preço","POR"])),fide:0,ean:val(r,["EAN","PLU virtual"])}))}
+ else if(source==="PBi"){
+   rows=rows.map(r=>{
+     const dynName=String(val(r,["DINÂMICA","DINAMICA","Dinâmica"])||"").trim();
+     const tipoCliente=String(val(r,["TIPO_CLIENTE","TIPO CLIENTE","Tipo Cliente"])||"").trim();
+     const de=num(val(r,["Preço De (R$)","Preço De","PREÇO DE","DE"]));
+     const promoRaw=val(r,["Preço Promo (R$)","Preço Promo","PREÇO PROMO","POR"]);
+     const promo=num(promoRaw);
+     const dynInfo=parsePBiDynamic(dynName,de,promo);
+     return {
+       raw:r,
+       category:val(r,["DEPTO_NOVO","NOM_SUBCATEG","NOM_GRUPO"]),
+       depto:val(r,["DEPTO_NOVO"]),
+       plu:val(r,["COD_PLU","PLU","Plu"]),
+       desc:val(r,["NOM_PROD","DESCRICAO","Descrição","DESCRIÇÃO"]),
+       qtd:1,cartazQty:1,
+       dyn:dynInfo.code,dynName,
+       pbiDynamicType:dynInfo.type,
+       pbiDynamicLine:dynInfo.line,
+       pbiExclusive:tipoCliente==="Fidelidade (Clube Extra / PA+)",
+       tipoCliente,
+       de,
+       por:dynInfo.por,
+       fide:promo,
+       ean:val(r,["EAN"]),
+       estoque:val(r,["ESTOQUE","ESTOQUE (UN.)","ESTOQUE (QTD)"]),
+       dataInicioOferta:val(r,["DAT_INICIO_OFERTA","DATA INICIO OFERTA"]),
+       dataFimOferta:val(r,["DAT_FIM_OFERTA","DATA FIM OFERTA"]),
+       desconto:val(r,["Desconto","DESCONTO"])
+     };
+   }).filter(r=>(r.plu||r.desc) && num(r.estoque)>0)
+ }
+ else {rows=rows.map(r=>{const endDate=val(r,["Validade da Oferta"]); return {raw:r,category:"ZEBRINHA",plu:String(val(r,["PLU virtual","PLU VIRTUAL"] )||"").trim(),desc:val(r,["Descrição","DESCRICAO"]),qtd:Math.max(0,Math.floor(num(val(r,["Quantidade"]))||0)),cartazQty:Math.max(0,Math.floor(num(val(r,["Quantidade"]))||0)),dyn:13,dynName:"PRÓXIMO AO VENCIMENTO",dynDesc:"PRÓXIMO AO VENCIMENTO",de:num(val(r,["Preço Original","Preço De"])),por:num(val(r,["Novo Preço Arredondado","Novo Preço","POR"])),fide:0,ean:"",zebraEndDate:endDate};}).filter(r=>(r.plu||r.desc)&&r.de>=0&&r.por>=0)}
 }
 function num(v){
  if(v===null||v===undefined||v==="") return 0;
  if(typeof v==="number") return Number.isFinite(v)?v:0;
- let s=String(v).trim().replace(/R\\$\\s*/gi,"").replace(/\\s/g,"");
+ let s=String(v).trim().replace(/R\$\s*/gi,"").replace(/\s/g,"");
  if(!s) return 0;
  if(s.includes(",")) s=s.replace(/\\./g,"").replace(",",".");
  const n=Number(s);
@@ -260,6 +363,17 @@ function demo(){return [
 ]}
 function formatDateBR(v){
   if(v===null||v===undefined||String(v).trim()==="") return "";
+  if(v instanceof Date && !Number.isNaN(v.getTime())){
+    return `${String(v.getDate()).padStart(2,"0")}/${String(v.getMonth()+1).padStart(2,"0")}/${v.getFullYear()}`;
+  }
+  if(typeof v === "number" && Number.isFinite(v) && v>20000 && v<80000){
+    // Datas do Excel chegam como número serial quando o XLSX é lido com cellDates:false.
+    const ms=Math.round((v-25569)*86400000);
+    const d=new Date(ms);
+    if(!Number.isNaN(d.getTime())){
+      return `${String(d.getUTCDate()).padStart(2,"0")}/${String(d.getUTCMonth()+1).padStart(2,"0")}/${d.getUTCFullYear()}`;
+    }
+  }
   const x=String(v).trim();
   let m=x.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
   if(m) return `${m[3].padStart(2,"0")}/${m[2].padStart(2,"0")}/${m[1]}`;
@@ -301,7 +415,7 @@ function buildCarts(){let out=[];rows.forEach(r=>{r.measureUnit=measureUnit(r);l
   }
   const packBasePrice=mode==="pack" ? packPriceBase(r) : 0;
   const parcelBasePrice=mode==="parcela" ? parcelPriceBase(r) : 0;
-  out.push({...r,price:priceFor(r),packBasePrice,parcelBasePrice,measureUnit:r.measureUnit||measureUnit(r),dynName:dynamics[r.dyn]||r.dynName||"OFERTA",dynDesc:specialMsg||descDyn[r.dyn]||r.dynName||"",validity:validityPhrase(r),packValidity:packValidityPhrase(r),parcelValidity:parcelValidityPhrase(r)})
+  out.push({...r,price:priceFor(r),packBasePrice,parcelBasePrice,measureUnit:r.measureUnit||measureUnit(r),dynName:dynamics[r.dyn]||r.dynName||"OFERTA",dynDesc:specialMsg||descDyn[r.dyn]||r.dynName||"",validity:source==="PBi"?pbiValidityPhrase(r):source==="Zebrinha"?zebrinhaValidityPhrase(r):validityPhrase(r),packValidity:packValidityPhrase(r),parcelValidity:parcelValidityPhrase(r),pbiLine:r.pbiDynamicLine||"OFERTA",pbiType:r.pbiDynamicType||"normal",pbiExclusive:!!r.pbiExclusive})
 }});carts=out}
 function packPriceBase(r){
   // Pack normal usa sempre Preço Venda. Dinâmica 20 (Clube Extra) usa Preço Fide/Promo.
@@ -332,8 +446,16 @@ function priceFor(r){
  if(mode==="parcela") return +(parcelPriceBase(r)/(num($("installments").value)||1)).toFixed(2);
  return +Number(p).toFixed(2);
 }
-function populateDyn(){let s=$("dynFilter");s.innerHTML='<option value="">Todas as dinâmicas</option>';Object.entries(dynamics).forEach(([k,v])=>s.innerHTML+=`<option value="${k}">${k} · ${v}</option>`)}
-function renderTable(){let q=$("search").value.toLowerCase(),d=$("dynFilter").value;let a=rows.filter(r=>(!q||`${r.plu} ${r.desc}`.toLowerCase().includes(q))&&(!d||String(r.dyn)===d));$("dataTable").innerHTML="<thead><tr><th>#</th><th>PLU</th><th>Descrição</th><th>Qtd. Cartaz</th><th>Dinâmica</th><th>De</th><th>Por</th></tr></thead><tbody>"+a.map((r,i)=>{const idx=rows.indexOf(r);return `<tr><td>${idx+1}</td><td>${r.plu}</td><td>${r.desc}</td><td><div class="qty-editor"><button type="button" class="qty-btn" data-qty="dec" data-row="${idx}" aria-label="Diminuir quantidade" title="Diminuir quantidade"><span class="material-symbols-rounded" aria-hidden="true">remove</span></button><input class="qty-cartaz-input" data-row="${idx}" type="number" min="0" step="1" value="${Math.max(0,Number(r.cartazQty)||0)}" aria-label="Quantidade de cartazes" title="0 = não imprimir este produto"><button type="button" class="qty-btn" data-qty="inc" data-row="${idx}" aria-label="Aumentar quantidade" title="Aumentar quantidade"><span class="material-symbols-rounded" aria-hidden="true">add</span></button></div></td><td>${dynamics[r.dyn]||r.dynName||""}</td><td>${r.de?money(r.de):"—"}</td><td>${(r.por||r.fide)?money(r.por||r.fide):"—"}</td></tr>`}).join("")+"</tbody>";
+function populateDyn(){
+  const s=$("dynFilter");
+  s.innerHTML='<option value="">Todas as dinâmicas</option>';
+  if(source==="PBi"){
+    [...new Set(rows.map(r=>String(r.dynName||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR",{sensitivity:"base"})).forEach(v=>s.innerHTML+=`<option value="${esc(v)}">${esc(v)}</option>`);
+    return;
+  }
+  Object.entries(dynamics).forEach(([k,v])=>s.innerHTML+=`<option value="${k}">${k} · ${v}</option>`);
+}
+function renderTable(){let q=$("search").value.toLowerCase(),d=$("dynFilter").value;let a=rows.filter(r=>(!q||`${r.plu} ${r.desc}`.toLowerCase().includes(q))&&(!d||(source==="PBi"?String(r.dynName)===d:String(r.dyn)===d)));$("dataTable").innerHTML="<thead><tr><th>#</th><th>PLU</th><th>Descrição</th><th>Qtd. Cartaz</th><th>Dinâmica</th><th>De</th><th>Por</th></tr></thead><tbody>"+a.map((r,i)=>{const idx=rows.indexOf(r);const dynDisplay=source==="PBi"?String(r.dynName||""):String(dynamics[r.dyn]||r.dynName||"");return `<tr><td>${idx+1}</td><td>${r.plu}</td><td>${r.desc}</td><td><div class="qty-editor"><button type="button" class="qty-btn" data-qty="dec" data-row="${idx}" aria-label="Diminuir quantidade" title="Diminuir quantidade"><span class="material-symbols-rounded" aria-hidden="true">remove</span></button><input class="qty-cartaz-input" data-row="${idx}" type="number" min="0" step="1" value="${Math.max(0,Number(r.cartazQty)||0)}" aria-label="Quantidade de cartazes" title="0 = não imprimir este produto"><button type="button" class="qty-btn" data-qty="inc" data-row="${idx}" aria-label="Aumentar quantidade" title="Aumentar quantidade"><span class="material-symbols-rounded" aria-hidden="true">add</span></button></div></td><td>${esc(dynDisplay)}</td><td>${r.de?money(r.de):"—"}</td><td>${(r.por||r.fide)?money(r.por||r.fide):"—"}</td></tr>`}).join("")+"</tbody>";
 $("dataTable").querySelectorAll(".qty-cartaz-input").forEach(inp=>inp.onchange=()=>setCartazQty(Number(inp.dataset.row),inp.value));
 $("dataTable").querySelectorAll(".qty-btn").forEach(btn=>btn.onclick=()=>{const i=Number(btn.dataset.row);const cur=Math.max(0,Number(rows[i].cartazQty)||0);setCartazQty(i,btn.dataset.qty==="inc"?cur+1:cur-1)});
 }
@@ -343,7 +465,12 @@ function money(v){return v?Number(v).toLocaleString("pt-BR",{style:"currency",cu
 function changePage(delta){let pages=Math.max(1,Math.ceil(carts.length/8));currentPage=Math.min(pages,Math.max(1,currentPage+delta));renderPrint()}
 function renderPrint(){let pages=Math.max(1,Math.ceil(carts.length/8));$("prevPage").disabled=currentPage<=1;$("nextPage").disabled=currentPage>=pages;$("pageSelect").innerHTML=Array.from({length:pages},(_,i)=>`<option value="${i+1}">Página ${i+1}</option>`).join("");$("pageSelect").value=currentPage;$("pageSelect").onchange=()=>{currentPage=+$("pageSelect").value;drawPage()};drawPage()}
 function renderAllPrintPages(){let pages=Math.max(1,Math.ceil(carts.length/8));$("printAllArea").innerHTML=Array.from({length:pages},(_,i)=>`<div class="a4 print-page">${carts.slice(i*8,i*8+8).map(cartMarkup).join("")}</div>`).join("")}
+function cartCodeMarkup(r){
+  const resultEan=source==="Result" ? String(r.ean??"").trim() : "";
+  return `<div class="cart-code">${resultEan?`<div class="ean">EAN ${esc(resultEan)}</div>`:""}<div class="plu">PLU ${esc(r.plu||"")}</div>${code39SVG(String(r.plu),190,34)}</div>`;
+}
 function cartMarkup(r){
+  if(source==="PBi" && mode==="padrao") return pbiCartMarkup(r);
   if(mode==="pack") return packCartMarkup(r);
   if(mode==="parcela") return parcelCartMarkup(r);
   const hasDePor=!!(r.de && r.price && Math.abs(Number(r.de)-Number(r.price))>0.004);
@@ -355,8 +482,31 @@ function cartMarkup(r){
     </div>
     <div class="cart-desc">${esc(r.desc||'')}</div>
     ${hasDePor?`<div class="cart-pricing"><div class="de-price"><span>DE:</span> <s class="price-value">${money(r.de)}</s><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div><div class="promo-box"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg><span class="promo-box-text ${String(r.dynDesc||'').length>15?'promo-box-text--long':''}">${esc(r.dynDesc||'')}</span></div><div class="promo-phrase">${promoPhrase}</div><div class="por-price"><span>POR:</span> <span class="price-value">${money(r.price)}</span><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div>${r.validity?`<div class="validity-phrase">${esc(r.validity)}</div>`:""}</div>`:`<div class="cart-pricing"><div class="price">${money(r.price)}<small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div></div>`}
-    <div class="cart-code"><div class="plu">PLU ${esc(r.plu||'')}</div>${code39SVG(String(r.plu),190,34)}</div>
+    ${cartCodeMarkup(r)}
   </article>`
+}
+function pbiCartMarkup(r){
+  const special=["a_partir","leve_pague","percentual"].includes(r.pbiType);
+  const twoLines=!!r.pbiExclusive && special;
+  const line=r.pbiLine||"OFERTA";
+  const hasDePor=!!(r.de && r.price && Math.abs(Number(r.de)-Number(r.price))>0.004);
+  const boxClass=twoLines?"pbi-box-two":"pbi-box-one";
+  const boxHtml=twoLines
+    ? `<div class="pbi-box-text"><span class="pbi-box-main">EXCLUSIVO CLUBE EXTRA</span><span class="pbi-box-line">${esc(line)}</span></div>`
+    : `<div class="pbi-box-text"><span class="pbi-box-line">${esc(special?line:"OFERTA")}</span></div>`;
+  const promoPhrase=special?"NESTA PROMOÇÃO, A UN. SAI POR":"";
+  return `<article class="cartaz pbi-cartaz ${hasDePor?'has-de-por':'no-de-por'}">
+    <div class="cart-top"><div class="dyn">${esc(line)}</div></div>
+    <div class="cart-desc">${esc(r.desc||"")}</div>
+    <div class="cart-pricing pbi-pricing">
+      ${r.de?`<div class="de-price"><span>DE:</span> <s class="price-value">${money(r.de)}</s></div>`:""}
+      <div class="pbi-promo-box ${boxClass}"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg>${boxHtml}</div>
+      ${promoPhrase?`<div class="promo-phrase">${promoPhrase}</div>`:""}
+      <div class="por-price"><span>POR:</span> <span class="price-value">${money(r.price)}</span></div>
+      ${r.validity?`<div class="validity-phrase">${esc(r.validity)}</div>`:""}
+    </div>
+    ${cartCodeMarkup(r)}
+  </article>`;
 }
 function packCartMarkup(r){
   const club=Number(r.dyn)===20;
@@ -372,7 +522,7 @@ function packCartMarkup(r){
       <div class="pack-unit-price">${money(r.price)}</div>
       ${validity?`<div class="validity-phrase pack-validity">${esc(validity)}</div>`:""}
     </div>
-    <div class="cart-code"><div class="plu">PLU ${esc(r.plu||'')}</div>${code39SVG(String(r.plu),190,34)}</div>
+    ${cartCodeMarkup(r)}
   </article>`;
 }
 function parcelCartMarkup(r){
@@ -390,7 +540,7 @@ function parcelCartMarkup(r){
       <div class="parcel-unit-price">${money(r.price)}</div>
       ${validity?`<div class="validity-phrase parcel-validity">${esc(validity)}</div>`:""}
     </div>
-    <div class="cart-code"><div class="plu">PLU ${esc(r.plu||'')}</div>${code39SVG(String(r.plu),190,34)}</div>
+    ${cartCodeMarkup(r)}
   </article>`;
 }
 function drawPage(){let start=(currentPage-1)*8,a=carts.slice(start,start+8);$("pageInfo").textContent=`${a.length} cartaz(es) nesta página`;$("printArea").innerHTML=a.map(cartMarkup).join("")}

@@ -143,15 +143,16 @@
   </div>
   <div class="source-grid">
     <label class="source-card selected"><input type="radio" name="source" value="Result" checked>
-      <strong>RESULT</strong><span>Arquivo principal de ofertas.</span>
+      <strong>RESULT</strong><span>Arquivo (.csv) de tarefas do Cockpit.</span>
     </label>
     <label class="source-card"><input type="radio" name="source" value="PBi">
-      <strong>PBi</strong><span>Outra estrutura de preços.</span>
+      <strong>PBi</strong><span>Arquivo (data.xlsx) do Power Bi Ofertas.</span>
     </label>
     <label class="source-card"><input type="radio" name="source" value="Zebrinha">
-      <strong>ZEBRINHA</strong><span>Fonte específica de zebrinha.</span>
+      <strong>ZEBRINHA</strong><span>Tabela (ctrl+c) da solicitação de rebaixa automática via e-mail</span>
     </label>
   </div>
+  <div id="fileInputArea">
   <div class="drop" id="drop">
     <input type="file" id="file" accept=".xlsx,.xls,.csv">
     <div class="drop-icon"><span class="material-symbols-rounded" aria-hidden="true">upload_file</span></div>
@@ -174,9 +175,17 @@
     <button class="clear-file" id="clearFile" type="button"><span class="material-symbols-rounded" aria-hidden="true">delete</span> Limpar</button>
   </div>
 
+  </div>
+  <div id="zebrinhaInputArea" class="hidden">
+    <label for="zebrinhaText"><strong>Cole aqui a tabela do e-mail da ZEBRINHA</strong></label>
+    <textarea id="zebrinhaText" rows="12" placeholder="Cole o cabeçalho e as linhas da tabela aqui. As colunas devem estar separadas por tabulações."></textarea>
+    <p class="drop-hint">Inclua o cabeçalho. O sistema reconhecerá as colunas pelo nome.</p>
+  </div>
   <div class="toolbar">
     <button class="primary" id="processBtn" disabled>Processar arquivo</button>
-    <button id="demoBtn" type="button">Carregar demonstração</button>
+    <a class="source-link" id="resultLink" href="http://gpradmin.gpabr.com/GPA.GPRCockpit/Indicadores/Execucao#" target="_blank" rel="noopener noreferrer">Acessar GPR Cockpit</a>
+    <a class="source-link hidden" id="pbiLink" href="https://app.powerbi.com/groups/me/reports/968d44b3-c17c-4d91-8bf6-6071f1e4b98b/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&amp;experience=power-bi" target="_blank" rel="noopener noreferrer">Acessar Power Bi Ofertas</a>
+    <a class="source-link hidden" id="outlookLink" href="https://outlook.office.com/" target="_blank" rel="noopener noreferrer">Acessar Outlook</a>
   </div>
   <div class="drop-hint" id="dropHint">Nenhum arquivo selecionado.</div>
 </section>
