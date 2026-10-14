@@ -62,6 +62,22 @@ function showPage(p){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 syncStepLock();
+function syncModeControls(){
+  const percent=mode==="percentual";
+  $("percentOptions").classList.toggle("hidden",!percent);
+  $("discountLabel").classList.toggle("hidden",!percent);
+  $("percentTextLabel").classList.toggle("hidden",!percent || percentType()!=="personalizado");
+  $("packQtyLabel").classList.toggle("hidden",mode!=="pack");
+  $("installmentsLabel").classList.toggle("hidden",mode!=="parcela");
+} 
+function percentType(){return document.querySelector('input[name="percentType"]:checked')?.value||"personalizado";}
+function suggestedPercentText(){return `${Math.min(100,Math.max(0,num($("discount").value)||0))}% DE DESCONTO`;}
+let lastSuggestedPercentText=suggestedPercentText();
+function refreshSuggestedPercentText(){
+  const input=$("percentText"), next=suggestedPercentText(), current=input.value.trim();
+  if(!current || current===lastSuggestedPercentText) input.value=next;
+  lastSuggestedPercentText=next;
+}
 function updateModeAvailability(){
   const restricted=["PBi","Zebrinha"].includes(source);
   document.querySelectorAll(".mode").forEach(btn=>{
@@ -76,12 +92,15 @@ function updateModeAvailability(){
   }
 }
 updateModeAvailability();
+syncModeControls();
 function syncSourceUI(){
   const isZebra=source==="Zebrinha";
   $("fileInputArea").classList.toggle("hidden",isZebra);
   $("zebrinhaInputArea").classList.toggle("hidden",!isZebra);
   $("processBtn").textContent=isZebra?"Processar texto":"Processar arquivo";
   $("processBtn").disabled=isZebra ? !$("zebrinhaText").value.trim() : !selectedFile;
+  $("processQaBtn").classList.toggle("hidden",source!=="Result");
+  $("processQaBtn").disabled=source!=="Result" || !selectedFile;
   $("resultLink").classList.toggle("hidden",source!=="Result");
   $("pbiLink").classList.toggle("hidden",source!=="PBi");
   $("outlookLink").classList.toggle("hidden",!isZebra);
@@ -111,6 +130,7 @@ function setSelectedFile(file){
   selectedFile=file;
   updateFileCard();
   $("processBtn").disabled=false;
+  $("processQaBtn").disabled=source!=="Result";
   $("dropHint").textContent=`Arquivo pronto para processar: ${file.name}`;
 }
 function updateFileCard(){
@@ -139,15 +159,20 @@ function clearSelectedFile(){
   syncStepLock();
   showPage("entrada");
   $("processBtn").disabled=true;
+  $("processQaBtn").disabled=true;
   $("fileCard").classList.add("hidden");
   drop.classList.remove("has-file");
   $("dropHint").textContent="Nenhum arquivo selecionado.";
   $("status").textContent="Aguardando arquivo";
 }
-$("processBtn").onclick=processFile;
+$("processBtn").onclick=()=>processFile(false);
+$("processQaBtn").onclick=()=>processFile(true);
 $("search").oninput=renderTable;$("dynFilter").onchange=renderTable;
-document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{if(b.disabled)return;document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));b.classList.add("active");mode=b.dataset.mode;});
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{if(b.disabled)return;document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));b.classList.add("active");mode=b.dataset.mode;syncModeControls();if(mode==="percentual")refreshSuggestedPercentText();buildCarts();renderPrint();updateStats();});
 $("rebuild").onclick=()=>{buildCarts();showPage("impressao")};
+$("discount").addEventListener("input",()=>{if(mode==="percentual"){refreshSuggestedPercentText();buildCarts();renderPrint();updateStats()}});
+$("percentText").addEventListener("input",()=>{if(mode==="percentual"){buildCarts();renderPrint()}});
+document.querySelectorAll('input[name="percentType"]').forEach(input=>input.addEventListener("change",()=>{syncModeControls();if(mode==="percentual"){if(percentType()==="personalizado")refreshSuggestedPercentText();buildCarts();renderPrint();updateStats()}}));
 $("printBtn").onclick=()=>printSection("impressao");
 $("printAllBtn").onclick=printAllSections;
 $("prevPage").onclick=()=>changePage(-1);
@@ -159,7 +184,7 @@ function printSection(section){
   document.body.classList.toggle("printing-cod",section==="cod");
   window.print();
 }
-async function processFile(){
+async function processFile(qaOnly=false){
   if(source==="Zebrinha"){
     try{const parsed=parseZebrinhaText($("zebrinhaText").value); if(!parsed.length) throw new Error("Não encontrei linhas de produtos. Cole a tabela com o cabeçalho e os dados separados por tabulações."); rows=parsed; normalize(); finish(); $("status").textContent=`Texto ZEBRINHA • ${rows.length} produtos`; }catch(err){alert(`Não foi possível processar o texto da ZEBRINHA.\n\n${err.message||err}`)} return;
   }
@@ -172,9 +197,11 @@ async function processFile(){
     if(ext==="csv"){
       const text=await f.text();
       rows=parseCSV(text);
+      if(qaOnly){ rows=rows.filter(r=>/^QA\s/i.test(String(val(r,["Descrição PLU","Descricao PLU","Descrição","DESCRIÇÃO"])).trim())); if(!rows.length){alert("Nenhum produto com Descrição PLU iniciando com \"QA \" foi encontrado no arquivo."); return;} }
       normalize();
       finish();
     }else{
+      if(qaOnly){alert("O filtro QA está disponível apenas para arquivos CSV da fonte RESULT.");return;}
       const data=await f.arrayBuffer();
       const wb=XLSX.read(data,{type:"array",cellDates:false,raw:true});
       const wanted=source==="Result"?"Result":source;
@@ -189,8 +216,9 @@ async function processFile(){
     alert(`Não foi possível processar o arquivo.\\n\\n${err.message||err}`);
     $("status").textContent="Erro ao processar arquivo";
   }finally{
-    $("processBtn").disabled=false;
+    $("processBtn").disabled=source==="Zebrinha" ? !$("zebrinhaText").value.trim() : !selectedFile;
     $("processBtn").textContent="Processar arquivo";
+    $("processQaBtn").disabled=source!=="Result" || !selectedFile;
   }
 }
 function parseCSV(text){
@@ -415,7 +443,8 @@ function buildCarts(){let out=[];rows.forEach(r=>{r.measureUnit=measureUnit(r);l
   }
   const packBasePrice=mode==="pack" ? packPriceBase(r) : 0;
   const parcelBasePrice=mode==="parcela" ? parcelPriceBase(r) : 0;
-  out.push({...r,price:priceFor(r),packBasePrice,parcelBasePrice,measureUnit:r.measureUnit||measureUnit(r),dynName:dynamics[r.dyn]||r.dynName||"OFERTA",dynDesc:specialMsg||descDyn[r.dyn]||r.dynName||"",validity:source==="PBi"?pbiValidityPhrase(r):source==="Zebrinha"?zebrinhaValidityPhrase(r):validityPhrase(r),packValidity:packValidityPhrase(r),parcelValidity:parcelValidityPhrase(r),pbiLine:r.pbiDynamicLine||"OFERTA",pbiType:r.pbiDynamicType||"normal",pbiExclusive:!!r.pbiExclusive})
+  const percentBasePrice=mode==="percentual" ? (percentType()==="cartao-extra" ? Number(r.por||0) : (Number(r.de)>0 ? Number(r.de) : Number(r.por||0))) : 0;
+  out.push({...r,price:priceFor(r),percentBasePrice,packBasePrice,parcelBasePrice,measureUnit:r.measureUnit||measureUnit(r),dynName:dynamics[r.dyn]||r.dynName||"OFERTA",dynDesc:specialMsg||descDyn[r.dyn]||r.dynName||"",validity:source==="PBi"?pbiValidityPhrase(r):source==="Zebrinha"?zebrinhaValidityPhrase(r):validityPhrase(r),packValidity:packValidityPhrase(r),parcelValidity:parcelValidityPhrase(r),pbiLine:r.pbiDynamicLine||"OFERTA",pbiType:r.pbiDynamicType||"normal",pbiExclusive:!!r.pbiExclusive})
 }});carts=out}
 function packPriceBase(r){
   // Pack normal usa sempre Preço Venda. Dinâmica 20 (Clube Extra) usa Preço Fide/Promo.
@@ -441,7 +470,11 @@ function parcelValidityPhrase(r){
 }
 function priceFor(r){
  let p=Number(r.por||0);
- if(mode==="percentual") return +(p*(1-num($("discount").value)/100)).toFixed(2);
+ if(mode==="percentual"){
+   const pct=Math.min(100,Math.max(0,num($("discount").value)||0));
+   const base=percentType()==="cartao-extra" ? Number(r.por||0) : (Number(r.de)>0 ? Number(r.de) : Number(r.por||0));
+   return +(base*(1-pct/100)).toFixed(2);
+ }
  if(mode==="pack") return +(packPriceBase(r)/(num($("packQty").value)||1)).toFixed(2);
  if(mode==="parcela") return +(parcelPriceBase(r)/(num($("installments").value)||1)).toFixed(2);
  return +Number(p).toFixed(2);
@@ -473,15 +506,22 @@ function cartMarkup(r){
   if(source==="PBi" && mode==="padrao") return pbiCartMarkup(r);
   if(mode==="pack") return packCartMarkup(r);
   if(mode==="parcela") return parcelCartMarkup(r);
-  const hasDePor=!!(r.de && r.price && Math.abs(Number(r.de)-Number(r.price))>0.004);
-  const promoPhrase=(hasDePor && [19,23,24].includes(Number(r.dyn)))?'NESTA PROMOÇÃO, A UN. SAI POR':'';
-  return `<article class="cartaz ${hasDePor?'has-de-por':'no-de-por'}">
+  const percentMode=mode==="percentual";
+  const isExtra=percentMode && percentType()==="cartao-extra";
+  const percentLabel=isExtra ? "EXCLUSIVO CARTÃO EXTRA" : ((($("percentText")?.value||"").trim() || suggestedPercentText()).toUpperCase());
+  const displayDe=percentMode ? Number(r.percentBasePrice||0) : Number(r.de||0);
+  const hasDePor=percentMode ? displayDe>0 : (!!(r.de && r.price && Math.abs(Number(r.de)-Number(r.price))>0.004));
+  const promoPhrase=percentMode ? "NESTA PROMOÇÃO, A UN. SAI POR" : ((hasDePor && [19,23,24].includes(Number(r.dyn)))?'NESTA PROMOÇÃO, A UN. SAI POR':'');
+  const promoText=percentMode?percentLabel:(r.dynDesc||'');
+  const wrappedExtra=isExtra?'promo-box-text--extra':'';
+  const longClass=String(promoText).length>15?'promo-box-text--long':'';
+  return `<article class="cartaz ${hasDePor?'has-de-por':'no-de-por'} ${percentMode?'percent-cartaz':''}">
     <div class="cart-top">
       <div class="dyn">${esc(r.dynName||'')}</div>
       <div class="mode-note">${esc(r.dynDesc||'')}</div>
     </div>
     <div class="cart-desc">${esc(r.desc||'')}</div>
-    ${hasDePor?`<div class="cart-pricing"><div class="de-price"><span>DE:</span> <s class="price-value">${money(r.de)}</s><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div><div class="promo-box"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg><span class="promo-box-text ${String(r.dynDesc||'').length>15?'promo-box-text--long':''}">${esc(r.dynDesc||'')}</span></div><div class="promo-phrase">${promoPhrase}</div><div class="por-price"><span>POR:</span> <span class="price-value">${money(r.price)}</span><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div>${r.validity?`<div class="validity-phrase">${esc(r.validity)}</div>`:""}</div>`:`<div class="cart-pricing"><div class="price">${money(r.price)}<small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div></div>`}
+    ${hasDePor?`<div class="cart-pricing"><div class="de-price"><span>DE:</span> <s class="price-value">${money(displayDe)}</s><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div><div class="promo-box"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg><span class="promo-box-text ${longClass} ${wrappedExtra}">${esc(promoText)}</span></div><div class="promo-phrase">${promoPhrase}</div><div class="por-price"><span>POR:</span> <span class="price-value">${money(r.price)}</span><small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div>${r.validity?`<div class="validity-phrase">${esc(r.validity)}</div>`:""}</div>`:`<div class="cart-pricing"><div class="price">${money(r.price)}<small class="measure-unit">${esc(r.measureUnit||"cada")}</small></div></div>`}
     ${cartCodeMarkup(r)}
   </article>`
 }

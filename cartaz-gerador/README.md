@@ -1,3 +1,26 @@
+## v64 — Correção funcional do modo Percentual
+- Corrigida a visibilidade das opções de rádio no modo Percentual; agora aparecem ao selecionar esse modo.
+- **EXCLUSIVO CARTÃO EXTRA** calcula o desconto sobre `Preço Venda` e exibe DE (Preço Venda) + POR (preço com desconto), com a chamada EXCLUSIVO CARTÃO EXTRA.
+- **PERSONALIZADO** calcula sobre `Preço De` quando preenchido; caso contrário, sobre `Preço Venda`, exibindo DE + POR a partir da base aplicada.
+- Texto personalizado sugerido como `X% DE DESCONTO`; edições manuais são preservadas ao alterar o percentual.
+- A frase `NESTA PROMOÇÃO, A UN. SAI POR` é exibida abaixo da caixa preta no modo Percentual.
+- A chamada EXCLUSIVO CARTÃO EXTRA usa alinhamento/quebra controlados no SVG/CSS para evitar cortes.
+- Mantido o filtro QA e os fluxos das demais fontes e modos.
+- Validação de sintaxe JavaScript e integridade do pacote realizada; é necessário validar visualmente com CSV real.
+
+## v63 — recuperação do modo Percentual e quebra de linha promocional
+- Adicionadas opções de rádio **EXCLUSIVO CARTÃO EXTRA** e **PERSONALIZADO**.
+- Exclusivo Cartão Extra calcula o percentual sobre `Preço Venda` e apresenta DE/POR com a chamada em duas linhas.
+- Personalizado calcula sobre `Preço De` quando preenchido; caso contrário, usa `Preço Venda`.
+- Texto personalizado sugerido automaticamente como `X% DE DESCONTO`, mantendo a possibilidade de edição manual.
+- No modo Percentual, a chamada fica acompanhada de `NESTA PROMOÇÃO, A UN. SAI POR`.
+- Padronizada a quebra explícita de `EXCLUSIVO CARTÃO EXTRA` para evitar cortes nos SVGs, inclusive em cartazes que exibem apenas POR no layout original.
+- Preservado o filtro QA e as demais fontes/modos; versão experimental para validação com CSV real.
+
+## Histórico de versões
+
+- **v62 — Recuperação experimental do modo Percentual:** campo opcional de texto promocional, exibição de chamada percentual também em cartazes sem preço DE, atualização automática ao editar desconto/texto. Mantém o filtro QA da v61.
+
 ## v54 — primeira versão de teste da função PBi
 - Adicionada a primeira tratativa funcional da fonte **PBi**, usando a estrutura do `data.xlsx` como referência.
 - `NOM_PROD` → descrição; `Preço De (R$)` → DE; `Preço Promo (R$)` → POR quando preenchido; `DAT_INICIO_OFERTA`/`DAT_FIM_OFERTA` → validade; `COD_PLU` → PLU e código de barras.
@@ -258,3 +281,11 @@ Senha atual permanece no `config.json`.
 - Adicionado o atalho “Acessar Power Bi Ofertas” quando PBi estiver selecionado.
 - Adicionado o atalho “Acessar Outlook” quando ZEBRINHA estiver selecionada.
 - Os atalhos abrem em nova aba; o campo de arquivo ou a caixa de texto continua aparecendo conforme a fonte selecionada.
+
+## v61 — processamento seletivo de produtos QA no RESULT
+- Adicionado o botão **Processar arquivo QA**, exibido somente quando a fonte RESULT está selecionada.
+- O processamento QA filtra as linhas cuja coluna `Descrição PLU` começa com `QA ` (QA seguido de espaço), sem diferenciar maiúsculas/minúsculas.
+- Os produtos filtrados seguem o mesmo mapeamento e tratamento existentes do RESULT; as etapas posteriores de Cartazes, impressão e COD permanecem iguais.
+- O botão **Processar arquivo** continua processando todos os produtos, sem filtro.
+- Se nenhum produto QA for encontrado, é exibido um aviso e a aplicação não avança para Tratamento.
+- O filtro QA é destinado a arquivos CSV do RESULT; as fontes PBi e ZEBRINHA não são alteradas.

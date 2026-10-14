@@ -839,3 +839,15 @@ body.auth-locked{overflow:hidden}
 #zebrinhaText{display:block;width:100%;box-sizing:border-box;min-height:220px;padding:14px;border:1px solid #cfd3d8;border-radius:10px;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre;overflow:auto;margin-top:10px;background:#fff;color:#202124}
 
 .source-link{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1d4ed8;text-decoration:none;font-weight:700;font-size:13px}.source-link:hover{background:#eff6ff}.source-link.hidden{display:none}
+
+
+/* v63 — Percentual: seleção de modalidade e quebra estável na caixa promocional */
+.percent-options{border:1px solid #d1d5db;border-radius:10px;padding:8px 12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0;}
+.percent-options legend{font-size:12px;font-weight:700;padding:0 4px;}
+.percent-options label{display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap;}
+.percent-options input[type=radio]{width:auto;min-height:auto;}
+.promo-box-text--long{white-space:pre-line!important;overflow-wrap:normal!important;word-break:normal!important;text-align:center!important;display:block;width:100%;padding:0 3px;box-sizing:border-box;font-size:16px!important;line-height:1.05!important;}
+
+/* v64: modo Percentual - chamadas promocionais consistentes em todos os cartazes */
+.percent-cartaz .promo-phrase{display:block!important;margin:3px 0 5px!important;text-align:center!important;font-size:8px!important;line-height:1.1!important;font-weight:700!important;}
+.promo-box-text--extra{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.02!important;padding:0 3px!important;font-size:clamp(8px, 2.4cqw, 13px)!important;}

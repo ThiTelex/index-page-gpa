@@ -183,6 +183,7 @@
   </div>
   <div class="toolbar">
     <button class="primary" id="processBtn" disabled>Processar arquivo</button>
+    <button class="primary hidden" id="processQaBtn" disabled>Processar arquivo QA</button>
     <a class="source-link" id="resultLink" href="http://gpradmin.gpabr.com/GPA.GPRCockpit/Indicadores/Execucao#" target="_blank" rel="noopener noreferrer">Acessar GPR Cockpit</a>
     <a class="source-link hidden" id="pbiLink" href="https://app.powerbi.com/groups/me/reports/968d44b3-c17c-4d91-8bf6-6071f1e4b98b/ReportSection?ctid=1a53e6b6-7562-4b9f-83d0-e71a8891667e&amp;experience=power-bi" target="_blank" rel="noopener noreferrer">Acessar Power Bi Ofertas</a>
     <a class="source-link hidden" id="outlookLink" href="https://outlook.office.com/" target="_blank" rel="noopener noreferrer">Acessar Outlook</a>
@@ -210,9 +211,11 @@
     <button class="mode" data-mode="parcela">Parcelamento</button>
   </div>
   <div class="control-row">
-    <label>Desconto % <input type="number" id="discount" value="50" min="0" max="100"></label>
-    <label>Unidades do pack <input type="number" id="packQty" value="2" min="1"></label>
-    <label>Parcelas <input type="number" id="installments" value="2" min="1"></label>
+    <label id="discountLabel">Desconto % <input type="number" id="discount" value="10" min="0" max="100"></label>
+    <fieldset id="percentOptions" class="percent-options hidden"><legend>Tipo de desconto</legend><label><input type="radio" name="percentType" value="cartao-extra"> EXCLUSIVO CARTÃO EXTRA</label><label><input type="radio" name="percentType" value="personalizado" checked> PERSONALIZADO</label></fieldset>
+    <label id="percentTextLabel" class="hidden">Texto promocional <input type="text" id="percentText" placeholder="Ex.: 10% DE DESCONTO"></label>
+    <label id="packQtyLabel" class="hidden">Unidades do pack <input type="number" id="packQty" value="2" min="1"></label>
+    <label id="installmentsLabel" class="hidden">Parcelas <input type="number" id="installments" value="2" min="1"></label>
     <button class="primary" id="rebuild">Atualizar</button>
   </div>
   <div class="summary-card" id="cartSummary"></div>
