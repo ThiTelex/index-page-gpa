@@ -1,3 +1,10 @@
+## v65 — margem interna segura para impressão A7
+- Adicionada margem interna de segurança de 3 mm no conteúdo de cada cartaz impresso.
+- Aplicada à impressão normal e à impressão de todas as páginas, preservando a grade física A4 4×2 e as dimensões externas de cada A7.
+- A alteração é apenas de layout; não modifica regras de RESULT, PBi, ZEBRINHA, preços, descontos ou códigos.
+- Objetivo do teste: verificar se texto, preços, caixas promocionais e códigos ficam mais protegidos contra cortes laterais e se a legibilidade permanece adequada.
+- Observação: a margem interna não altera a área não imprimível física da impressora; conferir escala 100% e testar impressão real.
+
 ## v64 — Correção funcional do modo Percentual
 - Corrigida a visibilidade das opções de rádio no modo Percentual; agora aparecem ao selecionar esse modo.
 - **EXCLUSIVO CARTÃO EXTRA** calcula o desconto sobre `Preço Venda` e exibe DE (Preço Venda) + POR (preço com desconto), com a chamada EXCLUSIVO CARTÃO EXTRA.

@@ -851,3 +851,14 @@ body.auth-locked{overflow:hidden}
 /* v64: modo Percentual - chamadas promocionais consistentes em todos os cartazes */
 .percent-cartaz .promo-phrase{display:block!important;margin:3px 0 5px!important;text-align:center!important;font-size:8px!important;line-height:1.1!important;font-weight:700!important;}
 .promo-box-text--extra{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.02!important;padding:0 3px!important;font-size:clamp(8px, 2.4cqw, 13px)!important;}
+
+/* v65 — margem interna segura para o conteúdo dos cartazes A7.
+   Mantém as dimensões físicas e a grade 4x2; recua o conteúdo para reduzir
+   cortes de texto/preço/código próximos às bordas, nas três fontes de impressão. */
+@media print{
+  body:not(.printing-cod) #impressao .cartaz,
+  body.printing-all #impressao #printAllArea .cartaz{
+    padding:3mm!important;
+    box-sizing:border-box!important;
+  }
+}
