@@ -1,9 +1,9 @@
-## v65 — margem interna segura para impressão A7
-- Adicionada margem interna de segurança de 3 mm no conteúdo de cada cartaz impresso.
-- Aplicada à impressão normal e à impressão de todas as páginas, preservando a grade física A4 4×2 e as dimensões externas de cada A7.
-- A alteração é apenas de layout; não modifica regras de RESULT, PBi, ZEBRINHA, preços, descontos ou códigos.
-- Objetivo do teste: verificar se texto, preços, caixas promocionais e códigos ficam mais protegidos contra cortes laterais e se a legibilidade permanece adequada.
-- Observação: a margem interna não altera a área não imprimível física da impressora; conferir escala 100% e testar impressão real.
+## v67 — correção de impressão para RESULT, PBi e ZEBRINHA
+- Restaurada a orientação A4 horizontal e a grade original de 4 colunas por 2 linhas; removida a alteração de v66 que forçava A4 retrato e 2 colunas por 4 linhas.
+- Adicionada margem externa de segurança de 3 mm ao redor da grade, para reduzir cortes nas posições periféricas.
+- Aplicada a mesma geometria à página atual e à impressão de todas as páginas.
+- Mantidas as regras funcionais e de processamento da v64; nenhuma limpeza de código foi realizada.
+- Nota: para reservar margem externa em uma folha A4 e manter 8 posições por página, cada posição fica ligeiramente menor que o A7 nominal (72,75 × 102 mm). Testar no navegador com A4 horizontal e “Tamanho real”.
 
 ## v64 — Correção funcional do modo Percentual
 - Corrigida a visibilidade das opções de rádio no modo Percentual; agora aparecem ao selecionar esse modo.
@@ -296,11 +296,3 @@ Senha atual permanece no `config.json`.
 - O botão **Processar arquivo** continua processando todos os produtos, sem filtro.
 - Se nenhum produto QA for encontrado, é exibido um aviso e a aplicação não avança para Tratamento.
 - O filtro QA é destinado a arquivos CSV do RESULT; as fontes PBi e ZEBRINHA não são alteradas.
-
-
-## v66 — correção das laterais na impressão
-- Corrigida a orientação de impressão para A4 retrato, com grade de 2 colunas por 4 linhas.
-- Cada cartaz passa a ocupar o formato A7 paisagem de 105 × 74,25 mm, alinhado à grade física da folha.
-- Mantida a margem interna de segurança de 3 mm introduzida na v65.
-- Aplicado o ajuste à impressão de página atual e à opção Imprimir todas; a impressão de códigos permanece separada.
-- Versão destinada a teste físico; conferir orientação e escala em “Tamanho real” no navegador.
