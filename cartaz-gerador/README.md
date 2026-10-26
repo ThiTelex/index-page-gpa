@@ -296,3 +296,11 @@ Senha atual permanece no `config.json`.
 - O botão **Processar arquivo** continua processando todos os produtos, sem filtro.
 - Se nenhum produto QA for encontrado, é exibido um aviso e a aplicação não avança para Tratamento.
 - O filtro QA é destinado a arquivos CSV do RESULT; as fontes PBi e ZEBRINHA não são alteradas.
+
+
+## v66 — correção das laterais na impressão
+- Corrigida a orientação de impressão para A4 retrato, com grade de 2 colunas por 4 linhas.
+- Cada cartaz passa a ocupar o formato A7 paisagem de 105 × 74,25 mm, alinhado à grade física da folha.
+- Mantida a margem interna de segurança de 3 mm introduzida na v65.
+- Aplicado o ajuste à impressão de página atual e à opção Imprimir todas; a impressão de códigos permanece separada.
+- Versão destinada a teste físico; conferir orientação e escala em “Tamanho real” no navegador.

@@ -862,3 +862,34 @@ body.auth-locked{overflow:hidden}
     box-sizing:border-box!important;
   }
 }
+
+
+/* v66 — correção da orientação da folha A4 e da grade física.
+   A folha é A4 retrato; cada cartaz é A7 paisagem (105 x 74,25 mm),
+   distribuído em 2 colunas por 4 linhas. Mantém a margem interna segura v65. */
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  html, body { width: 210mm!important; min-width: 210mm!important; height: auto!important; min-height: 297mm!important; margin: 0!important; padding: 0!important; }
+  body:not(.printing-cod) main,
+  body:not(.printing-cod) main>#impressao,
+  body.printing-all:not(.printing-cod) main>#impressao { width: 210mm!important; max-width: none!important; margin: 0!important; padding: 0!important; }
+  body:not(.printing-cod) #impressao .a4,
+  body.printing-all:not(.printing-cod) #impressao #printAllArea .a4 {
+    display: grid!important; width: 210mm!important; height: 297mm!important;
+    min-width: 210mm!important; min-height: 297mm!important;
+    max-width: 210mm!important; max-height: 297mm!important;
+    grid-template-columns: repeat(2, 105mm)!important;
+    grid-template-rows: repeat(4, 74.25mm)!important;
+    gap: 0!important; padding: 0!important; margin: 0!important;
+    overflow: hidden!important; box-shadow: none!important;
+  }
+  body:not(.printing-cod) #impressao .cartaz,
+  body.printing-all:not(.printing-cod) #impressao #printAllArea .cartaz {
+    width: 105mm!important; height: 74.25mm!important;
+    min-width: 105mm!important; max-width: 105mm!important;
+    min-height: 74.25mm!important; max-height: 74.25mm!important;
+    margin: 0!important; border: 0!important; overflow: hidden!important;
+    box-sizing: border-box!important; padding: 3mm!important;
+  }
+  body.printing-all:not(.printing-cod) #impressao #printAllArea { width: 210mm!important; }
+}
