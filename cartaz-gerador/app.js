@@ -476,7 +476,14 @@ function priceFor(r){
    return +(base*(1-pct/100)).toFixed(2);
  }
  if(mode==="pack") return +(packPriceBase(r)/(num($("packQty").value)||1)).toFixed(2);
- if(mode==="parcela") return +(parcelPriceBase(r)/(num($("installments").value)||1)).toFixed(2);
+ if(mode==="parcela") {
+   const parcelas=Math.max(1,Math.floor(num($("installments").value)||1));
+   let cents=Math.round((parcelPriceBase(r)/parcelas)*100);
+   // Regra comercial provisória: se o último algarismo dos centavos for zero,
+   // reduz um centavo somente no valor exibido da parcela.
+   if(cents%10===0) cents-=1;
+   return cents/100;
+ }
  return +Number(p).toFixed(2);
 }
 function populateDyn(){
@@ -575,9 +582,9 @@ function parcelCartMarkup(r){
     <div class="cart-desc">${esc(r.desc||'')}</div>
     ${club?`<div class="parcel-club-note">EXCLUSIVO CLUBE EXTRA</div>`:""}
     <div class="cart-pricing parcel-pricing">
-      <div class="parcel-base-price">${money(base)}</div>
+      <div class="parcel-base-price">${money(base)}<small class="parcel-measure-unit">${esc(r.measureUnit||"cada")}</small></div>
       <div class="parcel-box"><svg class="promo-box-bg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="100" height="100" fill="#202124"></rect></svg><div class="parcel-box-text"><span class="parcel-box-highlight">EM ${parcelas}x SEM JUROS</span><span class="parcel-box-sub">NOS CARTÕES DE CRÉDITO</span></div></div>
-      <div class="parcel-unit-price">${money(r.price)}</div>
+      <div class="parcel-unit-price">${money(r.price)}<small class="parcel-measure-unit">A parcela</small></div>
       ${validity?`<div class="validity-phrase parcel-validity">${esc(validity)}</div>`:""}
     </div>
     ${cartCodeMarkup(r)}

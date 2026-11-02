@@ -1,3 +1,10 @@
+## v68 — ajustes do modo Parcelamento (RESULT e PBi)
+- Texto da caixa preta reforçado em branco no SVG/HTML e nas regras de impressão, com preservação das cores na saída impressa.
+- Preço superior agora identifica a unidade do produto (`cada`, `kg` ou `100g`) usando a regra de unidade já existente.
+- Valor inferior agora é identificado por `A parcela`, com tipografia equivalente à identificação de unidade dos demais modos.
+- Regra provisória de apresentação: após calcular a parcela normalmente e arredondar para centavos, se o último algarismo dos centavos for zero (`,00`, `,10`, `,20` ... `,90`), reduz R$ 0,01 somente no valor exibido. O preço-base original permanece inalterado.
+- Alterações restritas ao modo Parcelamento; demais modos e fluxos preservados.
+
 ## v67 — correção de impressão para RESULT, PBi e ZEBRINHA
 - Restaurada a orientação A4 horizontal e a grade original de 4 colunas por 2 linhas; removida a alteração de v66 que forçava A4 retrato e 2 colunas por 4 linhas.
 - Adicionada margem externa de segurança de 3 mm ao redor da grade, para reduzir cortes nas posições periféricas.
@@ -296,3 +303,12 @@ Senha atual permanece no `config.json`.
 - O botão **Processar arquivo** continua processando todos os produtos, sem filtro.
 - Se nenhum produto QA for encontrado, é exibido um aviso e a aplicação não avança para Tratamento.
 - O filtro QA é destinado a arquivos CSV do RESULT; as fontes PBi e ZEBRINHA não são alteradas.
+
+
+## v69 — tela de login responsiva
+- Ajustada exclusivamente a apresentação da tela de login para diferentes tamanhos de janela e orientação de tela.
+- No computador, o cartão mantém largura máxima e centralização, sem ultrapassar a área disponível.
+- No celular em orientação vertical, o cartão e o logotipo se adaptam à largura.
+- No celular em orientação horizontal e em telas com pouca altura, os espaçamentos, logotipo e elementos do formulário ficam mais compactos.
+- A tela permite rolagem vertical quando necessário e impede rolagem horizontal, evitando que partes do login fiquem cortadas.
+- Identidade visual, autenticação e funcionalidades do gerador foram mantidas.
