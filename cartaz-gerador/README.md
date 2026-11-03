@@ -312,3 +312,11 @@ Senha atual permanece no `config.json`.
 - No celular em orientação horizontal e em telas com pouca altura, os espaçamentos, logotipo e elementos do formulário ficam mais compactos.
 - A tela permite rolagem vertical quando necessário e impede rolagem horizontal, evitando que partes do login fiquem cortadas.
 - Identidade visual, autenticação e funcionalidades do gerador foram mantidas.
+
+
+## v70 — refinamento visual do Parcelamento
+- Restaurada e fixada a tipografia da caixa preta do Parcelamento nos tamanhos anteriores: 18px para “EM Nx SEM JUROS” e 14px para “NOS CARTÕES DE CRÉDITO”.
+- Corrigidas declarações CSS malformadas no bloco de impressão do Parcelamento.
+- Mantida a cor branca do texto da caixa preta também na impressão.
+- Alinhados os termos de unidade do preço superior (`cada`, `kg` ou `100g`) e do preço inferior (`A parcela`) à direita, diretamente abaixo dos centavos.
+- Mantidos os cálculos, inclusive a regra provisória de redução de R$ 0,01, e as demais funcionalidades da v69.
