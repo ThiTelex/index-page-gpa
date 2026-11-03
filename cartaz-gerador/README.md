@@ -320,3 +320,11 @@ Senha atual permanece no `config.json`.
 - Mantida a cor branca do texto da caixa preta também na impressão.
 - Alinhados os termos de unidade do preço superior (`cada`, `kg` ou `100g`) e do preço inferior (`A parcela`) à direita, diretamente abaixo dos centavos.
 - Mantidos os cálculos, inclusive a regra provisória de redução de R$ 0,01, e as demais funcionalidades da v69.
+
+
+## v71 — correção de tipografia e alinhamento no Parcelamento
+- Corrigidas declarações CSS incompletas no bloco do Parcelamento, que impediam a aplicação consistente das regras de fonte.
+- Restaurado o valor superior e o valor da parcela para Montserrat, 40px e peso 950, em tela e impressão.
+- `cada`, `kg`, `100g` e `A parcela` passam a alinhar à direita dentro da largura real do respectivo valor, ficando sob os centavos.
+- Mantidos os tamanhos da caixa preta: 18px na primeira linha e 14px na segunda; texto branco preservado na impressão.
+- Nenhuma regra de cálculo ou outro modo de cartaz foi alterado.

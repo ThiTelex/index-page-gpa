@@ -792,9 +792,9 @@ body.auth-locked{overflow:hidden}
 .parcel-pricing{width:100%!important;align-items:center!important;justify-content:flex-start!important;margin-top:4px!important;gap:0!important}
 .parcel-base-price{font-family:"Montserrat",Arial,sans-serif!important;font-size:40px!important;font-weight:950!important;line-height:.9!important;white-space:nowrap!important;text-decoration:none!important}
 .parcel-measure-unit{display:block!important;font-family:"Montserrat",Arial,sans-serif!important;font-size:10px!important;font-weight:500!important;line-height:1!important;text-align:center!important;margin:2px 0 0!important;color:#202124!important;text-transform:none!important}
-.parcel-box{position:relative!important;width:88%!important;max-width:88%!important;min-height:48px!important;margin:7px auto 5px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;text-align:center!important;background:#202124!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important
+.parcel-box{position:relative!important;width:88%!important;max-width:88%!important;min-height:48px!important;margin:7px auto 5px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;text-align:center!important;background:#202124!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 .parcel-box .promo-box-bg{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
-.parcel-box-text{position:relative!important;z-index:1!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;width:100%!important;padding:6px 8px!important;box-sizing:border-box!important;text-align:center!important;color:#fff!important;-webkit-text-fill-color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important
+.parcel-box-text{position:relative!important;z-index:1!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;width:100%!important;padding:6px 8px!important;box-sizing:border-box!important;text-align:center!important;color:#fff!important;-webkit-text-fill-color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 .parcel-box-text span{display:block!important;font-family:"Montserrat",Arial,sans-serif!important;text-transform:uppercase!important;text-align:center!important;white-space:nowrap!important;line-height:1!important;color:#fff!important;-webkit-text-fill-color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 .parcel-box-highlight{font-size:18px!important;font-weight:900!important;letter-spacing:.05px!important}
 .parcel-box-sub{font-size:14px!important;font-weight:800!important;letter-spacing:.05px!important}
@@ -1010,15 +1010,65 @@ body.auth-locked { overflow: hidden; }
   #loginScreen .login-logo { width: min(260px, 82%) !important; }
 }
 
-
-/* v70 — restaura a tipografia original da caixa e alinha unidades sob os centavos */
-.parcel-box-highlight{font-size:18px!important;font-weight:900!important;letter-spacing:.05px!important}
-.parcel-box-sub{font-size:14px!important;font-weight:800!important;letter-spacing:.05px!important}
-.parcel-base-price,.parcel-unit-price{display:inline-block!important;text-align:center!important}
-.parcel-measure-unit{display:block!important;width:100%!important;text-align:right!important;margin:2px 0 0!important;padding:0!important}
+/* v71 — restaura a tipografia dos preços do Parcelamento e alinha as unidades
+   exatamente à direita da largura de cada valor, inclusive na impressão. */
+.parcel-cartaz .parcel-base-price,
+.parcel-cartaz .parcel-unit-price{
+  display:inline-block!important;
+  width:max-content!important;
+  font-family:"Montserrat",Arial,sans-serif!important;
+  font-size:40px!important;
+  font-weight:950!important;
+  line-height:.9!important;
+  white-space:nowrap!important;
+  text-align:left!important;
+}
+.parcel-cartaz .parcel-base-price > .parcel-measure-unit,
+.parcel-cartaz .parcel-unit-price > .parcel-measure-unit{
+  display:block!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin:2px 0 0!important;
+  padding:0!important;
+  font-family:"Montserrat",Arial,sans-serif!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  line-height:1!important;
+  text-align:right!important;
+  color:#202124!important;
+  text-transform:none!important;
+}
+.parcel-cartaz .parcel-box-highlight{
+  font-size:18px!important;
+  font-weight:900!important;
+  letter-spacing:.05px!important;
+}
+.parcel-cartaz .parcel-box-sub{
+  font-size:14px!important;
+  font-weight:800!important;
+  letter-spacing:.05px!important;
+}
 @media print{
-  .parcel-box,.parcel-box-text,.parcel-box-text span{color:#fff!important;-webkit-text-fill-color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  .parcel-box-highlight{font-size:18px!important;font-weight:900!important}
-  .parcel-box-sub{font-size:14px!important;font-weight:800!important}
-  .parcel-measure-unit{font-size:10px!important;font-weight:500!important;text-align:right!important;color:#202124!important}
+  .parcel-cartaz .parcel-base-price,
+  .parcel-cartaz .parcel-unit-price{
+    font-size:40px!important;
+    font-weight:950!important;
+  }
+  .parcel-cartaz .parcel-base-price > .parcel-measure-unit,
+  .parcel-cartaz .parcel-unit-price > .parcel-measure-unit{
+    font-size:10px!important;
+    font-weight:500!important;
+    text-align:right!important;
+    color:#202124!important;
+  }
+  .parcel-cartaz .parcel-box,
+  .parcel-cartaz .parcel-box-text,
+  .parcel-cartaz .parcel-box-text span{
+    color:#fff!important;
+    -webkit-text-fill-color:#fff!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  .parcel-cartaz .parcel-box-highlight{font-size:18px!important;font-weight:900!important}
+  .parcel-cartaz .parcel-box-sub{font-size:14px!important;font-weight:800!important}
 }
