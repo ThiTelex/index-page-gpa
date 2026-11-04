@@ -328,3 +328,12 @@ Senha atual permanece no `config.json`.
 - `cada`, `kg`, `100g` e `A parcela` passam a alinhar à direita dentro da largura real do respectivo valor, ficando sob os centavos.
 - Mantidos os tamanhos da caixa preta: 18px na primeira linha e 14px na segunda; texto branco preservado na impressão.
 - Nenhuma regra de cálculo ou outro modo de cartaz foi alterado.
+
+
+## v72 — login compacto com envio integrado
+- Removido o texto auxiliar abaixo do título do login.
+- Removido o botão ENTRAR separado e incorporada uma seta vermelha de envio dentro da barra da senha.
+- O formulário continua sendo enviado pelo clique na seta ou pela tecla Enter, usando o mesmo evento submit e a mesma validação de autenticação.
+- Cartão de login mais compacto e centralizado, preservando a largura e a identidade visual.
+- Mantidos ajustes responsivos para desktop, celular vertical e celular horizontal.
+- Nenhuma regra do gerador de cartazes ou do modo Parcelamento foi modificada.

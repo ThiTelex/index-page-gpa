@@ -1072,3 +1072,50 @@ body.auth-locked { overflow: hidden; }
   .parcel-cartaz .parcel-box-highlight{font-size:18px!important;font-weight:900!important}
   .parcel-cartaz .parcel-box-sub{font-size:14px!important;font-weight:800!important}
 }
+
+
+/* v72 — login compacto com envio integrado à barra da senha. */
+#loginScreen.login-screen{padding:20px!important}
+#loginScreen .login-card{width:min(510px,100%)!important;padding:30px 34px 22px!important}
+#loginScreen .login-logo-wrap{margin-bottom:14px!important}
+#loginScreen .login-logo{width:min(300px,88%)!important}
+#loginScreen .login-icon{width:56px!important;height:56px!important;margin-bottom:12px!important}
+#loginScreen .login-card h1{margin-bottom:18px!important}
+#loginScreen .login-card>p{display:none!important}
+#loginScreen #loginForm{display:block!important;margin:0!important}
+#loginScreen .login-input-wrap{position:relative!important;margin:0!important;padding-right:5px!important;min-height:58px!important}
+#loginScreen #loginPassword{min-width:0!important;height:56px!important;padding-right:58px!important}
+#loginScreen .login-submit{
+ position:absolute!important;right:5px!important;top:50%!important;transform:translateY(-50%)!important;
+ width:46px!important;min-width:46px!important;height:46px!important;min-height:46px!important;
+ padding:0!important;display:grid!important;place-items:center!important;border:0!important;border-radius:9px!important;
+ color:#fff!important;background:linear-gradient(180deg,#ff1529 0%,#e00018 52%,#c90015 100%)!important;
+ box-shadow:0 4px 13px rgba(235,0,25,.28),0 0 12px rgba(255,0,20,.14)!important;cursor:pointer!important;
+}
+#loginScreen .login-submit .material-symbols-rounded{font-size:25px!important;font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24}
+#loginScreen .login-submit:hover{filter:brightness(1.08)!important}
+#loginScreen .login-submit:active{transform:translateY(calc(-50% + 1px))!important}
+#loginScreen .login-submit:disabled{opacity:.62!important;cursor:wait!important}
+#loginScreen .login-error{min-height:16px!important;margin-top:8px!important}
+@media(max-height:650px){
+ #loginScreen .login-card{padding:18px 28px 14px!important}
+ #loginScreen .login-logo-wrap{margin-bottom:8px!important}
+ #loginScreen .login-logo{width:min(220px,72%)!important}
+ #loginScreen .login-icon{width:42px!important;height:42px!important;margin-bottom:8px!important}
+ #loginScreen .login-icon .material-symbols-rounded{font-size:23px!important}
+ #loginScreen .login-card h1{font-size:23px!important;margin-bottom:12px!important}
+ #loginScreen .login-input-wrap{min-height:50px!important}
+ #loginScreen #loginPassword{height:48px!important}
+ #loginScreen .login-submit{width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important}
+}
+@media(max-width:600px){#loginScreen .login-card{padding:28px 22px 20px!important}}
+@media(max-height:500px) and (orientation:landscape){
+ #loginScreen .login-card{padding:10px 22px 8px!important}
+ #loginScreen .login-logo-wrap{margin-bottom:4px!important}
+ #loginScreen .login-logo{width:min(150px,35vw)!important}
+ #loginScreen .login-icon{width:34px!important;height:34px!important;margin-bottom:5px!important}
+ #loginScreen .login-card h1{font-size:18px!important;margin-bottom:7px!important}
+ #loginScreen .login-input-wrap{min-height:42px!important}
+ #loginScreen #loginPassword{height:40px!important}
+ #loginScreen .login-submit{width:34px!important;min-width:34px!important;height:34px!important;min-height:34px!important}
+}

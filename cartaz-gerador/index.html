@@ -105,15 +105,16 @@
     <div class="login-logo-wrap"><img src="login-logo-extra-mercado.png" alt="Extra Mercado" class="login-logo"></div>
     <div class="login-icon"><span class="material-symbols-rounded" aria-hidden="true">lock</span></div>
     <h1 id="loginTitle">Acesso ao Gerador</h1>
-    <p>Digite a senha para acessar a ferramenta.</p>
-    <form id="loginForm" autocomplete="off">
-      <div class="login-input-wrap">
-        <span class="material-symbols-rounded login-field-icon" aria-hidden="true">lock</span>
-        <input id="loginPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Senha" aria-label="Senha" required>
-      </div>
-      <button id="loginBtn" class="login-submit" type="submit">ENTRAR</button>
-      <div id="loginError" class="login-error" role="alert" aria-live="polite"></div>
-    </form>
+  <form id="loginForm" autocomplete="off">
+    <div class="login-input-wrap">
+      <span class="material-symbols-rounded login-field-icon" aria-hidden="true">lock</span>
+      <input id="loginPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Senha" aria-label="Senha" required>
+      <button id="loginBtn" class="login-submit" type="submit" aria-label="Entrar" title="Entrar">
+        <span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span>
+      </button>
+    </div>
+    <div id="loginError" class="login-error" role="alert" aria-live="polite"></div>
+  </form>
   </div>
 </div>
 <header>
