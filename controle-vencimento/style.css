@@ -27,3 +27,33 @@
 .legend-dot{width:10px;height:10px;border-radius:50%}.legend-dot.done{background:#36a779}.legend-dot.pending{background:#e5b64b}
 .chart-legend strong{font-size:13px}.chart-legend small{color:var(--muted);min-width:34px;text-align:right}
 @media(max-width:650px){.status-stats article{padding:11px 9px;min-height:104px}.stat-label{gap:5px}.stat-label .material-symbols-rounded{font-size:18px}.stat-label small{font-size:11px}.stat-card strong{font-size:23px}.stat-foot{font-size:9px}.status-chart-card{padding:14px}.chart-content{gap:20px}.pie-chart{width:118px;height:118px;flex-basis:118px}.chart-legend{min-width:0;gap:13px}.chart-legend>div{grid-template-columns:10px 1fr auto;gap:6px}.chart-legend small{grid-column:2;grid-row:2;text-align:left}.chart-legend strong{grid-column:3;grid-row:1}}
+
+
+/* V1.7 — identidade visual e organização dos filtros */
+.header-brand{display:flex;align-items:center;gap:14px;min-width:0}
+.header-logo{display:block;width:118px;height:48px;object-fit:contain;flex:0 0 auto}
+.header-brand-text{min-width:0}
+.search-row{align-items:stretch;margin-bottom:10px}
+.search-row input{flex:1;min-width:0}
+.print-button{display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
+.print-button .material-symbols-rounded{font-size:19px}
+.advanced-filters{margin-top:0;display:flex;gap:10px}
+.advanced-filters select{flex:1;min-width:0}
+.login-icon{border:1px solid #ae7dff;box-sizing:border-box}
+.login-submit{width:54px;height:54px;min-width:54px;flex:0 0 54px;display:grid;place-items:center;padding:0;margin:0 1px 0 0;align-self:center;line-height:1;border-radius:10px}
+.login-submit .material-symbols-rounded{display:block;font-size:27px;line-height:1}
+@media(max-width:650px){
+  header{padding:0 14px;height:70px}
+  .header-brand{gap:9px}
+  .header-logo{width:82px;height:40px}
+  .brand{font-size:12px;letter-spacing:.7px}
+  .brand span{font-size:9px;margin-left:4px}
+  .header-brand-text>small{font-size:9px}
+  .search-row{flex-direction:row;align-items:stretch;gap:7px}
+  .search-row input{width:0;flex:1;padding:10px 9px;font-size:12px}
+  .print-button{flex:0 0 auto;padding:9px 10px;font-size:11px;gap:4px}
+  .print-button .material-symbols-rounded{font-size:17px}
+  .advanced-filters{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .advanced-filters select{width:100%;padding:10px 8px;font-size:12px}
+  .advanced-filters select:last-child{grid-column:1/-1}
+}

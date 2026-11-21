@@ -1,6 +1,10 @@
-# Controle de Vencimentos — Sistema V1.6
+# Controle de Vencimentos — Sistema V1.7
 
 ## Novidades
+- Logo Extra Mercado adicionada à barra superior, ao lado do título do sistema.
+- Busca e botão Imprimir relatório agrupados na primeira linha; filtros de setor, situação e prazo organizados na linha seguinte.
+- Ícone de cadeado do login com borda roxa combinando com o contorno do cartão.
+- Botão Entrar alinhado ao centro, com dimensões e área de ícone padronizadas.
 - Painel renomeado para **Painel de Status**.
 - Indicadores **Tratativas**, **Tratados** e **A tratar**, calculados pelo setor e prazo selecionados, sem serem afetados pelo filtro de situação.
 - Gráfico de pizza comparando a quantidade e o percentual de registros tratados e a tratar.
@@ -28,12 +32,12 @@
 O site V1.5 usa o contrato da API V2.2 para aceitar `data_lancamento` no POST. No Cloudflare Workers, substitua o código pelo arquivo `worker-v2.2.js`, mantendo o binding D1 com nome `DB`, e publique (Deploy). A API usa a coluna `data_lancamento` já existente; não exige migração SQL.
 
 ## Publicação do site
-Envie os arquivos desta pasta para o GitHub Pages. Mantenha `config.json`, `barcode-bip.m4a` e `login-logo-extra-mercado.png` na mesma pasta de `index.html`.
+Envie os arquivos desta pasta para o GitHub Pages. Mantenha `config.json`, `barcode-bip.m4a` e `login-logo-extra-mercado.png` e `header-logo-extra.png` na mesma pasta de `index.html`.
 
 ## Formato de datas
 O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seriais comuns de datas do Excel. Linhas sem datas válidas ou com campos obrigatórios inválidos são destacadas e bloqueiam a finalização até serem excluídas. A data de lançamento é armazenada no formato ISO aceito pela API.
 
 ## Versões
-- Sistema: V1.6
+- Sistema: V1.7
 - API: V2.2
 - D1: estrutura existente, sem alteração SQL.
