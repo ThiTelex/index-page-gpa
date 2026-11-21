@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Controle de Vencimentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body class="auth-locked">
+<div id="loginScreen" class="login-screen"><div class="login-card"><div class="login-logo-wrap"><img src="login-logo-extra-mercado.png" class="login-logo" alt="Extra Mercado"></div>
+<div class="login-icon"><span class="material-symbols-rounded">lock</span></div><h1>Controle de Vencimentos</h1><p>Acesso ao sistema</p>
+<form id="loginForm"><div class="login-input-wrap"><span class="material-symbols-rounded login-field-icon">lock</span><input id="loginPassword" type="password" inputmode="numeric" placeholder="Senha" required><button class="login-submit" aria-label="Entrar"><span class="material-symbols-rounded">arrow_forward</span></button></div><div id="loginError" class="login-error"></div></form></div></div>
+<header><div><div class="brand">VENCIMENTOS <span>CONTROLE</span></div><small>Gestão de validade por setor</small></div><button id="logout" class="ghost">Sair</button></header>
+<main><section class="toolbar"><div><h1>Painel de pendências</h1><p>Prioridade para os produtos com vencimento mais próximo.</p></div><button id="newBtn" class="primary">＋ Novo lançamento</button></section>
+<section class="stats"><article><small>Pendências</small><strong id="total">—</strong></article><article><small>Vencidos</small><strong id="expired">—</strong></article><article><small>Em atenção</small><strong id="attention">—</strong></article></section>
+<section class="filters"><select id="sector"><option value="Mercearia">Mercearia</option><option value="Perecíveis">Perecíveis</option><option value="">Todos os setores</option></select><select id="status"><option value="0">Não tratados</option><option value="1">Tratados</option><option value="">Todos</option></select><input id="search" placeholder="Pesquisar descrição ou PLU/EAN"></section>
+<div id="notice"></div><section id="list" class="list"></section></main>
+<dialog id="formDialog"><form id="entryForm"><div class="dialog-head"><h2>Novo vencimento</h2><button type="button" id="closeDialog" class="ghost">✕</button></div>
+<label>Descrição<input name="descricao" required maxlength="180"></label><label>PLU / EAN<div class="ean-row"><input id="eanInput" name="plu_ean" required inputmode="numeric" placeholder="Digite ou leia o código"><button type="button" id="openScanner" class="scan-btn"><span class="material-symbols-rounded">barcode_scanner</span><span>Ler código</span></button></div></label>
+<div class="two"><label>Validade<input name="validade" type="date" required></label><label>Quantidade<input name="quantidade" type="number" min="0" step="1" required></label></div>
+<label>Responsável<input name="responsavel" required></label><label>Setor<select name="setor"><option>Mercearia</option><option>Perecíveis</option></select></label>
+<div class="dialog-actions"><button type="button" id="cancel" class="ghost">Cancelar</button><button class="primary" type="submit">Cadastrar</button></div></form></dialog>
+<dialog id="scannerDialog" class="scanner-dialog"><div class="scanner-content"><div class="dialog-head"><div><h2>Leitor de código de barras</h2><p>Aponte a câmera para o código EAN-13</p></div><button id="closeScanner" class="ghost">✕</button></div><div class="video-frame"><video id="scannerVideo" playsinline muted></video><div class="scan-guide"></div></div><div id="scannerStatus" class="scanner-status">Aguardando câmera…</div><button id="torchButton" class="ghost" type="button" hidden>Ativar lanterna</button><small>Permita o acesso à câmera quando o navegador solicitar.</small></div></dialog>
+<script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script><script src="app.js"></script></body></html>
