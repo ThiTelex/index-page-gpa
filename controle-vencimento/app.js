@@ -6,7 +6,7 @@ $("loginForm").addEventListener("submit",async e=>{e.preventDefault();try{if($("
 if(sessionStorage.getItem("vencimentos_login")==="1"){ $("loginScreen").hidden=true;$("loginScreen").style.display="none";document.body.classList.remove("auth-locked");load()}
 $("logout").onclick=()=>{sessionStorage.removeItem("vencimentos_login");location.reload()};
 ["sector","status","search"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",load));
-async function load(){if(document.body.classList.contains("auth-locked"))return;try{notice("Atualizando…");const p=new URLSearchParams();if($("sector").value)p.set("setor",$("sector").value);if($("status").value!=="")p.set("tratado",$("status").value);if($("search").value.trim())p.set("q",$("search").value.trim());const r=await fetch(`${API}/api/vencimentos?${p}`);const j=await r.json();if(!r.ok||!j.sucesso)throw Error();registros=j.dados||[];render();notice(`${j.total} registro(s) encontrado(s).`)}catch{$("list").innerHTML='<div class="empty">Falha ao consultar a API. Verifique a publicação e o CORS.</div>';notice("Não foi possível atualizar os dados.")}}
+async function load(){if(document.body.classList.contains("auth-locked"))return;try{notice("Atualizando…");const p=new URLSearchParams();if($("sector").value)p.set("setor",$("sector").value);if($("search").value.trim())p.set("q",$("search").value.trim());const r=await fetch(`${API}/api/vencimentos?${p}`);const j=await r.json();if(!r.ok||!j.sucesso)throw Error();registros=j.dados||[];render();notice(`${j.total} registro(s) encontrado(s).`)}catch{$("list").innerHTML='<div class="empty">Falha ao consultar a API. Verifique a publicação e o CORS.</div>';notice("Não foi possível atualizar os dados.")}}
 function render(){const p=registros.filter(x=>x.tratado===0);$("total").textContent=p.length;$("expired").textContent=p.filter(x=>x.situacao==="vencido").length;$("attention").textContent=p.filter(x=>x.situacao==="atencao").length;if(!registros.length){$("list").innerHTML='<div class="empty">Nenhum registro encontrado.</div>';return}$("list").innerHTML=registros.map(x=>`<article class="item"><div><h3>${esc(x.descricao)}</h3><div class="meta">EAN/PLU: ${esc(x.plu_ean)} · ${esc(x.setor)} · Qtd.: ${x.quantidade}</div><div class="meta">Validade: ${x.validade.split("-").reverse().join("/")} · Responsável: ${esc(x.responsavel)}</div></div><div class="right"><span class="pill ${x.tratado?"":x.situacao}">${x.tratado?"TRATADO":label(x)}</span>${x.tratado?"":`<button class="primary" onclick="markTreated(${x.id})">Marcar tratado</button>`}</div></article>`).join("")}
 function label(x){return x.situacao==="vencido"?`VENCIDO · ${Math.abs(x.dias_restantes)} dia(s)`:x.situacao==="atencao"?`${x.dias_restantes} dia(s) · ATENÇÃO`:`${x.dias_restantes} dias restantes`}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -130,19 +130,43 @@ const $v=id=>document.getElementById(id);
 $v('search').addEventListener('input',()=>{currentPage=1;load()});
 $v('daysLimit').addEventListener('change',()=>{currentPage=1;render()});
 const originalRender=render;
+function withinDaysFilter(items){
+ const lim=$v('daysLimit').value;
+ if(lim==='all')return items.slice();
+ return items.filter(x=>Number(x.dias_restantes)<=Number(lim));
+}
 render=function(){
- const pend=registros.filter(x=>Number(x.tratado)===0);
- $v('total').textContent=pend.length;$v('expired').textContent=pend.filter(x=>x.situacao==='vencido').length;$v('attention').textContent=pend.filter(x=>x.situacao==='atencao').length;
- let data=registros.slice();const lim=$v('daysLimit').value;
- if(lim!=='all'&&$v('status').value!=='1'){data=data.filter(x=>Number(x.tratado)===1||Number(x.dias_restantes)<0||Number(x.dias_restantes)<=Number(lim));}
- const pages=Math.max(1,Math.ceil(data.length/PAGE_SIZE));currentPage=Math.min(currentPage,pages);const shown=data.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
+ // As caixas e o gráfico ignoram o filtro de situação, para sempre comparar os dois grupos.
+ const periodData=withinDaysFilter(registros);
+ const treated=periodData.filter(x=>Number(x.tratado)===1).length;
+ const pending=periodData.filter(x=>Number(x.tratado)===0).length;
+ const total=periodData.length;
+ $v('total').textContent=total;
+ $v('expired').textContent=treated;
+ $v('attention').textContent=pending;
+ $v('chartTotal').textContent=`${total} ${total===1?'registro':'registros'}`;
+ $v('treatedCount').textContent=treated;
+ $v('pendingCount').textContent=pending;
+ const treatedPct=total?Math.round(treated/total*100):0;
+ const pendingPct=total?100-treatedPct:0;
+ $v('treatedPercent').textContent=`${treatedPct}%`;
+ $v('pendingPercent').textContent=`${pendingPct}%`;
+ $v('statusPie').style.setProperty('--treated-share',`${total?treated/total*100:0}%`);
+ $v('statusPie').style.setProperty('--pending-share',`${total?pending/total*100:0}%`);
+ $v('statusPie').style.background=total?`conic-gradient(#36a779 0% ${treated/total*100}%, #e5b64b ${treated/total*100}% 100%)`:'#eee9f4';
+ $v('statusPie').setAttribute('aria-label',`Tratados: ${treated} (${treatedPct}%). A tratar: ${pending} (${pendingPct}%).`);
+ let data=periodData;
+ if($v('status').value==='0')data=data.filter(x=>Number(x.tratado)===0);
+ else if($v('status').value==='1')data=data.filter(x=>Number(x.tratado)===1);
+ const pages=Math.max(1,Math.ceil(data.length/PAGE_SIZE));currentPage=Math.min(currentPage,pages);
+ const shown=data.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
  if(!shown.length){$v('list').innerHTML='<div class="empty">Nenhum registro encontrado.</div>';$v('pagination').innerHTML='';return}
  $v('list').innerHTML=shown.map(x=>`<article class="item"><div><h3>${esc(x.descricao)}</h3><div class="meta">EAN/PLU: ${esc(x.plu_ean)} · ${esc(x.setor)} · Qtd.: ${x.quantidade}</div><div class="meta">Validade: ${String(x.validade).split('-').reverse().join('/')} · Responsável: ${esc(x.responsavel)}</div></div><div class="right"><span class="pill ${x.tratado?'':x.situacao}">${x.tratado?'TRATADO':label(x)}</span>${Number(x.tratado)===1?`<button class="ghost" onclick="undoTreated(${x.id})">Desfazer</button>`:`<button class="primary" onclick="markTreated(${x.id})">Marcar tratado</button>`}</div></article>`).join('');
  $v('pagination').innerHTML=`<span>${data.length} registro(s) · Página ${currentPage}/${pages}</span><div class="page-actions"><button class="ghost" ${currentPage===1?'disabled':''} onclick="goPage(${currentPage-1})">Anterior</button>${Array.from({length:pages},(_,i)=>i+1).slice(Math.max(0,currentPage-3),currentPage+2).map(n=>`<button class="page-number ${n===currentPage?'active':''}" onclick="goPage(${n})">${n}</button>`).join('')}<button class="ghost" ${currentPage===pages?'disabled':''} onclick="goPage(${currentPage+1})">Próxima</button></div>`;
 };
 window.goPage=n=>{currentPage=n;render();window.scrollTo({top:0,behavior:'smooth'})};
 window.undoTreated=async id=>{if(!confirm('Desfazer a tratativa deste registro?'))return;try{const r=await fetch(`${API}/api/vencimentos/${id}/tratado`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({tratado:0})});const j=await r.json();if(!r.ok||!j.sucesso)throw Error(j.mensagem||'Falha ao desfazer');await load()}catch(e){notice(e.message)}};
-$v('printBtn').onclick=()=>{let data=registros.slice();const lim=$v('daysLimit').value;if(lim!=='all'&&$v('status').value!=='1')data=data.filter(x=>Number(x.tratado)===1||Number(x.dias_restantes)<0||Number(x.dias_restantes)<=Number(lim));const w=window.open('','_blank');if(!w){notice('Permita pop-ups para imprimir.');return}const rows=data.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.descricao)}</td><td>${esc(x.plu_ean)}</td><td>${String(x.validade).split('-').reverse().join('/')}</td><td>${x.quantidade}</td><td>${esc(x.responsavel)}</td><td>${esc(x.setor)}</td><td>${x.tratado?'TRATADO':'PENDENTE'}</td></tr>`).join('');w.document.write(`<html><meta charset="utf-8"><title>Relatório de vencimentos</title><style>body{font:12px Arial;margin:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #aaa;padding:6px;text-align:left}h2{margin-bottom:4px}</style><h2>CONTROLE DE VENCIMENTOS — V1.5</h2><p>Emitido: ${new Date().toLocaleString('pt-BR')} · Total: ${data.length}</p><table><thead><tr><th>#</th><th>Descrição</th><th>PLU/EAN</th><th>Validade</th><th>Qtd.</th><th>Responsável</th><th>Setor</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><script>onload=()=>print()</script></html>`);w.document.close()};
+$v('printBtn').onclick=()=>{let data=withinDaysFilter(registros);if($v('status').value==='0')data=data.filter(x=>Number(x.tratado)===0);else if($v('status').value==='1')data=data.filter(x=>Number(x.tratado)===1);const w=window.open('','_blank');if(!w){notice('Permita pop-ups para imprimir.');return}const rows=data.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.descricao)}</td><td>${esc(x.plu_ean)}</td><td>${String(x.validade).split('-').reverse().join('/')}</td><td>${x.quantidade}</td><td>${esc(x.responsavel)}</td><td>${esc(x.setor)}</td><td>${x.tratado?'TRATADO':'PENDENTE'}</td></tr>`).join('');w.document.write(`<html><meta charset="utf-8"><title>Relatório de vencimentos</title><style>body{font:12px Arial;margin:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #aaa;padding:6px;text-align:left}h2{margin-bottom:4px}</style><h2>CONTROLE DE VENCIMENTOS — V1.6</h2><p>Emitido: ${new Date().toLocaleString('pt-BR')} · Total: ${data.length}</p><table><thead><tr><th>#</th><th>Descrição</th><th>PLU/EAN</th><th>Validade</th><th>Qtd.</th><th>Responsável</th><th>Setor</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><script>onload=()=>print()</script></html>`);w.document.close()};
 function parseCSV(text){const rows=[];let row=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){cell+='"';i++}else quoted=!quoted}else if(c===';'&&!quoted){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(v=>v.trim()!==''))rows.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(v=>v.trim()!==''))rows.push(row);return rows}
 function csvDate(value){const s=String(value||'').trim();let m=s.match(/^(\d{1,2})[/. -](\d{1,2})[/. -](\d{4})(?:\s+.*)?$/);if(m)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return `${m[1]}-${m[2]}-${m[3]}`;if(/^\d+(\.\d+)?$/.test(s)){const d=new Date(Date.UTC(1899,11,30)+Number(s)*86400000);return d.toISOString().slice(0,10)}return ''}
 function validISO(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const d=new Date(s+'T00:00:00Z');return !Number.isNaN(d.getTime())&&d.toISOString().slice(0,10)===s}

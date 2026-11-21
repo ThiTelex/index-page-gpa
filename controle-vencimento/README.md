@@ -1,6 +1,11 @@
-# Controle de Vencimentos — Sistema V1.5
+# Controle de Vencimentos — Sistema V1.6
 
 ## Novidades
+- Painel renomeado para **Painel de Status**.
+- Indicadores **Tratativas**, **Tratados** e **A tratar**, calculados pelo setor e prazo selecionados, sem serem afetados pelo filtro de situação.
+- Gráfico de pizza comparando a quantidade e o percentual de registros tratados e a tratar.
+- Detalhes visuais discretos nos indicadores: roxo, verde e amarelo, com ícones Material Symbols.
+- Filtro de situação aplicado localmente à lista e ao relatório; os indicadores continuam comparando os dois status.
 - Botão **+ Importar** ao lado de **+ Novo lançamento**.
 - Importação CSV delimitado por ponto e vírgula (`;`), com suporte a campos entre aspas e aspas escapadas.
 - Prévia editável por exclusão individual antes da gravação.
@@ -29,6 +34,6 @@ Envie os arquivos desta pasta para o GitHub Pages. Mantenha `config.json`, `barc
 O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seriais comuns de datas do Excel. Linhas sem datas válidas ou com campos obrigatórios inválidos são destacadas e bloqueiam a finalização até serem excluídas. A data de lançamento é armazenada no formato ISO aceito pela API.
 
 ## Versões
-- Sistema: V1.5
+- Sistema: V1.6
 - API: V2.2
 - D1: estrutura existente, sem alteração SQL.
