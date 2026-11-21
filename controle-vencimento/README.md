@@ -1,25 +1,28 @@
-# Controle de Vencimentos — leitor EAN
+# Controle de Vencimentos — Sistema V1.4
 
-Esta versão integra ZXing Browser para leitura de códigos de barras EAN-13 pela câmera do dispositivo. O repositório enviado é a biblioteca ZXing JS, não um aplicativo pronto; ela fornece o mecanismo de leitura que foi integrado ao formulário.
+## Novidades desta versão
+- Paginação de 30 registros por página.
+- Relatório para impressão que reúne todos os registros do filtro atual, independentemente da página exibida.
+- Filtro de prazo de 10, 20 ou 30 dias, além de opção para todos os prazos. Registros vencidos continuam visíveis como prioridade.
+- Botão **Desfazer** na lista de tratados, usando a rota PATCH existente para retornar `tratado` a `0`.
+- Mantidos login, identidade visual roxa, leitor de código de barras, áudio `barcode-bip.m4a` e integração com o Worker/D1.
+
+## Compatibilidade
+- API esperada: `https://vencimentos-api.thitelex1999.workers.dev`
+- O Worker deve aceitar `PATCH /api/vencimentos/:id/tratado` com `{ "tratado": 0 }` ou `{ "tratado": 1 }`.
+- Não exige alteração no banco D1 nem execução de SQL.
+- Paginação e filtro de prazo são aplicados no navegador sobre o resultado completo retornado pela API. A impressão usa todos os registros filtrados, não apenas a página atual.
+
+## Publicação
+Envie o conteúdo desta pasta para o repositório do GitHub Pages, substituindo os arquivos da versão anterior. Mantenha `config.json`, `barcode-bip.m4a` e `login-logo-extra-mercado.png` na mesma pasta de `index.html`.
 
 ## Arquivos
-- `index.html`: login, painel, cadastro e janela de leitura.
-- `style.css`: tema roxo, raios luminosos, cadeado e correção `#loginScreen[hidden]`.
-- `app.js`: integração com a API e leitor de câmera.
-- `config.json`: senha visual de demonstração `1833`.\n- `barcode-bip.m4a`: áudio reproduzido após leitura bem-sucedida.
-- `login-logo-extra-mercado.png`: logo extraída do projeto de referência anterior.
+- `index.html`: estrutura do painel e formulários.
+- `style.css`: estilos e responsividade.
+- `app.js`: autenticação visual, integração com API, filtros, paginação, impressão, tratativas e leitor.
+- `config.json`: configuração da senha visual.
+- `barcode-bip.m4a`: áudio do leitor.
+- `login-logo-extra-mercado.png`: imagem do login.
 
-## Banco de dados
-A migração SQL já foi aplicada no D1 pelo usuário. Este pacote não inclui nem exige executar novamente o SQL. Os campos descrição, responsável e setor são convertidos para maiúsculas com `toLocaleUpperCase("pt-BR")` antes do envio. Quantidade é opcional na tela; vazia é enviada como `0`, pois a coluna D1 permanece `NOT NULL`. O formulário mostra a mensagem devolvida pela API e registra detalhes técnicos no console do navegador se o Worker recusar o cadastro.
-
-## Leitor e som
-A leitura usa ZXing pela CDN. Ao reconhecer um código, o sistema reproduz `barcode-bip.m4a` (áudio fornecido) e usa um bip Web Audio apenas como contingência caso o navegador bloqueie o arquivo. A reprodução é preparada no toque do botão de abrir o leitor para melhorar a compatibilidade em celulares.
-
-## Publicar
-Substitua os arquivos do site no repositório GitHub Pages por estes arquivos e publique. A câmera exige HTTPS (GitHub Pages fornece HTTPS). Permita o acesso à câmera quando solicitado. O carregamento da biblioteca ZXing usa CDN e exige conexão com a internet.
-
-## API
-Usa o Worker `https://vencimentos-api.thitelex1999.workers.dev` e os endpoints GET/POST/PATCH já definidos no projeto.
-
-## Limitação de segurança
-O login é apenas visual; `config.json` fica público. A API deve receber autenticação real no servidor antes de uso comercial.
+## Observação
+A senha visual configurada no `config.json` é apenas uma barreira de interface no navegador, não um mecanismo de segurança para proteger a API ou os dados.
