@@ -1,6 +1,9 @@
-# Controle de Vencimentos — Sistema V1.9
+# Controle de Vencimentos — Sistema V2.0
 
 ## Novidades
+- Botões do topo reorganizados no mobile: **Modelo XLSX** e **Importar** ficam juntos na primeira linha; **Novo lançamento** ocupa a linha seguinte em largura total e com maior destaque.
+- Botão **Modelo XLSX** agora tem bordas arredondadas e acabamento visual consistente com os demais botões.
+- Removido o botão **Sair** da barra superior; a sessão permanece ativa na aba até seu fechamento ou limpeza da sessão do navegador.
 - Importação de arquivos Excel `.xlsx` além do CSV, com processamento local no navegador pela biblioteca SheetJS.
 - Leitura automática da aba `Proativo` (ou de outra aba que contenha os sete cabeçalhos obrigatórios).
 - Compatibilidade com a planilha simplificada de 7 colunas e com o CSV original de 32 colunas, desde que contenham os mesmos cabeçalhos necessários.

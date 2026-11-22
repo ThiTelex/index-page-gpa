@@ -75,3 +75,36 @@
   .template-download .material-symbols-rounded{font-size:18px}
   .toolbar-actions #newBtn{white-space:normal}
 }
+
+
+/* V2.0 — ações superiores: modelo + importar agrupados; novo lançamento em destaque */
+.toolbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;row-gap:12px;flex-wrap:wrap}
+.toolbar-actions .template-download{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:11px 15px;text-decoration:none;font-weight:700;
+  white-space:nowrap;flex:0 0 auto;border:1px solid var(--line);
+  border-radius:12px;background:#f1edf7;color:var(--ink);
+  transition:background .15s ease,border-color .15s ease,transform .15s ease
+}
+.toolbar-actions .template-download:hover{background:#ebe3f5;border-color:#d6c5eb}
+.toolbar-actions .template-download .material-symbols-rounded{font-size:20px}
+.toolbar-actions button{min-height:44px;white-space:nowrap;flex:0 0 auto}
+@media(max-width:650px){
+  .toolbar-actions{
+    width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:10px;align-items:stretch
+  }
+  .toolbar-actions .template-download,
+  .toolbar-actions #importBtn{
+    width:100%;min-width:0;min-height:46px;flex:none;
+    padding:10px 8px;font-size:12px;gap:5px;white-space:nowrap
+  }
+  .toolbar-actions .template-download .material-symbols-rounded{font-size:19px}
+  .toolbar-actions .template-download-label{display:none}
+  .toolbar-actions .template-download-short{display:inline}
+  .toolbar-actions #newBtn{
+    grid-column:1/-1;width:100%;min-height:52px;flex:none;
+    padding:13px 16px;font-size:14px;white-space:normal;
+    border-radius:13px;box-shadow:0 5px 14px #7044b82b
+  }
+}
