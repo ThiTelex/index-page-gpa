@@ -108,3 +108,31 @@
     border-radius:13px;box-shadow:0 5px 14px #7044b82b
   }
 }
+
+
+/* V2.1 — urgência, busca por código e distribuição sem gráfico de pizza */
+.status-distribution{padding:18px 20px}
+.distribution-summary{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 12px}
+.distribution-summary>div{display:grid;grid-template-columns:12px 1fr auto auto;align-items:center;gap:8px;font-size:13px}
+.distribution-summary strong{font-size:15px}
+.distribution-summary small{color:var(--muted);min-width:36px;text-align:right}
+.distribution-track{height:16px;width:100%;display:flex;overflow:hidden;border-radius:30px;background:#eee9f4;gap:2px}
+.distribution-track span{height:100%;display:block;transition:width .25s ease}
+#treatedBar{background:#29966b}
+#pendingBar{background:#e4b33d}
+.distribution-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:6px}
+.pill.urgency-red{background:#fde8e8;color:#b42318}
+.pill.urgency-orange{background:#ffeadc;color:#c34d0b}
+.pill.urgency-yellow{background:#fff5cc;color:#916b00}
+.pill.urgency-blue{background:#e5f0ff;color:#2459a6}
+.pill.urgency-gray{background:#eceef1;color:#59616d}
+.search-scan-btn{display:grid;place-items:center;min-width:44px;padding:8px 10px}
+.search-scan-btn .material-symbols-rounded{font-size:22px}
+@media(max-width:650px){
+ .status-distribution{padding:14px}
+ .distribution-summary{gap:10px}
+ .distribution-summary>div{grid-template-columns:10px 1fr auto;gap:6px;font-size:12px}
+ .distribution-summary small{grid-column:2;grid-row:2;text-align:left}
+ .distribution-summary strong{grid-column:3;grid-row:1}
+ .search-scan-btn{min-width:40px;padding:8px}
+}

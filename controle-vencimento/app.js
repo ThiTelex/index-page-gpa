@@ -72,7 +72,7 @@ $("entryForm").addEventListener("submit",async e=>{
     submitButton.textContent="Cadastrar";
   }
 });
-$("openScanner").onclick=startScanner;$("closeScanner").onclick=stopScanner;$("scannerDialog").addEventListener("cancel",stopScanner);
+$("openScanner").onclick=()=>startScanner("form");$("searchScanner").onclick=()=>startScanner("search");$("closeScanner").onclick=stopScanner;$("scannerDialog").addEventListener("cancel",stopScanner);
 function playScanSound(){
   const audio=$("scanSound");
   if(audio){
@@ -105,7 +105,7 @@ function playFallbackBeep(){
     osc.onended=()=>ctx.close();
   }catch(e){/* som complementar; não interrompe a leitura */}
 }
-async function startScanner(){
+async function startScanner(mode="form"){
   // Desbloqueia a reprodução de áudio após o toque do usuário (restrição comum em celulares).
   const scanAudio=$("scanSound");
   if(scanAudio){
@@ -119,7 +119,7 @@ async function startScanner(){
   }
   if(!window.isSecureContext){$("scannerStatus").textContent="A câmera exige HTTPS. Abra o site pelo GitHub Pages.";return}if(!navigator.mediaDevices?.getUserMedia){$("scannerStatus").textContent="Este navegador não oferece acesso à câmera.";return}if(!window.ZXing?.BrowserMultiFormatReader){$("scannerStatus").textContent="Biblioteca de leitura não carregou. Verifique a internet e tente novamente.";return}
 $("scannerDialog").showModal();$("scannerStatus").textContent="Solicitando acesso à câmera…";
-try{scannerReader=new ZXing.BrowserMultiFormatReader();scannerControls=await scannerReader.decodeFromVideoDevice(undefined,$("scannerVideo"),(result,err,controls)=>{if(result){const code=result.getText();playScanSound();$("eanInput").value=code;$("scannerStatus").textContent=`Código identificado: ${code}`;stopScanner();$("eanInput").focus()}else if(err&&!(err instanceof ZXing.NotFoundException)){/* mantém a leitura ativa enquanto procura o código */}});$("scannerStatus").textContent="Câmera ativa. Centralize o código de barras na faixa."}catch(e){$("scannerStatus").textContent=e.name==="NotAllowedError"?"Acesso à câmera negado. Autorize nas configurações do navegador.":"Não foi possível iniciar a câmera. Verifique permissões e se ela está disponível."}}
+try{scannerReader=new ZXing.BrowserMultiFormatReader();scannerControls=await scannerReader.decodeFromVideoDevice(undefined,$("scannerVideo"),(result,err,controls)=>{if(result){const code=result.getText();playScanSound();$("scannerStatus").textContent=`Código identificado: ${code}`;stopScanner();if(mode==="search"){$("search").value=code;currentPage=1;load();$("search").focus()}else{$("eanInput").value=code;$("eanInput").focus()}}else if(err&&!(err instanceof ZXing.NotFoundException)){/* mantém a leitura ativa enquanto procura o código */}});$("scannerStatus").textContent="Câmera ativa. Centralize o código de barras na faixa."}catch(e){$("scannerStatus").textContent=e.name==="NotAllowedError"?"Acesso à câmera negado. Autorize nas configurações do navegador.":"Não foi possível iniciar a câmera. Verifique permissões e se ela está disponível."}}
 function stopScanner(){try{scannerControls?.stop()}catch{}scannerControls=null;try{scannerReader?.reset()}catch{}scannerReader=null;if($("scannerDialog").open)$("scannerDialog").close()}
 
 // ===== Sistema V1.8: importação CSV/XLSX, paginação, relatório e desfazer =====
@@ -130,13 +130,15 @@ $v('search').addEventListener('input',()=>{currentPage=1;load()});
 $v('daysLimit').addEventListener('change',()=>{currentPage=1;render()});
 const originalRender=render;
 function withinDaysFilter(items){
+ const active=items.filter(x=>Number(x.dias_restantes)>=0);
  const lim=$v('daysLimit').value;
- if(lim==='all')return items.slice();
- return items.filter(x=>Number(x.dias_restantes)<=Number(lim));
+ if(lim==='all')return active;
+ return active.filter(x=>Number(x.dias_restantes)<=Number(lim));
 }
 render=function(){
- // As caixas e o gráfico ignoram o filtro de situação, para sempre comparar os dois grupos.
- const periodData=withinDaysFilter(registros);
+ // Vencidos permanecem no D1, mas não participam do painel operacional.
+ const operational=registros.filter(x=>Number(x.dias_restantes)>=0);
+ const periodData=withinDaysFilter(operational);
  const treated=periodData.filter(x=>Number(x.tratado)===1).length;
  const pending=periodData.filter(x=>Number(x.tratado)===0).length;
  const total=periodData.length;
@@ -150,22 +152,38 @@ render=function(){
  const pendingPct=total?100-treatedPct:0;
  $v('treatedPercent').textContent=`${treatedPct}%`;
  $v('pendingPercent').textContent=`${pendingPct}%`;
- $v('statusPie').style.setProperty('--treated-share',`${total?treated/total*100:0}%`);
- $v('statusPie').style.setProperty('--pending-share',`${total?pending/total*100:0}%`);
- $v('statusPie').style.background=total?`conic-gradient(#36a779 0% ${treated/total*100}%, #e5b64b ${treated/total*100}% 100%)`:'#eee9f4';
- $v('statusPie').setAttribute('aria-label',`Tratados: ${treated} (${treatedPct}%). A tratar: ${pending} (${pendingPct}%).`);
+ $v('treatedBar').style.width=`${total?treated/total*100:0}%`;
+ $v('pendingBar').style.width=`${total?pending/total*100:0}%`;
+ $v('treatedBar').setAttribute('aria-label',`Tratados: ${treatedPct}%`);
+ $v('pendingBar').setAttribute('aria-label',`A tratar: ${pendingPct}%`);
  let data=periodData;
  if($v('status').value==='0')data=data.filter(x=>Number(x.tratado)===0);
  else if($v('status').value==='1')data=data.filter(x=>Number(x.tratado)===1);
  const pages=Math.max(1,Math.ceil(data.length/PAGE_SIZE));currentPage=Math.min(currentPage,pages);
  const shown=data.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
- if(!shown.length){$v('list').innerHTML='<div class="empty">Nenhum registro encontrado.</div>';$v('pagination').innerHTML='';return}
- $v('list').innerHTML=shown.map(x=>`<article class="item"><div><h3>${esc(x.descricao)}</h3><div class="meta">EAN/PLU: ${esc(x.plu_ean)} · ${esc(x.setor)} · Qtd.: ${x.quantidade}</div><div class="meta">Validade: ${String(x.validade).split('-').reverse().join('/')} · Responsável: ${esc(x.responsavel)}</div></div><div class="right"><span class="pill ${x.tratado?'':x.situacao}">${x.tratado?'TRATADO':label(x)}</span>${Number(x.tratado)===1?`<button class="ghost" onclick="undoTreated(${x.id})">Desfazer</button>`:`<button class="primary" onclick="markTreated(${x.id})">Marcar tratado</button>`}</div></article>`).join('');
+ if(!shown.length){$v('list').innerHTML='<div class="empty">Nenhum registro encontrado no período selecionado.</div>';$v('pagination').innerHTML='';return}
+ $v('list').innerHTML=shown.map(x=>`<article class="item"><div><h3>${esc(x.descricao)}</h3><div class="meta">EAN/PLU: ${esc(x.plu_ean)} · ${esc(x.setor)} · Qtd.: ${x.quantidade}</div><div class="meta">Validade: ${String(x.validade).split('-').reverse().join('/')} · Responsável: ${esc(x.responsavel)}</div></div><div class="right"><span class="pill ${urgencyClass(x)}">${x.tratado?'TRATADO':urgencyLabel(x)}</span>${Number(x.tratado)===1?`<button class="ghost" onclick="undoTreated(${x.id})">Desfazer</button>`:`<button class="primary" onclick="markTreated(${x.id})">Marcar tratado</button>`}</div></article>`).join('');
  $v('pagination').innerHTML=`<span>${data.length} registro(s) · Página ${currentPage}/${pages}</span><div class="page-actions"><button class="ghost" ${currentPage===1?'disabled':''} onclick="goPage(${currentPage-1})">Anterior</button>${Array.from({length:pages},(_,i)=>i+1).slice(Math.max(0,currentPage-3),currentPage+2).map(n=>`<button class="page-number ${n===currentPage?'active':''}" onclick="goPage(${n})">${n}</button>`).join('')}<button class="ghost" ${currentPage===pages?'disabled':''} onclick="goPage(${currentPage+1})">Próxima</button></div>`;
 };
+function urgencyClass(x){
+ const d=Number(x.dias_restantes);
+ if(d<=3)return 'urgency-red';
+ if(d<=10)return 'urgency-orange';
+ if(d<=20)return 'urgency-yellow';
+ if(d<=30)return 'urgency-blue';
+ return 'urgency-gray';
+}
+function urgencyLabel(x){
+ const d=Number(x.dias_restantes);
+ if(d<=3)return `${d} ${d===1?'DIA':'DIAS'} · URGÊNCIA`;
+ if(d<=10)return `${d} DIAS · URGENTE`;
+ if(d<=20)return `${d} DIAS · ATENÇÃO`;
+ if(d<=30)return `${d} DIAS · MONITORAMENTO`;
+ return `${d} DIAS · FORA DO PERÍODO`;
+}
 window.goPage=n=>{currentPage=n;render();window.scrollTo({top:0,behavior:'smooth'})};
 window.undoTreated=async id=>{if(!confirm('Desfazer a tratativa deste registro?'))return;try{const r=await fetch(`${API}/api/vencimentos/${id}/tratado`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({tratado:0})});const j=await r.json();if(!r.ok||!j.sucesso)throw Error(j.mensagem||'Falha ao desfazer');await load()}catch(e){notice(e.message)}};
-$v('printBtn').onclick=()=>{let data=withinDaysFilter(registros);if($v('status').value==='0')data=data.filter(x=>Number(x.tratado)===0);else if($v('status').value==='1')data=data.filter(x=>Number(x.tratado)===1);const w=window.open('','_blank');if(!w){notice('Permita pop-ups para imprimir.');return}const rows=data.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.descricao)}</td><td>${esc(x.plu_ean)}</td><td>${String(x.validade).split('-').reverse().join('/')}</td><td>${x.quantidade}</td><td>${esc(x.responsavel)}</td><td>${esc(x.setor)}</td><td>${x.tratado?'TRATADO':'PENDENTE'}</td></tr>`).join('');w.document.write(`<html><meta charset="utf-8"><title>Relatório de vencimentos</title><style>body{font:12px Arial;margin:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #aaa;padding:6px;text-align:left}h2{margin-bottom:4px}</style><h2>CONTROLE DE VENCIMENTOS — V1.8</h2><p>Emitido: ${new Date().toLocaleString('pt-BR')} · Total: ${data.length}</p><table><thead><tr><th>#</th><th>Descrição</th><th>PLU/EAN</th><th>Validade</th><th>Qtd.</th><th>Responsável</th><th>Setor</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><script>onload=()=>print()</script></html>`);w.document.close()};
+$v('printBtn').onclick=()=>{let data=withinDaysFilter(registros);if($v('status').value==='0')data=data.filter(x=>Number(x.tratado)===0);else if($v('status').value==='1')data=data.filter(x=>Number(x.tratado)===1);const w=window.open('','_blank');if(!w){notice('Permita pop-ups para imprimir.');return}const rows=data.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.descricao)}</td><td>${esc(x.plu_ean)}</td><td>${String(x.validade).split('-').reverse().join('/')}</td><td>${x.quantidade}</td><td>${esc(x.responsavel)}</td><td>${esc(x.setor)}</td><td>${x.tratado?'TRATADO':'PENDENTE'}</td></tr>`).join('');w.document.write(`<html><meta charset="utf-8"><title>Relatório de vencimentos</title><style>body{font:12px Arial;margin:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #aaa;padding:6px;text-align:left}h2{margin-bottom:4px}</style><h2>CONTROLE DE VENCIMENTOS — V2.1</h2><p>Emitido: ${new Date().toLocaleString('pt-BR')} · Total: ${data.length}</p><table><thead><tr><th>#</th><th>Descrição</th><th>PLU/EAN</th><th>Validade</th><th>Qtd.</th><th>Responsável</th><th>Setor</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><script>onload=()=>print()</script></html>`);w.document.close()};
 function parseCSV(text){const rows=[];let row=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){cell+='"';i++}else quoted=!quoted}else if(c===';'&&!quoted){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(v=>String(v).trim()!==''))rows.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(v=>String(v).trim()!==''))rows.push(row);return rows}
 function csvDate(value){if(value instanceof Date&&!Number.isNaN(value.getTime()))return `${value.getFullYear()}-${String(value.getMonth()+1).padStart(2,'0')}-${String(value.getDate()).padStart(2,'0')}`;const s=String(value??'').trim();let m=s.match(/^(\d{1,2})[/. -](\d{1,2})[/. -](\d{4})(?:\s+.*)?$/);if(m)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return `${m[1]}-${m[2]}-${m[3]}`;if(/^\d+(\.\d+)?$/.test(s)){const d=new Date(Date.UTC(1899,11,30)+Number(s)*86400000);return d.toISOString().slice(0,10)}return ''}
 function validISO(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const d=new Date(s+'T00:00:00Z');return !Number.isNaN(d.getTime())&&d.toISOString().slice(0,10)===s}

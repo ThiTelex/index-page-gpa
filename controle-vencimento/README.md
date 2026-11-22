@@ -1,6 +1,12 @@
-# Controle de Vencimentos — Sistema V2.0
+# Controle de Vencimentos — Sistema V2.1
 
-## Novidades
+## Novidades V2.1
+- Indicadores de urgência por registro: vermelho (0–3 dias), laranja (4–10), amarelo (11–20), azul (21–30) e cinza (acima de 30 dias).
+- Registros vencidos permanecem armazenados no D1, mas são ocultados da lista operacional, dos indicadores e dos relatórios de tratativas. Uma futura área de consulta de vencidos poderá recuperá-los.
+- Botão de leitura por câmera ao lado da busca: lê o EAN e pesquisa automaticamente os registros correspondentes.
+- Painel de distribuição substitui o gráfico de pizza por uma barra segmentada entre Tratados e A tratar, com contagens e percentuais calculados sobre os filtros de setor e dias, independentemente do filtro de situação.
+
+## Histórico de funcionalidades preservadas
 - Botões do topo reorganizados no mobile: **Modelo XLSX** e **Importar** ficam juntos na primeira linha; **Novo lançamento** ocupa a linha seguinte em largura total e com maior destaque.
 - Botão **Modelo XLSX** agora tem bordas arredondadas e acabamento visual consistente com os demais botões.
 - Removido o botão **Sair** da barra superior; a sessão permanece ativa na aba até seu fechamento ou limpeza da sessão do navegador.
@@ -45,8 +51,14 @@ Envie os arquivos desta pasta para o GitHub Pages. Mantenha `config.json`, `barc
 O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seriais comuns de datas do Excel. Linhas sem datas válidas ou com campos obrigatórios inválidos são destacadas e bloqueiam a finalização até serem excluídas. A data de lançamento é armazenada no formato ISO aceito pela API.
 
 ## Versões
-- Sistema: V1.8
+- Sistema: V2.1
 - API: V2.2
 - D1: estrutura existente, sem alteração SQL.
 
 - Botão **Baixar modelo** com ícone de download; usa o caminho relativo `Modelo_Proativo_Importacao.xlsx` na mesma pasta publicada do `index.html`, para baixar o modelo XLSX hospedado no GitHub Pages.
+
+
+## Versão 2.1
+- Sistema web: V2.1
+- API: V2.2 (sem alteração)
+- Banco D1: sem alteração SQL.
