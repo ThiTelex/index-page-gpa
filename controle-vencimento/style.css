@@ -62,3 +62,16 @@
 .toolbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;row-gap:14px;flex-wrap:wrap}
 .toolbar-actions button{min-height:44px;white-space:nowrap;flex:0 0 auto}
 @media(max-width:650px){.toolbar-actions{display:flex;width:100%;gap:12px;row-gap:12px}.toolbar-actions button{flex:1 1 calc(50% - 6px);min-width:0;padding:11px 10px;font-size:13px}.toolbar-actions #newBtn{white-space:normal}}
+
+/* V1.9 — download do modelo de importação XLSX */
+.toolbar-actions .template-download{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:11px 14px;text-decoration:none;font-weight:700;white-space:nowrap;flex:0 0 auto}
+.template-download .material-symbols-rounded{font-size:20px}
+.template-download-short{display:none}
+@media(max-width:650px){
+  .toolbar-actions{gap:10px;row-gap:10px}
+  .toolbar-actions .template-download,.toolbar-actions button{flex:1 1 calc(33.333% - 7px);min-width:0;padding:10px 7px;font-size:11px;gap:4px}
+  .template-download-label{display:none}
+  .template-download-short{display:inline}
+  .template-download .material-symbols-rounded{font-size:18px}
+  .toolbar-actions #newBtn{white-space:normal}
+}

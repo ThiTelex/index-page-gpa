@@ -1,4 +1,4 @@
-# Controle de Vencimentos — Sistema V1.8
+# Controle de Vencimentos — Sistema V1.9
 
 ## Novidades
 - Importação de arquivos Excel `.xlsx` além do CSV, com processamento local no navegador pela biblioteca SheetJS.
@@ -45,3 +45,5 @@ O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seria
 - Sistema: V1.8
 - API: V2.2
 - D1: estrutura existente, sem alteração SQL.
+
+- Botão **Baixar modelo** com ícone de download; usa o caminho relativo `Modelo_Proativo_Importacao.xlsx` na mesma pasta publicada do `index.html`, para baixar o modelo XLSX hospedado no GitHub Pages.
