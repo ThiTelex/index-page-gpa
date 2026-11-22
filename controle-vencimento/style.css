@@ -136,3 +136,33 @@
  .distribution-summary strong{grid-column:3;grid-row:1}
  .search-scan-btn{min-width:40px;padding:8px}
 }
+
+
+/* V2.2 — alinhamento dos filtros e padronização dos botões de importação */
+.toolbar-actions #importBtn{
+  min-height:44px;padding:11px 15px;border:1px solid var(--line);
+  border-radius:12px;background:#f1edf7;color:var(--ink);
+  transition:background .15s ease,border-color .15s ease,transform .15s ease
+}
+.toolbar-actions #importBtn:hover{background:#ebe3f5;border-color:#d6c5eb}
+.template-download-short{display:none!important}
+.template-download-label{display:inline!important}
+.advanced-filters{display:flex;align-items:stretch;gap:10px;margin-top:0}
+.advanced-filters select{flex:1;min-width:0}
+.advanced-filters .print-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:0 0 auto;white-space:nowrap;padding:11px 15px;border:1px solid var(--line);border-radius:12px;background:#f1edf7;color:var(--ink)}
+.advanced-filters .print-button:hover{background:#ebe3f5;border-color:#d6c5eb}
+@media(max-width:650px){
+  .toolbar-actions .template-download,.toolbar-actions #importBtn{
+    width:100%;min-width:0;min-height:46px;flex:none;padding:10px 8px;
+    font-size:12px;gap:5px;white-space:nowrap;border:1px solid var(--line);
+    border-radius:12px;background:#f1edf7;color:var(--ink)
+  }
+  .toolbar-actions .template-download{display:inline-flex}
+  .toolbar-actions .template-download-short{display:none!important}
+  .toolbar-actions .template-download-label{display:inline!important}
+  .advanced-filters{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px}
+  .advanced-filters select{width:100%;min-width:0;padding:10px 8px;font-size:12px}
+  .advanced-filters select:last-of-type{grid-column:auto}
+  .advanced-filters .print-button{width:100%;min-width:0;min-height:40px;grid-column:auto;padding:9px 7px;font-size:11px;gap:4px;white-space:nowrap}
+  .advanced-filters .print-button .material-symbols-rounded{font-size:17px}
+}

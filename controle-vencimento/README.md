@@ -62,3 +62,11 @@ O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seria
 - Sistema web: V2.1
 - API: V2.2 (sem alteração)
 - Banco D1: sem alteração SQL.
+
+
+## Versão 2.2
+- Botões Baixar modelo e Importar com mesmo fundo, borda e arredondamento.
+- Rótulo único do download: Baixar modelo, em desktop e mobile.
+- Busca e scanner agrupados na primeira linha.
+- Filtros de setor, situação e prazo agrupados com Imprimir relatório na segunda linha; no mobile, impressão ao lado do filtro de dias.
+- API V2.2 e D1 sem alterações.
