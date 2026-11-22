@@ -6,6 +6,37 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link type="text/css" rel="stylesheet" href="materialize.min.css" media="screen,projection">
 		<link type="text/css" rel="stylesheet" href="materialize_modern.css" media="screen,projection">
+	
+		<style>
+			/* Modal de ferramentas próprias */
+			#modalTools { width: 92%; max-width: 1040px; max-height: 88%; border-radius: 16px; overflow: hidden; }
+			#modalTools .modal-content { padding: 28px 30px 32px; }
+			#modalTools .modal-header { padding: 0 42px 18px 0; margin-bottom: 22px; border-bottom: 1px solid #e8ebef; }
+			#modalTools .modal-header h4 { margin: 0 0 7px; color: #263746; font-size: 1.75rem; font-weight: 700; }
+			#modalTools .modal-subtitle { margin: 0; color: #718096; font-size: .98rem; }
+			#modalTools .tools-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+			#modalTools .tool-card { --tool-color: #607d8b; --tool-rgb: 96,125,139; position: relative; display: flex; align-items: flex-start; gap: 17px; min-height: 172px; padding: 23px 22px; border: 1px solid rgba(var(--tool-rgb), .18); border-radius: 13px; background: linear-gradient(135deg, #fff 0%, rgba(var(--tool-rgb), .075) 100%); color: #334155; text-decoration: none; box-shadow: 0 3px 12px rgba(30, 45, 62, .055); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+			#modalTools .tool-card:hover { transform: translateY(-3px); border-color: rgba(var(--tool-rgb), .42); box-shadow: 0 8px 20px rgba(30, 45, 62, .10); }
+			#modalTools .tool-icon { flex: 0 0 58px; width: 58px; height: 58px; display: flex; align-items: center; justify-content: center; border-radius: 14px; background: rgba(var(--tool-rgb), .12); color: var(--tool-color); }
+			#modalTools .tool-icon i { font-size: 2.15rem; }
+			#modalTools .tool-copy { flex: 1; min-width: 0; }
+			#modalTools .tool-copy h5 { margin: 2px 0 9px; color: var(--tool-color); font-size: 1.12rem; line-height: 1.3; font-weight: 700; }
+			#modalTools .tool-copy p { margin: 0; color: #586575; font-size: .92rem; line-height: 1.55; text-transform: none; }
+			#modalTools .tool-arrow { align-self: center; color: rgba(var(--tool-rgb), .72); font-size: 1.55rem; }
+			#modalTools .tool-red { --tool-color: #c62828; --tool-rgb: 198,40,40; }
+			#modalTools .tool-purple { --tool-color: #7042a5; --tool-rgb: 112,66,165; }
+			#modalTools .tool-blue { --tool-color: #1769aa; --tool-rgb: 23,105,170; }
+			#modalTools .tool-orange { --tool-color: #c77816; --tool-rgb: 199,120,22; }
+			@media (max-width: 650px) {
+				#modalTools { width: 96%; max-height: 92%; }
+				#modalTools .modal-content { padding: 22px 17px 25px; }
+				#modalTools .modal-header h4 { font-size: 1.35rem; }
+				#modalTools .tools-grid { grid-template-columns: 1fr; gap: 12px; }
+				#modalTools .tool-card { min-height: 0; padding: 18px 16px; gap: 13px; }
+				#modalTools .tool-icon { flex-basis: 48px; width: 48px; height: 48px; }
+				#modalTools .tool-icon i { font-size: 1.8rem; }
+			}
+		</style>
 	</head>
 	<body>
 		<div class="row center"><img class="responsive-img" src="banner_extravc.png"></div><br>
@@ -27,11 +58,8 @@
 			<div class="row">
 				<div class="col s6">
 					<h2 class="blue-text text-darken-3" style="margin: 0; white-space: nowrap;">
-						<a href="central_atalhos.html" class="collection-item" title="ACESSAR CENTRAL WINDOWS"><i class="material-icons" style="font-size: 2.5rem; vertical-align: middle;">bookmarks</i></a>
+						<a href="#modalTools" class="collection-item modal-trigger" title="ACESSAR MODAL DE FERRAMENTAS PRÓPRIAS"><i class="material-icons" style="font-size: 2.5rem; vertical-align: middle;">bookmarks</i></a>
 						<b> SUMÁRIO A-Z</b>
-						<a href="cartaz-gerador"><i class="material-icons tiny" style="vertical-align: middle; position: relative; top: -20px;">pages</i></a>
-						<a href="controle-vencimento"><i class="material-icons tiny" style="vertical-align: middle; position: relative; top: -20px;">event</i></a>
-						<a href="radio-anuncios" class="modal-trigger"><i class="material-icons tiny" style="vertical-align: middle; position: relative; top: -20px;">radio</i></a>
 					</h2>
 					
 				</div>
@@ -45,61 +73,52 @@
 				</div>
 			</div>
 			
-			<!-- Modal Excel -->
-<div id="modalRadio" class="modal">
-    <div class="modal-content" style="position: relative;">
-        <!-- Botão fechar -->
-        <a href="#!" class="modal-close" style="position: absolute; top: 10px; right: 10px;">
-            <i class="material-icons grey-text text-darken-2">close</i>
-        </a>
-        <h4>SELEÇÃO DE RÁDIO</h4>
-        <hr>
-                <div class="card-content">
-					<div class="row" style="margin-bottom: 0;">
-						<div class="col s12">
-							<div class="card">
-								<div class="card-action">
-									<a href="radio/autoanuncios.html" style="display: block;">
-									<div class="row" style="margin-bottom: 0; display: flex; justify-content: center; align-items: center;">
-										<div class="col s2 center-align" >
-											<i class="material-icons" style="font-size: 5em; display: block; margin: 0 auto;" >more_time</i>
-										</div>
-										<div class="col s9">
-									        <h5 class="header blue-text text-darken-4" style="margin-top: 0;">AUTO-ANÚNCIOS</h5>
-									        <hr>
-									        <p style=" text-transform: none; font-size: 1.3em">“Reproduza anúncios dentro de um determinado tempo, sem afetar o rádio local.”</p>
-									    </div>
-									    <div class="col s1 center-align">
-										    <i class="material-icons" style="font-size: 2em; display: block; margin: 0 auto;" >arrow_forward_ios</i>
-										</div>
-									</div></a>
-								</div>
-							</div>
-						</div>
-						<div class="col s12">
-							<div class="card">
-								<div class="card-action">
-									<a href="radio/radioanuncios.html"style="display: block;">
-									<div class="row" style="margin-bottom: 0;  display: flex; justify-content: center; align-items: center;">
-										<div class="col s2 center-align">
-											<i class="material-icons" style="font-size: 5em; display: block; margin: 0 auto;">library_music</i>
-										</div>
-										<div class="col s9">
-									        <h5 class="header blue-text text-darken-4" style="margin-top: 0;">RÁDIO+ANÚNCIOS</h5>
-									        <hr>
-									        <p style=" text-transform: none; font-size: 1.3em">“Reproduza anúncios intercalando com músicas no armazenamento local do seu dispositivo, transformando em uma rádio independente.”</p>
-									    </div>
-									    <div class="col s1 center-align">
-										    <i class="material-icons" style="font-size: 2em; display: block; margin: 0 auto;">arrow_forward_ios</i>
-										</div>
-									</div></a>
-								</div>
-							</div>
-						</div>
+			<!-- Modal | Ferramentas próprias -->
+			<div id="modalTools" class="modal">
+				<div class="modal-content">
+					<a href="#!" class="modal-close" aria-label="Fechar modal" style="position:absolute; top:18px; right:20px; color:#607080;">
+						<i class="material-icons">close</i>
+					</a>
+					<div class="modal-header">
+						<h4>FERRAMENTAS PRÓPRIAS</h4>
+						<p class="modal-subtitle">Acesse as ferramentas e recursos desenvolvidos para apoiar as rotinas da loja.</p>
+					</div>
+					<div class="tools-grid">
+						<a class="tool-card tool-red" href="cartaz-gerador">
+							<span class="tool-icon"><i class="material-icons">pages</i></span>
+							<span class="tool-copy">
+								<h5>GERADOR DE CARTAZ</h5>
+								<p>Geração de cartazes por planilhas Excel Cockpit (result.csv) e Power BI (data.xlsx), além do e-mail Libeprec de rebaixa de preço (zebrinha).</p>
+							</span>
+							<i class="material-icons tool-arrow">arrow_forward_ios</i>
+						</a>
+						<a class="tool-card tool-purple" href="controle-vencimento">
+							<span class="tool-icon"><i class="material-icons">event</i></span>
+							<span class="tool-copy">
+								<h5>CONTROLE DE VENCIMENTO</h5>
+								<p>Gestão de vencimentos por importação de planilha Pró-Ativo do Excel Cockpit (.csv), utilização de modelo padrão ou registro manual.</p>
+							</span>
+							<i class="material-icons tool-arrow">arrow_forward_ios</i>
+						</a>
+						<a class="tool-card tool-blue" href="radio-anuncios">
+							<span class="tool-icon"><i class="material-icons">radio</i></span>
+							<span class="tool-copy">
+								<h5>RÁDIO ANÚNCIOS</h5>
+								<p>Central de rádio independente com autoanúncios e músicas (.mp3) do dispositivo, além de anúncios por texto falado. Controle a quantidade de reproduções e os intervalos durante o turno.</p>
+							</span>
+							<i class="material-icons tool-arrow">arrow_forward_ios</i>
+						</a>
+						<a class="tool-card tool-orange" href="central_atalhos.html">
+							<span class="tool-icon"><i class="material-icons">web_stories</i></span>
+							<span class="tool-copy">
+								<h5>CENTRAL DE ATALHOS WINDOWS</h5>
+								<p>Central de atalhos para agilizar processos e tarefas do pacote Office e do ambiente Windows.</p>
+							</span>
+							<i class="material-icons tool-arrow">arrow_forward_ios</i>
+						</a>
 					</div>
 				</div>
-    </div>
-</div>
+			</div>
 
 			<!-- Busca exclusiva do Sumário A-Z -->
 			<div class="sumario-busca">
@@ -633,12 +652,14 @@
 				});
 			});
 		</script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-		<script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var elems = document.querySelectorAll('.modal');
-                M.Modal.init(elems);
-            });
-        </script>
+		<script src="materialize.min.js"></script>
+				<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				if (window.M && M.Modal) {
+					var modals = document.querySelectorAll('.modal');
+					M.Modal.init(modals, { dismissible: true, opacity: 0.5, inDuration: 250, outDuration: 200 });
+				}
+			});
+		</script>
 	</body>
 </html>
