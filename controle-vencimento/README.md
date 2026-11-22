@@ -1,6 +1,10 @@
-# Controle de Vencimentos — Sistema V1.7
+# Controle de Vencimentos — Sistema V1.8
 
 ## Novidades
+- Importação de arquivos Excel `.xlsx` além do CSV, com processamento local no navegador pela biblioteca SheetJS.
+- Leitura automática da aba `Proativo` (ou de outra aba que contenha os sete cabeçalhos obrigatórios).
+- Compatibilidade com a planilha simplificada de 7 colunas e com o CSV original de 32 colunas, desde que contenham os mesmos cabeçalhos necessários.
+- Botões **+ Importar** e **+ Novo lançamento** com espaçamento maior, inclusive em telas pequenas; quebra de linha segura quando faltar espaço.
 - Logo Extra Mercado adicionada à barra superior, ao lado do título do sistema.
 - Busca e botão Imprimir relatório agrupados na primeira linha; filtros de setor, situação e prazo organizados na linha seguinte.
 - Ícone de cadeado do login com borda roxa combinando com o contorno do cartão.
@@ -11,14 +15,14 @@
 - Detalhes visuais discretos nos indicadores: roxo, verde e amarelo, com ícones Material Symbols.
 - Filtro de situação aplicado localmente à lista e ao relatório; os indicadores continuam comparando os dois status.
 - Botão **+ Importar** ao lado de **+ Novo lançamento**.
-- Importação CSV delimitado por ponto e vírgula (`;`), com suporte a campos entre aspas e aspas escapadas.
+- Importação CSV delimitado por ponto e vírgula (`;`), com suporte a campos entre aspas e aspas escapadas, e importação Excel `.xlsx` via SheetJS.
 - Prévia editável por exclusão individual antes da gravação.
 - Mapeamento por nome do cabeçalho (não depende da ordem das colunas).
 - Processamento sequencial com barra de progresso, contagem de sucesso e falhas por linha.
 - Paginação de 30 registros, filtro de prazo 10/20/30 dias ou todos, relatório para impressão com todos os registros filtrados e ação Desfazer tratativa.
 - Mantidos login, visual roxo, leitor de código de barras e `barcode-bip.m4a`.
 
-## Mapeamento CSV
+## Mapeamento CSV e XLSX
 - `Descrição PLU` → `descricao` (maiúsculo)
 - `EAN` → `plu_ean` (texto)
 - `Data de Validade` → `validade` (ISO `AAAA-MM-DD`)
@@ -38,6 +42,6 @@ Envie os arquivos desta pasta para o GitHub Pages. Mantenha `config.json`, `barc
 O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seriais comuns de datas do Excel. Linhas sem datas válidas ou com campos obrigatórios inválidos são destacadas e bloqueiam a finalização até serem excluídas. A data de lançamento é armazenada no formato ISO aceito pela API.
 
 ## Versões
-- Sistema: V1.7
+- Sistema: V1.8
 - API: V2.2
 - D1: estrutura existente, sem alteração SQL.
