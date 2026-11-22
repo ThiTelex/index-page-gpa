@@ -166,3 +166,23 @@
   .advanced-filters .print-button{width:100%;min-width:0;min-height:40px;grid-column:auto;padding:9px 7px;font-size:11px;gap:4px;white-space:nowrap}
   .advanced-filters .print-button .material-symbols-rounded{font-size:17px}
 }
+
+
+/* V2.3 — histórico e consulta de produtos expirados */
+header{gap:16px}
+.header-expired-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border:1px solid #8064a6;border-radius:11px;background:#342447;color:#fff;font-weight:700;white-space:nowrap}
+.header-expired-btn .material-symbols-rounded{font-size:21px}
+.expired-dialog{width:min(1040px,calc(100% - 24px));max-width:1040px;max-height:92vh;overflow:auto}
+.expired-content{padding:22px;display:grid;gap:8px}
+.expired-content .dialog-head{margin-bottom:4px}
+.expired-content .dialog-head h2{display:flex;align-items:center;gap:8px}
+.expired-content .dialog-head h2 .material-symbols-rounded{color:var(--purple);font-size:27px}
+.expired-search-row input{flex:1;min-width:0}
+.expired-advanced-filters select{flex:1;min-width:0}
+.expired-notice{min-height:20px;color:var(--muted);font-size:12px}
+.expired-pill{background:#fce8eb;color:#b42336}
+.expired-treatment{font-size:11px;font-weight:800}
+.expired-treatment.done{color:#25835d}
+.expired-treatment.pending{color:#a66d14}
+.expired-item{border-left:3px solid #c65b6c}
+@media(max-width:650px){.header-expired-btn{padding:8px 10px;gap:0}.header-expired-btn>span:last-child{display:none}.expired-content{padding:14px}.expired-advanced-filters{display:grid;grid-template-columns:1fr 1fr;gap:8px}.expired-advanced-filters select{width:100%}.expired-advanced-filters #expiredDays{grid-column:1}.expired-advanced-filters #expiredPrintBtn{grid-column:2;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;padding:10px 8px;font-size:12px}.expired-search-row{display:flex;gap:8px}.expired-search-row .search-scan-btn{flex:0 0 44px}.expired-content .pagination{gap:8px;flex-wrap:wrap}}

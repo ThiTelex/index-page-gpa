@@ -119,8 +119,41 @@ async function startScanner(mode="form"){
   }
   if(!window.isSecureContext){$("scannerStatus").textContent="A câmera exige HTTPS. Abra o site pelo GitHub Pages.";return}if(!navigator.mediaDevices?.getUserMedia){$("scannerStatus").textContent="Este navegador não oferece acesso à câmera.";return}if(!window.ZXing?.BrowserMultiFormatReader){$("scannerStatus").textContent="Biblioteca de leitura não carregou. Verifique a internet e tente novamente.";return}
 $("scannerDialog").showModal();$("scannerStatus").textContent="Solicitando acesso à câmera…";
-try{scannerReader=new ZXing.BrowserMultiFormatReader();scannerControls=await scannerReader.decodeFromVideoDevice(undefined,$("scannerVideo"),(result,err,controls)=>{if(result){const code=result.getText();playScanSound();$("scannerStatus").textContent=`Código identificado: ${code}`;stopScanner();if(mode==="search"){$("search").value=code;currentPage=1;load();$("search").focus()}else{$("eanInput").value=code;$("eanInput").focus()}}else if(err&&!(err instanceof ZXing.NotFoundException)){/* mantém a leitura ativa enquanto procura o código */}});$("scannerStatus").textContent="Câmera ativa. Centralize o código de barras na faixa."}catch(e){$("scannerStatus").textContent=e.name==="NotAllowedError"?"Acesso à câmera negado. Autorize nas configurações do navegador.":"Não foi possível iniciar a câmera. Verifique permissões e se ela está disponível."}}
+try{scannerReader=new ZXing.BrowserMultiFormatReader();scannerControls=await scannerReader.decodeFromVideoDevice(undefined,$("scannerVideo"),(result,err,controls)=>{if(result){const code=result.getText();playScanSound();$("scannerStatus").textContent=`Código identificado: ${code}`;stopScanner();if(mode==="search"){$("search").value=code;currentPage=1;load();$("search").focus()}else if(mode==="expired-search"){expiredEl("expiredSearch").value=code;expiredPage=1;loadExpired();expiredEl("expiredSearch").focus()}else{$("eanInput").value=code;$("eanInput").focus()}}else if(err&&!(err instanceof ZXing.NotFoundException)){/* mantém a leitura ativa enquanto procura o código */}});$("scannerStatus").textContent="Câmera ativa. Centralize o código de barras na faixa."}catch(e){$("scannerStatus").textContent=e.name==="NotAllowedError"?"Acesso à câmera negado. Autorize nas configurações do navegador.":"Não foi possível iniciar a câmera. Verifique permissões e se ela está disponível."}}
 function stopScanner(){try{scannerControls?.stop()}catch{}scannerControls=null;try{scannerReader?.reset()}catch{}scannerReader=null;if($("scannerDialog").open)$("scannerDialog").close()}
+
+// ===== Área de produtos expirados =====
+let expiredRecords=[], expiredPage=1;
+const EXPIRED_PAGE_SIZE=30;
+const expiredEl=id=>document.getElementById(id);
+expiredEl('expiredOpenBtn').addEventListener('click',()=>{expiredEl('expiredDialog').showModal();expiredPage=1;loadExpired()});
+expiredEl('closeExpired').addEventListener('click',()=>expiredEl('expiredDialog').close());
+['expiredSector','expiredStatus','expiredDays'].forEach(id=>expiredEl(id).addEventListener('change',()=>{expiredPage=1;renderExpired()}));
+expiredEl('expiredSearch').addEventListener('input',()=>{expiredPage=1;renderExpired()});
+async function loadExpired(){
+  expiredEl('expiredNotice').textContent='Carregando produtos expirados…';
+  try{const params=new URLSearchParams(),sector=expiredEl('expiredSector').value,status=expiredEl('expiredStatus').value,q=expiredEl('expiredSearch').value.trim();
+    if(sector)params.set('setor',sector);if(status==='0'||status==='1')params.set('tratado',status);if(q)params.set('q',q);
+    const r=await fetch(`${API}/api/vencimentos?${params.toString()}`),j=await r.json();if(!r.ok||!j.sucesso)throw Error(j.mensagem||'Falha ao consultar a API.');
+    expiredRecords=(j.dados||[]).filter(x=>Number(x.dias_restantes)<0);renderExpired();
+  }catch(e){expiredEl('expiredList').innerHTML='<div class="empty">Não foi possível carregar os produtos expirados.</div>';expiredEl('expiredNotice').textContent=e.message||'Erro ao consultar.'}
+}
+function getExpiredFiltered(){let data=expiredRecords.slice();const q=expiredEl('expiredSearch').value.trim().toLocaleUpperCase('pt-BR');
+  if(q)data=data.filter(x=>String(x.descricao||'').toLocaleUpperCase('pt-BR').includes(q)||String(x.plu_ean||'').includes(q));
+  const days=expiredEl('expiredDays').value;if(days!=='all')data=data.filter(x=>Math.abs(Number(x.dias_restantes))<=Number(days));
+  data.sort((a,b)=>Number(b.dias_restantes)-Number(a.dias_restantes)||String(b.validade).localeCompare(String(a.validade))||Number(b.id)-Number(a.id));return data;
+}
+function renderExpired(){const data=getExpiredFiltered(),total=data.length,pages=Math.max(1,Math.ceil(total/EXPIRED_PAGE_SIZE));expiredPage=Math.min(expiredPage,pages);const visible=data.slice((expiredPage-1)*EXPIRED_PAGE_SIZE,expiredPage*EXPIRED_PAGE_SIZE);
+  expiredEl('expiredNotice').textContent=`${total} produto(s) expirado(s) encontrado(s).`;
+  if(!visible.length){expiredEl('expiredList').innerHTML='<div class="empty">Nenhum produto expirado encontrado com esses filtros.</div>';expiredEl('expiredPagination').innerHTML='';return}
+  expiredEl('expiredList').innerHTML=visible.map(x=>{const elapsed=Math.abs(Number(x.dias_restantes));return `<article class="item expired-item"><div><h3>${esc(x.descricao)}</h3><div class="meta">EAN/PLU: ${esc(x.plu_ean)} · ${esc(x.setor)} · Qtd.: ${x.quantidade}</div><div class="meta">Validade: ${String(x.validade).split('-').reverse().join('/')} · Responsável: ${esc(x.responsavel)}</div></div><div class="right"><span class="pill expired-pill">EXPIRADO HÁ ${elapsed} ${elapsed===1?'DIA':'DIAS'}</span><span class="expired-treatment ${Number(x.tratado)===1?'done':'pending'}">${Number(x.tratado)===1?'TRATADO':'NÃO TRATADO'}</span></div></article>`}).join('');
+  const start=Math.max(0,expiredPage-3),end=Math.min(pages,expiredPage+2);expiredEl('expiredPagination').innerHTML=`<span>${total} registro(s) · Página ${expiredPage}/${pages}</span><div class="page-actions"><button class="ghost" ${expiredPage===1?'disabled':''} onclick="goExpiredPage(${expiredPage-1})">Anterior</button>${Array.from({length:pages},(_,i)=>i+1).slice(start,end).map(n=>`<button class="page-number ${n===expiredPage?'active':''}" onclick="goExpiredPage(${n})">${n}</button>`).join('')}<button class="ghost" ${expiredPage===pages?'disabled':''} onclick="goExpiredPage(${expiredPage+1})">Próxima</button></div>`;
+}
+window.goExpiredPage=n=>{expiredPage=n;renderExpired();expiredEl('expiredList').scrollIntoView({behavior:'smooth',block:'start'})};
+expiredEl('expiredPrintBtn').addEventListener('click',()=>{const data=getExpiredFiltered(),w=window.open('','_blank');if(!w){expiredEl('expiredNotice').textContent='Permita pop-ups para imprimir.';return}
+  const rows=data.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.descricao)}</td><td>${esc(x.plu_ean)}</td><td>${String(x.validade).split('-').reverse().join('/')}</td><td>${Math.abs(Number(x.dias_restantes))}</td><td>${x.quantidade}</td><td>${esc(x.responsavel)}</td><td>${esc(x.setor)}</td><td>${Number(x.tratado)===1?'TRATADO':'NÃO TRATADO'}</td></tr>`).join('');
+  w.document.write(`<html><meta charset="utf-8"><title>Relatório de produtos expirados</title><style>body{font:12px Arial;margin:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #aaa;padding:6px;text-align:left}h2{margin-bottom:4px}</style><h2>CONTROLE DE VENCIMENTOS — PRODUTOS EXPIRADOS</h2><p>Emitido: ${new Date().toLocaleString('pt-BR')} · Total: ${data.length}</p><table><thead><tr><th>#</th><th>Descrição</th><th>PLU/EAN</th><th>Validade</th><th>Expirado há (dias)</th><th>Qtd.</th><th>Responsável</th><th>Setor</th><th>Tratativa</th></tr></thead><tbody>${rows}</tbody></table><script>onload=()=>print()</script></html>`);w.document.close();});
+expiredEl('expiredScannerBtn').addEventListener('click',()=>startScanner('expired-search'));
 
 // ===== Sistema V1.8: importação CSV/XLSX, paginação, relatório e desfazer =====
 const PAGE_SIZE=30;let currentPage=1,importRows=[];

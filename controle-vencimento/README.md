@@ -51,7 +51,7 @@ Envie os arquivos desta pasta para o GitHub Pages. Mantenha `config.json`, `barc
 O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seriais comuns de datas do Excel. Linhas sem datas válidas ou com campos obrigatórios inválidos são destacadas e bloqueiam a finalização até serem excluídas. A data de lançamento é armazenada no formato ISO aceito pela API.
 
 ## Versões
-- Sistema: V2.1
+- Sistema: V2.3
 - API: V2.2
 - D1: estrutura existente, sem alteração SQL.
 
@@ -70,3 +70,15 @@ O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seria
 - Busca e scanner agrupados na primeira linha.
 - Filtros de setor, situação e prazo agrupados com Imprimir relatório na segunda linha; no mobile, impressão ao lado do filtro de dias.
 - API V2.2 e D1 sem alterações.
+
+
+## Versão 2.3
+- Botão **Expirados** com ícone `history` no lado direito da barra superior; no mobile, exibe somente o ícone.
+- Modal dedicado a produtos com validade anterior à data atual de Brasília.
+- Ordenação do vencimento mais recente ao mais antigo.
+- Paginação de 30 registros por página.
+- Busca por descrição/PLU/EAN, leitura por câmera, filtros de setor, tratativa e tempo desde o vencimento.
+- Relatório para impressão considera todos os registros filtrados, não apenas a página visível.
+- API V2.2 e D1 sem alterações; não requer SQL nem novo deploy do Worker.
+
+- Sistema web atual: V2.3
