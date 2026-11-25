@@ -82,3 +82,13 @@ O importador reconhece `DD/MM/AAAA`, `DD-MM-AAAA`, `AAAA-MM-DD` e números seria
 - API V2.2 e D1 sem alterações; não requer SQL nem novo deploy do Worker.
 
 - Sistema web atual: V2.3
+
+
+## V2.4 — atualização obrigatória na virada do dia e área Expirados simplificada
+- A área Produtos expirados passa a utilizar uma cópia em memória dos registros vencidos carregada na abertura inicial do sistema, incluindo todos os setores.
+- Abrir ou reabrir o modal Expirados, pesquisar e escanear não executam novas consultas ao D1.
+- A lista Expirados mantém pesquisa, scanner, impressão e paginação; foram removidos os filtros de setor, situação e período.
+- O scanner permanece ao lado do campo de pesquisa em telas pequenas.
+- Ao detectar a mudança da data em `America/Sao_Paulo`, o sistema apresenta um modal obrigatório, sem opção de fechar ou continuar. A única ação é atualizar a página.
+- A mudança de data é verificada por temporizador e também quando a aba volta a ficar visível ou recebe foco, cobrindo a suspensão do navegador em celulares.
+- A primeira abertura realiza uma consulta adicional sem filtros para preencher o cache completo de expirados, pois a tela principal inicia filtrada por setor. Essa consulta acontece na abertura do sistema, não a cada acesso ao modal.

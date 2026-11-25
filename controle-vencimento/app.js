@@ -1,15 +1,31 @@
-const API="https://vencimentos-api.thitelex1999.workers.dev";const $=id=>document.getElementById(id);let scannerControls=null,scannerReader=null,registros=[];
+const API="https://vencimentos-api.thitelex1999.workers.dev";const $=id=>document.getElementById(id);let scannerControls=null,scannerReader=null,registros=[],expiredRecords=[],expiredCacheReady=false;
+const brasilDay=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+let observedDay=brasilDay();
+function checkDayChange(){
+  const current=brasilDay();
+  if(current!==observedDay){
+    observedDay=current;
+    const dialog=$("dayRefreshDialog");
+    if(dialog&&!dialog.open)dialog.showModal();
+  }
+}
+setInterval(checkDayChange,30000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkDayChange()});
+window.addEventListener("focus",checkDayChange);
+$("dayRefreshBtn").addEventListener("click",()=>location.reload());
+$("dayRefreshDialog").addEventListener("cancel",e=>e.preventDefault());
+$("dayRefreshDialog").addEventListener("click",e=>{if(e.target===$("dayRefreshDialog"))e.preventDefault()});
 function notice(t){$("notice").textContent=t}
 async function getPassword(){try{const r=await fetch("./config.json",{cache:"no-store"});if(!r.ok)throw Error();return String((await r.json()).senha)}catch(e){if(location.protocol==="file:")return "1833";throw e}}
 function unlock(){ $("loginScreen").hidden=true;$("loginScreen").style.display="none";document.body.classList.remove("auth-locked");sessionStorage.setItem("vencimentos_login","1");load()}
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();try{if($("loginPassword").value.trim()===await getPassword())unlock();else $("loginError").textContent="Senha incorreta."}catch{$("loginError").textContent="Falha ao ler config.json. Verifique se está na mesma pasta."}});
 if(sessionStorage.getItem("vencimentos_login")==="1"){ $("loginScreen").hidden=true;$("loginScreen").style.display="none";document.body.classList.remove("auth-locked");load()}
 ["sector","status","search"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",load));
-async function load(){if(document.body.classList.contains("auth-locked"))return;try{notice("Atualizando…");const p=new URLSearchParams();if($("sector").value)p.set("setor",$("sector").value);if($("search").value.trim())p.set("q",$("search").value.trim());const r=await fetch(`${API}/api/vencimentos?${p}`);const j=await r.json();if(!r.ok||!j.sucesso)throw Error();registros=j.dados||[];render();notice(`${j.total} registro(s) encontrado(s).`)}catch{$("list").innerHTML='<div class="empty">Falha ao consultar a API. Verifique a publicação e o CORS.</div>';notice("Não foi possível atualizar os dados.")}}
+async function load(){if(document.body.classList.contains("auth-locked"))return;try{notice("Atualizando…");const p=new URLSearchParams();if($("sector").value)p.set("setor",$("sector").value);if($("search").value.trim())p.set("q",$("search").value.trim());const r=await fetch(`${API}/api/vencimentos?${p}`);const j=await r.json();if(!r.ok||!j.sucesso)throw Error();registros=j.dados||[];if(!expiredCacheReady){try{const allResponse=await fetch(`${API}/api/vencimentos`);const allData=await allResponse.json();if(!allResponse.ok||!allData.sucesso)throw Error();expiredRecords=(allData.dados||[]).filter(x=>Number(x.dias_restantes)<0);expiredCacheReady=true;}catch(cacheError){console.warn("Não foi possível preparar a lista de expirados:",cacheError);expiredRecords=[];}}render();notice(`${j.total} registro(s) encontrado(s).`)}catch{$("list").innerHTML='<div class="empty">Falha ao consultar a API. Verifique a publicação e o CORS.</div>';notice("Não foi possível atualizar os dados.")}}
 function render(){const p=registros.filter(x=>x.tratado===0);$("total").textContent=p.length;$("expired").textContent=p.filter(x=>x.situacao==="vencido").length;$("attention").textContent=p.filter(x=>x.situacao==="atencao").length;if(!registros.length){$("list").innerHTML='<div class="empty">Nenhum registro encontrado.</div>';return}$("list").innerHTML=registros.map(x=>`<article class="item"><div><h3>${esc(x.descricao)}</h3><div class="meta">EAN/PLU: ${esc(x.plu_ean)} · ${esc(x.setor)} · Qtd.: ${x.quantidade}</div><div class="meta">Validade: ${x.validade.split("-").reverse().join("/")} · Responsável: ${esc(x.responsavel)}</div></div><div class="right"><span class="pill ${x.tratado?"":x.situacao}">${x.tratado?"TRATADO":label(x)}</span>${x.tratado?"":`<button class="primary" onclick="markTreated(${x.id})">Marcar tratado</button>`}</div></article>`).join("")}
 function label(x){return x.situacao==="vencido"?`VENCIDO · ${Math.abs(x.dias_restantes)} dia(s)`:x.situacao==="atencao"?`${x.dias_restantes} dia(s) · ATENÇÃO`:`${x.dias_restantes} dias restantes`}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-window.markTreated=async id=>{if(!confirm("Marcar este registro como tratado?"))return;try{const r=await fetch(`${API}/api/vencimentos/${id}/tratado`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({tratado:1})});if(!r.ok)throw Error();await load()}catch{notice("Falha ao atualizar tratativa.")}};
+window.markTreated=async id=>{if(!confirm("Marcar este registro como tratado?"))return;try{const r=await fetch(`${API}/api/vencimentos/${id}/tratado`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({tratado:1})});if(!r.ok)throw Error();expiredRecords=expiredRecords.map(x=>Number(x.id)===Number(id)?{...x,tratado:1}:x);await load();if(expiredEl("expiredDialog").open)renderExpired()}catch{notice("Falha ao atualizar tratativa.")}};
 $("newBtn").onclick=()=>$("formDialog").showModal();$("closeDialog").onclick=$("cancel").onclick=()=>$("formDialog").close();
 $("entryForm").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -60,6 +76,11 @@ $("entryForm").addEventListener("submit",async e=>{
       const detalhe=j.mensagem||j.erro||j.error||`HTTP ${r.status}`;
       throw Error(`Cadastro recusado pela API: ${detalhe}`);
     }
+    const [ya,mo,da]=b.validade.split("-").map(Number);
+    const todayParts=Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+    const todayKey=`${todayParts.year}-${todayParts.month}-${todayParts.day}`;
+    const daysLeft=Math.round((Date.UTC(ya,mo-1,da)-Date.parse(todayKey+"T00:00:00Z"))/86400000);
+    if(daysLeft<0)expiredRecords.push({id:j.id,descricao:b.descricao,plu_ean:b.plu_ean,validade:b.validade,quantidade:b.quantidade,responsavel:b.responsavel,setor:b.setor,tratado:0,dias_restantes:daysLeft});
     form.reset();
     $("formDialog").close();
     notice("Cadastro realizado com sucesso.");
@@ -119,33 +140,26 @@ async function startScanner(mode="form"){
   }
   if(!window.isSecureContext){$("scannerStatus").textContent="A câmera exige HTTPS. Abra o site pelo GitHub Pages.";return}if(!navigator.mediaDevices?.getUserMedia){$("scannerStatus").textContent="Este navegador não oferece acesso à câmera.";return}if(!window.ZXing?.BrowserMultiFormatReader){$("scannerStatus").textContent="Biblioteca de leitura não carregou. Verifique a internet e tente novamente.";return}
 $("scannerDialog").showModal();$("scannerStatus").textContent="Solicitando acesso à câmera…";
-try{scannerReader=new ZXing.BrowserMultiFormatReader();scannerControls=await scannerReader.decodeFromVideoDevice(undefined,$("scannerVideo"),(result,err,controls)=>{if(result){const code=result.getText();playScanSound();$("scannerStatus").textContent=`Código identificado: ${code}`;stopScanner();if(mode==="search"){$("search").value=code;currentPage=1;load();$("search").focus()}else if(mode==="expired-search"){expiredEl("expiredSearch").value=code;expiredPage=1;loadExpired();expiredEl("expiredSearch").focus()}else{$("eanInput").value=code;$("eanInput").focus()}}else if(err&&!(err instanceof ZXing.NotFoundException)){/* mantém a leitura ativa enquanto procura o código */}});$("scannerStatus").textContent="Câmera ativa. Centralize o código de barras na faixa."}catch(e){$("scannerStatus").textContent=e.name==="NotAllowedError"?"Acesso à câmera negado. Autorize nas configurações do navegador.":"Não foi possível iniciar a câmera. Verifique permissões e se ela está disponível."}}
+try{scannerReader=new ZXing.BrowserMultiFormatReader();scannerControls=await scannerReader.decodeFromVideoDevice(undefined,$("scannerVideo"),(result,err,controls)=>{if(result){const code=result.getText();playScanSound();$("scannerStatus").textContent=`Código identificado: ${code}`;stopScanner();if(mode==="search"){$("search").value=code;currentPage=1;load();$("search").focus()}else if(mode==="expired-search"){expiredEl("expiredSearch").value=code;expiredPage=1;renderExpired();expiredEl("expiredSearch").focus()}else{$("eanInput").value=code;$("eanInput").focus()}}else if(err&&!(err instanceof ZXing.NotFoundException)){/* mantém a leitura ativa enquanto procura o código */}});$("scannerStatus").textContent="Câmera ativa. Centralize o código de barras na faixa."}catch(e){$("scannerStatus").textContent=e.name==="NotAllowedError"?"Acesso à câmera negado. Autorize nas configurações do navegador.":"Não foi possível iniciar a câmera. Verifique permissões e se ela está disponível."}}
 function stopScanner(){try{scannerControls?.stop()}catch{}scannerControls=null;try{scannerReader?.reset()}catch{}scannerReader=null;if($("scannerDialog").open)$("scannerDialog").close()}
 
-// ===== Área de produtos expirados =====
-let expiredRecords=[], expiredPage=1;
+// ===== Área de produtos expirados (usa o conjunto carregado na abertura) =====
+let expiredPage=1;
 const EXPIRED_PAGE_SIZE=30;
 const expiredEl=id=>document.getElementById(id);
-expiredEl('expiredOpenBtn').addEventListener('click',()=>{expiredEl('expiredDialog').showModal();expiredPage=1;loadExpired()});
+expiredEl('expiredOpenBtn').addEventListener('click',()=>{expiredEl('expiredDialog').showModal();expiredPage=1;renderExpired()});
 expiredEl('closeExpired').addEventListener('click',()=>expiredEl('expiredDialog').close());
-['expiredSector','expiredStatus','expiredDays'].forEach(id=>expiredEl(id).addEventListener('change',()=>{expiredPage=1;renderExpired()}));
 expiredEl('expiredSearch').addEventListener('input',()=>{expiredPage=1;renderExpired()});
-async function loadExpired(){
-  expiredEl('expiredNotice').textContent='Carregando produtos expirados…';
-  try{const params=new URLSearchParams(),sector=expiredEl('expiredSector').value,status=expiredEl('expiredStatus').value,q=expiredEl('expiredSearch').value.trim();
-    if(sector)params.set('setor',sector);if(status==='0'||status==='1')params.set('tratado',status);if(q)params.set('q',q);
-    const r=await fetch(`${API}/api/vencimentos?${params.toString()}`),j=await r.json();if(!r.ok||!j.sucesso)throw Error(j.mensagem||'Falha ao consultar a API.');
-    expiredRecords=(j.dados||[]).filter(x=>Number(x.dias_restantes)<0);renderExpired();
-  }catch(e){expiredEl('expiredList').innerHTML='<div class="empty">Não foi possível carregar os produtos expirados.</div>';expiredEl('expiredNotice').textContent=e.message||'Erro ao consultar.'}
-}
-function getExpiredFiltered(){let data=expiredRecords.slice();const q=expiredEl('expiredSearch').value.trim().toLocaleUpperCase('pt-BR');
+function getExpiredFiltered(){
+  const q=expiredEl('expiredSearch').value.trim().toLocaleUpperCase('pt-BR');
+  let data=expiredRecords.slice();
   if(q)data=data.filter(x=>String(x.descricao||'').toLocaleUpperCase('pt-BR').includes(q)||String(x.plu_ean||'').includes(q));
-  const days=expiredEl('expiredDays').value;if(days!=='all')data=data.filter(x=>Math.abs(Number(x.dias_restantes))<=Number(days));
-  data.sort((a,b)=>Number(b.dias_restantes)-Number(a.dias_restantes)||String(b.validade).localeCompare(String(a.validade))||Number(b.id)-Number(a.id));return data;
+  data.sort((a,b)=>Number(b.dias_restantes)-Number(a.dias_restantes)||String(b.validade).localeCompare(String(a.validade))||Number(b.id)-Number(a.id));
+  return data;
 }
 function renderExpired(){const data=getExpiredFiltered(),total=data.length,pages=Math.max(1,Math.ceil(total/EXPIRED_PAGE_SIZE));expiredPage=Math.min(expiredPage,pages);const visible=data.slice((expiredPage-1)*EXPIRED_PAGE_SIZE,expiredPage*EXPIRED_PAGE_SIZE);
   expiredEl('expiredNotice').textContent=`${total} produto(s) expirado(s) encontrado(s).`;
-  if(!visible.length){expiredEl('expiredList').innerHTML='<div class="empty">Nenhum produto expirado encontrado com esses filtros.</div>';expiredEl('expiredPagination').innerHTML='';return}
+  if(!visible.length){expiredEl('expiredList').innerHTML='<div class="empty">Nenhum produto expirado encontrado.</div>';expiredEl('expiredPagination').innerHTML='';return}
   expiredEl('expiredList').innerHTML=visible.map(x=>{const elapsed=Math.abs(Number(x.dias_restantes));return `<article class="item expired-item"><div><h3>${esc(x.descricao)}</h3><div class="meta">EAN/PLU: ${esc(x.plu_ean)} · ${esc(x.setor)} · Qtd.: ${x.quantidade}</div><div class="meta">Validade: ${String(x.validade).split('-').reverse().join('/')} · Responsável: ${esc(x.responsavel)}</div></div><div class="right"><span class="pill expired-pill">EXPIRADO HÁ ${elapsed} ${elapsed===1?'DIA':'DIAS'}</span><span class="expired-treatment ${Number(x.tratado)===1?'done':'pending'}">${Number(x.tratado)===1?'TRATADO':'NÃO TRATADO'}</span></div></article>`}).join('');
   const start=Math.max(0,expiredPage-3),end=Math.min(pages,expiredPage+2);expiredEl('expiredPagination').innerHTML=`<span>${total} registro(s) · Página ${expiredPage}/${pages}</span><div class="page-actions"><button class="ghost" ${expiredPage===1?'disabled':''} onclick="goExpiredPage(${expiredPage-1})">Anterior</button>${Array.from({length:pages},(_,i)=>i+1).slice(start,end).map(n=>`<button class="page-number ${n===expiredPage?'active':''}" onclick="goExpiredPage(${n})">${n}</button>`).join('')}<button class="ghost" ${expiredPage===pages?'disabled':''} onclick="goExpiredPage(${expiredPage+1})">Próxima</button></div>`;
 }
@@ -227,4 +241,4 @@ $v('importBtn').onclick=()=>$v('csvFile').click();$v('csvFile').onchange=async e
 function renderImportPreview(){const bad=importRows.filter(x=>x._errors.length).length;$v('importSummary').textContent=`${importRows.length} registro(s) identificados · ${bad} com pendência(s) de validação.`;$v('importErrors').textContent=bad?`Corrija o arquivo de origem ou exclua as linhas inválidas antes de importar. Linhas com erro: ${importRows.filter(x=>x._errors.length).map(x=>x._line).join(', ')}`:'';$v('importPreview').innerHTML=importRows.map((x,i)=>`<article class="import-card"><div><h3>${esc(x.descricao||'(sem descrição)')}</h3><p>EAN: ${esc(x.plu_ean)} · Validade: ${x.validade?x.validade.split('-').reverse().join('/'):'inválida'} · Quantidade: ${x.quantidade??'inválida'}</p><p>Responsável: ${esc(x.responsavel)} · Setor: <b>${x.setor}</b> · Data Reg.: ${x.data_lancamento||'inválida'}</p>${x._errors.length?`<p class="import-errors">Linha ${x._line}: ${esc(x._errors.join(' · '))}</p>`:''}</div><button class="remove-import" title="Excluir da importação" onclick="removeImportRow(${x._key})">✕</button></article>`).join('')||'<div class="empty">Nenhum registro selecionado.</div>';$v('finishImport').disabled=!importRows.length||bad>0;$v('finishImport').textContent=`Finalizar importação (${importRows.length})`}
 window.removeImportRow=key=>{importRows=importRows.filter(x=>x._key!==key);renderImportPreview()};
 $v('closeImport').onclick=$v('cancelImport').onclick=()=>{$v('importDialog').close();importRows=[]};
-$v('finishImport').onclick=async()=>{if(!importRows.length)return;const btn=$v('finishImport');btn.disabled=true;$v('cancelImport').disabled=true;$v('closeImport').disabled=true;$v('importStatus').textContent='Importação em andamento…';$v('importProgressBar').style.width='0%';let ok=0,failed=[];for(let i=0;i<importRows.length;i++){const x=importRows[i];const payload={descricao:x.descricao,plu_ean:x.plu_ean,validade:x.validade,quantidade:x.quantidade,responsavel:x.responsavel,setor:x.setor,data_lancamento:x.data_lancamento};try{const r=await fetch(`${API}/api/vencimentos`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});const j=await r.json();if(!r.ok||!j.sucesso)throw Error(j.mensagem||`HTTP ${r.status}`);ok++}catch(err){failed.push(`Linha ${x._line}: ${err.message}`)}$v('importProgressBar').style.width=`${Math.round((i+1)/importRows.length*100)}%`;$v('importStatus').textContent=`Processando ${i+1}/${importRows.length} · ${ok} concluído(s) · ${failed.length} falha(s)`} $v('importStatus').textContent=`Concluído: ${ok} importado(s), ${failed.length} falha(s).${failed.length?' Detalhes: '+failed.join(' | '):''}`;$v('importSummary').textContent='Processamento finalizado.';$v('cancelImport').disabled=false;$v('closeImport').disabled=false;btn.textContent='Fechar';btn.disabled=false;btn.onclick=()=>{$v('importDialog').close();btn.onclick=null;btn.textContent='Finalizar importação';importRows=[];load()};};
+$v('finishImport').onclick=async()=>{if(!importRows.length)return;const btn=$v('finishImport');btn.disabled=true;$v('cancelImport').disabled=true;$v('closeImport').disabled=true;$v('importStatus').textContent='Importação em andamento…';$v('importProgressBar').style.width='0%';let ok=0,failed=[];for(let i=0;i<importRows.length;i++){const x=importRows[i];const payload={descricao:x.descricao,plu_ean:x.plu_ean,validade:x.validade,quantidade:x.quantidade,responsavel:x.responsavel,setor:x.setor,data_lancamento:x.data_lancamento};try{const r=await fetch(`${API}/api/vencimentos`,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});const j=await r.json();if(!r.ok||!j.sucesso)throw Error(j.mensagem||`HTTP ${r.status}`);ok++}catch(err){failed.push(`Linha ${x._line}: ${err.message}`)}$v('importProgressBar').style.width=`${Math.round((i+1)/importRows.length*100)}%`;$v('importStatus').textContent=`Processando ${i+1}/${importRows.length} · ${ok} concluído(s) · ${failed.length} falha(s)`} $v('importStatus').textContent=`Concluído: ${ok} importado(s), ${failed.length} falha(s).${failed.length?' Detalhes: '+failed.join(' | '):''}`;$v('importSummary').textContent='Processamento finalizado.';$v('cancelImport').disabled=false;$v('closeImport').disabled=false;btn.textContent='Fechar';btn.disabled=false;btn.onclick=()=>{$v('importDialog').close();btn.onclick=null;btn.textContent='Finalizar importação';importRows=[];expiredCacheReady=false;load()};};

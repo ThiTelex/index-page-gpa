@@ -186,3 +186,21 @@ header{gap:16px}
 .expired-treatment.pending{color:#a66d14}
 .expired-item{border-left:3px solid #c65b6c}
 @media(max-width:650px){.header-expired-btn{padding:8px 10px;gap:0}.header-expired-btn>span:last-child{display:none}.expired-content{padding:14px}.expired-advanced-filters{display:grid;grid-template-columns:1fr 1fr;gap:8px}.expired-advanced-filters select{width:100%}.expired-advanced-filters #expiredDays{grid-column:1}.expired-advanced-filters #expiredPrintBtn{grid-column:2;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;padding:10px 8px;font-size:12px}.expired-search-row{display:flex;gap:8px}.expired-search-row .search-scan-btn{flex:0 0 44px}.expired-content .pagination{gap:8px;flex-wrap:wrap}}
+
+/* V2.4 — busca compacta e atualização obrigatória na virada do dia */
+.expired-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 8px}
+.expired-live-note{font-size:11px;color:var(--muted)}
+.expired-search-row{display:flex;align-items:stretch;gap:8px;width:100%}
+.expired-search-row input{flex:1 1 auto;min-width:0}
+.expired-search-row .search-scan-btn{flex:0 0 54px;min-width:54px;display:flex;align-items:center;justify-content:center;padding:10px}
+.day-refresh-dialog{width:min(440px,calc(100% - 28px));max-width:440px;border:0;border-radius:22px;padding:0;box-shadow:0 24px 90px #10091f70}
+.day-refresh-dialog::backdrop{background:#160d25c9;backdrop-filter:blur(5px)}
+.day-refresh-content{padding:30px 26px;display:grid;justify-items:center;gap:14px;text-align:center}
+.day-refresh-icon{font-size:48px;color:var(--purple)}
+.day-refresh-content h2{font-size:25px;margin:0;color:var(--ink)}
+.day-refresh-content p{margin:0;color:var(--muted);line-height:1.55}
+.day-refresh-info{width:100%;padding:14px;border-radius:13px;background:#f4effa;display:grid;gap:5px;color:var(--ink);font-size:13px}
+.day-refresh-info span{color:var(--muted);line-height:1.45}
+.day-refresh-button{width:100%;padding:15px 18px}
+.day-refresh-content small{font-size:11px;color:var(--muted)}
+@media(max-width:650px){.expired-toolbar{align-items:center}.expired-live-note{font-size:10px}.expired-search-row .search-scan-btn{flex:0 0 54px}.day-refresh-content{padding:26px 20px}}
