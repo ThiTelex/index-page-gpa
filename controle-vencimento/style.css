@@ -190,8 +190,8 @@ header{gap:16px}
 /* V2.4 — busca compacta e atualização obrigatória na virada do dia */
 .expired-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 8px}
 .expired-live-note{font-size:11px;color:var(--muted)}
-.expired-search-row{display:flex;align-items:stretch;gap:8px;width:100%}
-.expired-search-row input{flex:1 1 auto;min-width:0}
+.expired-search-row{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:stretch;gap:8px;width:100%}
+.expired-search-row input{flex:1 1 0;width:0;min-width:0}
 .expired-search-row .search-scan-btn{flex:0 0 54px;min-width:54px;display:flex;align-items:center;justify-content:center;padding:10px}
 .day-refresh-dialog{width:min(440px,calc(100% - 28px));max-width:440px;border:0;border-radius:22px;padding:0;box-shadow:0 24px 90px #10091f70}
 .day-refresh-dialog::backdrop{background:#160d25c9;backdrop-filter:blur(5px)}
